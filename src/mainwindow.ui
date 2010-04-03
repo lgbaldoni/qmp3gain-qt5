@@ -1,0 +1,1485 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>732</width>
+    <height>477</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>%1</string>
+  </property>
+  <property name="toolTip">
+   <string/>
+  </property>
+  <property name="statusTip">
+   <string/>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_4">
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QGroupBox" name="groupBox">
+          <property name="title">
+           <string/>
+          </property>
+          <layout class="QHBoxLayout">
+           <item>
+            <widget class="QLabel" name="label">
+             <property name="text">
+              <string>Target &quot;Normal&quot; Volume:</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QDoubleSpinBox" name="doubleSpinBox_targetNormalValue">
+             <property name="suffix">
+              <string/>
+             </property>
+             <property name="decimals">
+              <number>1</number>
+             </property>
+             <property name="minimum">
+              <double>75.000000000000000</double>
+             </property>
+             <property name="maximum">
+              <double>105.900000000000006</double>
+             </property>
+             <property name="value">
+              <double>89.000000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="labelTargetNormalValue">
+             <property name="text">
+              <string>dB (default %1)</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <spacer>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>371</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QTableView" name="tableView">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="contextMenuPolicy">
+         <enum>Qt::CustomContextMenu</enum>
+        </property>
+        <property name="editTriggers">
+         <set>QAbstractItemView::NoEditTriggers</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <spacer>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>231</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="cancelButton">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="text">
+           <string>Cancel</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>251</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="exitButton">
+          <property name="text">
+           <string>Exit</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_FileProgress">
+          <property name="text">
+           <string>File progress</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1" rowspan="2">
+         <widget class="QProgressBar" name="progressBar_File">
+          <property name="value">
+           <number>0</number>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0" rowspan="2">
+         <widget class="QLabel" name="label_TotalProgress">
+          <property name="text">
+           <string>Total progress</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="DoubleProgressBar" name="progressBar_Total">
+          <property name="value">
+           <number>0</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>732</width>
+     <height>18</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>&amp;File</string>
+    </property>
+    <addaction name="actionLoad_Analysis_results"/>
+    <addaction name="actionSave_Analysis_results"/>
+    <addaction name="separator"/>
+    <addaction name="actionAdd_Files"/>
+    <addaction name="actionAdd_Folder"/>
+    <addaction name="separator"/>
+    <addaction name="actionSelect_All_Files"/>
+    <addaction name="actionSelect_No_Files"/>
+    <addaction name="actionInvert_selection"/>
+    <addaction name="separator"/>
+    <addaction name="actionClear_Selected_Files"/>
+    <addaction name="actionClear_All_files"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
+   </widget>
+   <widget class="QMenu" name="menuAnalysis">
+    <property name="title">
+     <string>&amp;Analysis</string>
+    </property>
+    <addaction name="actionTrack_Analysis"/>
+    <addaction name="actionAlbum_Analysis"/>
+    <addaction name="actionMax_No_clip_Analysis"/>
+    <addaction name="separator"/>
+    <addaction name="actionClear_Analysis"/>
+   </widget>
+   <widget class="QMenu" name="menuModify_Gain">
+    <property name="title">
+     <string>&amp;Modify Gain</string>
+    </property>
+    <addaction name="actionTrack_Gain"/>
+    <addaction name="actionAlbum_Gain"/>
+    <addaction name="actionConstant_Gain"/>
+    <addaction name="actionMax_No_clip_Gain_for_Each_file"/>
+    <addaction name="actionMax_No_clip_Gain_for_Album"/>
+    <addaction name="separator"/>
+    <addaction name="actionUndo_Gain_changes"/>
+   </widget>
+   <widget class="QMenu" name="menuOptions">
+    <property name="title">
+     <string>&amp;Options</string>
+    </property>
+    <widget class="QMenu" name="menuTags">
+     <property name="title">
+      <string>Tags</string>
+     </property>
+     <addaction name="actionIgnore_do_not_read_or_write_tags"/>
+     <addaction name="actionRe_calculate_do_not_read_tags"/>
+     <addaction name="actionDon_t_check_adding_files"/>
+     <addaction name="separator"/>
+     <addaction name="actionRemove_Tags_from_files"/>
+    </widget>
+    <widget class="QMenu" name="menuToolbar">
+     <property name="statusTip">
+      <string/>
+     </property>
+     <property name="title">
+      <string>Toolbar</string>
+     </property>
+     <addaction name="actionBig"/>
+     <addaction name="actionSmall"/>
+     <addaction name="actionText_only"/>
+     <addaction name="actionNone"/>
+    </widget>
+    <widget class="QMenu" name="menuFilename_Display">
+     <property name="statusTip">
+      <string/>
+     </property>
+     <property name="title">
+      <string>Filename Display</string>
+     </property>
+     <addaction name="actionShow_Path_slash_File"/>
+     <addaction name="actionShow_File_only"/>
+     <addaction name="actionShow_Path_at_File"/>
+    </widget>
+    <widget class="QMenu" name="menuLogs">
+     <property name="title">
+      <string>Logs</string>
+     </property>
+     <widget class="QMenu" name="menuLog_output">
+      <property name="title">
+       <string>Output Type</string>
+      </property>
+      <addaction name="actionLogError"/>
+      <addaction name="actionLogAnalysis"/>
+      <addaction name="actionLogChange"/>
+      <addaction name="actionLogBackend"/>
+      <addaction name="actionLogTrace"/>
+     </widget>
+     <widget class="QMenu" name="menuTimestamp">
+      <property name="title">
+       <string>Timestamp</string>
+      </property>
+      <addaction name="actionLogTimestampToFile"/>
+      <addaction name="actionLogTimestampToPanel"/>
+     </widget>
+     <addaction name="actionLogFile"/>
+     <addaction name="menuTimestamp"/>
+     <addaction name="menuLog_output"/>
+     <addaction name="actionLogDock"/>
+     <addaction name="actionLogOpenAutomaticallyPanel"/>
+    </widget>
+    <addaction name="actionAlways_on_Top"/>
+    <addaction name="actionWork_on_Selected_files_only"/>
+    <addaction name="actionAdd_Subfolders"/>
+    <addaction name="actionPreserve_file_date_time"/>
+    <addaction name="actionNo_check_for_Layer_I_or_II"/>
+    <addaction name="actionDon_t_clip_when_doing_track_gain"/>
+    <addaction name="menuTags"/>
+    <addaction name="menuLogs"/>
+    <addaction name="separator"/>
+    <addaction name="menuToolbar"/>
+    <addaction name="menuFilename_Display"/>
+    <addaction name="actionMinimize_to_tray"/>
+    <addaction name="actionBeep_when_finished"/>
+    <addaction name="separator"/>
+    <addaction name="actionReset_default_column_widths"/>
+    <addaction name="actionResize_column_widths_by_content"/>
+    <addaction name="actionReset_warning_messages"/>
+    <addaction name="separator"/>
+    <addaction name="actionBack_end"/>
+    <addaction name="actionAdvanced"/>
+   </widget>
+   <widget class="QMenu" name="menuLanguage">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="title">
+     <string>&amp;Language</string>
+    </property>
+    <addaction name="actionDefault_Language"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>&amp;Help</string>
+    </property>
+    <addaction name="actionContents"/>
+    <addaction name="separator"/>
+    <addaction name="actionDisclaimer"/>
+    <addaction name="separator"/>
+    <addaction name="actionAbout"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuAnalysis"/>
+   <addaction name="menuModify_Gain"/>
+   <addaction name="menuOptions"/>
+   <addaction name="menuLanguage"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>Toolbar</string>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>32</width>
+     <height>32</height>
+    </size>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionAdd_Files"/>
+   <addaction name="actionAdd_Folder"/>
+   <addaction name="actionTrack_Analysis"/>
+   <addaction name="actionAlbum_Analysis"/>
+   <addaction name="actionTrack_Gain"/>
+   <addaction name="actionAlbum_Gain"/>
+   <addaction name="actionConstant_Gain"/>
+   <addaction name="actionClear_Selected_Files"/>
+   <addaction name="actionClear_All_files"/>
+  </widget>
+  <widget class="QDockWidget" name="logDockWidget">
+   <property name="floating">
+    <bool>false</bool>
+   </property>
+   <property name="features">
+    <set>QDockWidget::AllDockWidgetFeatures</set>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::BottomDockWidgetArea|Qt::TopDockWidgetArea</set>
+   </property>
+   <property name="windowTitle">
+    <string>Logs</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>8</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents">
+    <layout class="QVBoxLayout" name="verticalLayout_3">
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <widget class="QToolButton" name="clearLogButton">
+           <property name="text">
+            <string>Clear</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="checkBox_logError">
+           <property name="toolTip">
+            <string>Errors</string>
+           </property>
+           <property name="statusTip">
+            <string>Errors</string>
+           </property>
+           <property name="styleSheet">
+            <string>QCheckBox { color: red }</string>
+           </property>
+           <property name="text">
+            <string>Error</string>
+           </property>
+           <property name="checked">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="checkBox_logAnalysis">
+           <property name="toolTip">
+            <string>Analysis results</string>
+           </property>
+           <property name="statusTip">
+            <string>Analysis results</string>
+           </property>
+           <property name="styleSheet">
+            <string>QCheckBox { color: green }</string>
+           </property>
+           <property name="text">
+            <string>Analysis</string>
+           </property>
+           <property name="checked">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="checkBox_logChange">
+           <property name="toolTip">
+            <string>Gain changes</string>
+           </property>
+           <property name="statusTip">
+            <string>Gain changes</string>
+           </property>
+           <property name="styleSheet">
+            <string>QCheckBox { color: blue }</string>
+           </property>
+           <property name="text">
+            <string>Change</string>
+           </property>
+           <property name="checked">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="checkBox_logBackend">
+           <property name="toolTip">
+            <string>Back end output</string>
+           </property>
+           <property name="statusTip">
+            <string>Back end output</string>
+           </property>
+           <property name="styleSheet">
+            <string>QCheckBox { color: black }</string>
+           </property>
+           <property name="text">
+            <string>Back end</string>
+           </property>
+           <property name="checked">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="checkBox_logTrace">
+           <property name="toolTip">
+            <string>Trace output</string>
+           </property>
+           <property name="statusTip">
+            <string>Trace output</string>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QCheckBox { color: grey }</string>
+           </property>
+           <property name="text">
+            <string>Trace</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QPlainTextEdit" name="logPlainTextEdit">
+         <property name="baseSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <action name="actionLoad_Analysis_results">
+   <property name="text">
+    <string>Load Analysis results</string>
+   </property>
+   <property name="shortcut">
+    <string/>
+   </property>
+  </action>
+  <action name="actionSave_Analysis_results">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Save Analysis results</string>
+   </property>
+  </action>
+  <action name="actionAdd_Files">
+   <property name="icon">
+    <iconset resource="../resources/qmp3gain.qrc">
+     <normaloff>:/images/add_file.gif</normaloff>:/images/add_file.gif</iconset>
+   </property>
+   <property name="text">
+    <string>Add File(s)</string>
+   </property>
+   <property name="toolTip">
+    <string>Add mp3 file(s) to the list</string>
+   </property>
+   <property name="statusTip">
+    <string>Add mp3 file(s) to the list</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
+   </property>
+  </action>
+  <action name="actionAdd_Folder">
+   <property name="icon">
+    <iconset resource="../resources/qmp3gain.qrc">
+     <normaloff>:/images/add_folder.gif</normaloff>:/images/add_folder.gif</iconset>
+   </property>
+   <property name="text">
+    <string>Add Folder</string>
+   </property>
+   <property name="toolTip">
+    <string>Add all mp3 files in a folder</string>
+   </property>
+   <property name="statusTip">
+    <string>Add all mp3 files in a folder</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+D</string>
+   </property>
+  </action>
+  <action name="actionSelect_All_Files">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Select All Files</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+A</string>
+   </property>
+  </action>
+  <action name="actionSelect_No_Files">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Select No Files</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
+  </action>
+  <action name="actionInvert_selection">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Invert selection</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+V</string>
+   </property>
+  </action>
+  <action name="actionClear_Selected_Files">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources/qmp3gain.qrc">
+     <normaloff>:/images/clear_file.gif</normaloff>:/images/clear_file.gif</iconset>
+   </property>
+   <property name="text">
+    <string>Clear selected file(s)</string>
+   </property>
+   <property name="iconText">
+    <string>Clear File(s)</string>
+   </property>
+   <property name="toolTip">
+    <string>Remove selected files(s) from list</string>
+   </property>
+   <property name="statusTip">
+    <string>Remove selected files(s) from list</string>
+   </property>
+  </action>
+  <action name="actionClear_All_files">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources/qmp3gain.qrc">
+     <normaloff>:/images/clear_all.gif</normaloff>:/images/clear_all.gif</iconset>
+   </property>
+   <property name="text">
+    <string>Clear All files</string>
+   </property>
+   <property name="iconText">
+    <string>Clear All</string>
+   </property>
+   <property name="toolTip">
+    <string>Remove all files from list</string>
+   </property>
+   <property name="statusTip">
+    <string>Remove all files from list</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionTrack_Analysis">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources/qmp3gain.qrc">
+     <normaloff>:/images/track_analysis.gif</normaloff>:/images/track_analysis.gif</iconset>
+   </property>
+   <property name="text">
+    <string>Track Analysis</string>
+   </property>
+   <property name="toolTip">
+    <string>Do Replay Gain analysis on files</string>
+   </property>
+   <property name="statusTip">
+    <string>Analyze each file individually and then list details of the files</string>
+   </property>
+   <property name="whatsThis">
+    <string/>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+T</string>
+   </property>
+  </action>
+  <action name="actionAlbum_Analysis">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources/qmp3gain.qrc">
+     <normaloff>:/images/album_analysis.gif</normaloff>:/images/album_analysis.gif</iconset>
+   </property>
+   <property name="text">
+    <string>Album Analysis</string>
+   </property>
+   <property name="toolTip">
+    <string>Do Replay Gain analysis on files as an album</string>
+   </property>
+   <property name="statusTip">
+    <string>Analyze each file in the Album as part of a whole and then list details about the files</string>
+   </property>
+   <property name="whatsThis">
+    <string/>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+U</string>
+   </property>
+  </action>
+  <action name="actionClear_Analysis">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Clear Analysis</string>
+   </property>
+   <property name="statusTip">
+    <string>Clear the analysis results in the file list</string>
+   </property>
+  </action>
+  <action name="actionTrack_Gain">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources/qmp3gain.qrc">
+     <normaloff>:/images/track_gain.gif</normaloff>:/images/track_gain.gif</iconset>
+   </property>
+   <property name="text">
+    <string>Track Gain</string>
+   </property>
+   <property name="iconText">
+    <string>Track Gain</string>
+   </property>
+   <property name="toolTip">
+    <string>Track Gain</string>
+   </property>
+   <property name="statusTip">
+    <string>Volume-correct all files listed in the File List to match the Target Volume</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+G</string>
+   </property>
+  </action>
+  <action name="actionAlbum_Gain">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources/qmp3gain.qrc">
+     <normaloff>:/images/album_gain.gif</normaloff>:/images/album_gain.gif</iconset>
+   </property>
+   <property name="text">
+    <string>Album Gain</string>
+   </property>
+   <property name="iconText">
+    <string>Album Gain</string>
+   </property>
+   <property name="statusTip">
+    <string>Volume-correct all files listed in the File List so that the overall album volume matches the Target Volume</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+B</string>
+   </property>
+  </action>
+  <action name="actionConstant_Gain">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources/qmp3gain.qrc">
+     <normaloff>:/images/constant_gain.gif</normaloff>:/images/constant_gain.gif</iconset>
+   </property>
+   <property name="text">
+    <string>Constant Gain</string>
+   </property>
+   <property name="iconText">
+    <string>Constant Gain</string>
+   </property>
+   <property name="toolTip">
+    <string>Constant Gain</string>
+   </property>
+   <property name="statusTip">
+    <string>Absolute gain change of all files listed in the File List</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionUndo_Gain_changes">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Undo Gain changes</string>
+   </property>
+   <property name="statusTip">
+    <string>Undo all gain changes to the mp3 files in the list</string>
+   </property>
+  </action>
+  <action name="actionAlways_on_Top">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Always on Top</string>
+   </property>
+   <property name="statusTip">
+    <string>MP3Gain window will always stay on top of other windows</string>
+   </property>
+  </action>
+  <action name="actionWork_on_Selected_files_only">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Work on Selected files only</string>
+   </property>
+   <property name="statusTip">
+    <string>Only those files that are currently selected will be operated on</string>
+   </property>
+  </action>
+  <action name="actionAdd_Subfolders">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Add Subfolders</string>
+   </property>
+   <property name="statusTip">
+    <string>When you Add a Folder, all of the mp3s in all of the folders inside the selected folder will be added to the list</string>
+   </property>
+  </action>
+  <action name="actionPreserve_file_date_time">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Preserve file date/time</string>
+   </property>
+   <property name="statusTip">
+    <string>Changed files will keep their original timestamp</string>
+   </property>
+  </action>
+  <action name="actionNo_check_for_Layer_I_or_II">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>No check for Layer I or II</string>
+   </property>
+   <property name="statusTip">
+    <string>Forces mp3Gain to skip the safety check, allowing you to change the gain on these mis-identified files</string>
+   </property>
+  </action>
+  <action name="actionDon_t_clip_when_doing_track_gain">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Don't clip when doing Track Gain</string>
+   </property>
+   <property name="statusTip">
+    <string>When you do Track Gain, if the suggested Track gain will cause clipping then MP3Gain will apply the maximum non-clipping gain instead</string>
+   </property>
+  </action>
+  <action name="actionMinimize_to_tray">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Minimize to Tray</string>
+   </property>
+   <property name="statusTip">
+    <string>When you minimize the MP3Gain window it will appear as an icon in the system tray notification area</string>
+   </property>
+  </action>
+  <action name="actionBeep_when_finished">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Beep when finished</string>
+   </property>
+   <property name="statusTip">
+    <string>MP3Gain will make a default beep sound when it finishes a task</string>
+   </property>
+  </action>
+  <action name="actionReset_default_column_widths">
+   <property name="text">
+    <string>Reset Default Column Widths</string>
+   </property>
+   <property name="statusTip">
+    <string>Reset the column positions &amp; sizes to their default settings</string>
+   </property>
+  </action>
+  <action name="actionReset_warning_messages">
+   <property name="text">
+    <string>Reset &quot;Warning&quot; messages</string>
+   </property>
+   <property name="statusTip">
+    <string>Makes earlier suppressed warning and questions messages start popping up again</string>
+   </property>
+  </action>
+  <action name="actionAdvanced">
+   <property name="text">
+    <string>Advanced...</string>
+   </property>
+   <property name="statusTip">
+    <string>Allows you to modify some extra features</string>
+   </property>
+  </action>
+  <action name="actionIgnore_do_not_read_or_write_tags">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Ignore (do not read or write tags)</string>
+   </property>
+  </action>
+  <action name="actionBig">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Big</string>
+   </property>
+   <property name="statusTip">
+    <string>Modify the look of the toolbar to Big size</string>
+   </property>
+  </action>
+  <action name="actionShow_Path_slash_File">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show Path/File</string>
+   </property>
+   <property name="statusTip">
+    <string>Path/File are displayed in a single column of the File List</string>
+   </property>
+  </action>
+  <action name="actionContents">
+   <property name="text">
+    <string>Contents</string>
+   </property>
+  </action>
+  <action name="actionDisclaimer">
+   <property name="text">
+    <string>Disclaimer...</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About...</string>
+   </property>
+  </action>
+  <action name="actionMax_No_clip_Analysis">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Max No-clip Analysis</string>
+   </property>
+   <property name="statusTip">
+    <string>Find only the peak amplitudes of each of the mp3s in the list without spending any extra time</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+M</string>
+   </property>
+   <property name="visible">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="actionMax_No_clip_Gain_for_Each_file">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Max No-clip Gain for Each file</string>
+   </property>
+   <property name="iconText">
+    <string>This will change the gain on each mp3 file so that it is as loud as possible without clipping.</string>
+   </property>
+   <property name="toolTip">
+    <string>This will change the gain on each mp3 file so that it is as loud as possible without clipping.</string>
+   </property>
+   <property name="statusTip">
+    <string>Change the gain on each mp3 file so that it is as loud as possible without clipping</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+X</string>
+   </property>
+   <property name="visible">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="actionMax_No_clip_Gain_for_Album">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Max No-clip Gain for Album</string>
+   </property>
+   <property name="iconText">
+    <string>This will look at each folder in the file list, find the single maximum gain which will not cause any clipping in any of the mp3s in the folder, and then apply that single gain change to all the mp3s in the folder.</string>
+   </property>
+   <property name="toolTip">
+    <string>This will look at each folder in the file list, find the single maximum gain which will not cause any clipping in any of the mp3s in the folder, and then apply that single gain change to all the mp3s in the folder.</string>
+   </property>
+   <property name="statusTip">
+    <string>Look at each folder in the file list, find the single maximum gain which will not cause any clipping in any of the mp3s in the folder, and then apply that single gain change to all the mp3s in the folder</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+L</string>
+   </property>
+   <property name="visible">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="actionRe_calculate_do_not_read_tags">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Re-calculate (do not read tags)</string>
+   </property>
+  </action>
+  <action name="actionDon_t_check_adding_files">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Don't check while adding files</string>
+   </property>
+  </action>
+  <action name="actionRemove_Tags_from_files">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Remove Tags from files</string>
+   </property>
+  </action>
+  <action name="actionSmall">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Small</string>
+   </property>
+   <property name="statusTip">
+    <string>Modify the look of the toolbar to Small size</string>
+   </property>
+  </action>
+  <action name="actionText_only">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Text only</string>
+   </property>
+   <property name="statusTip">
+    <string>Modify the look of the toolbar to Text format only</string>
+   </property>
+  </action>
+  <action name="actionNone">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>None</string>
+   </property>
+   <property name="statusTip">
+    <string>Switch off the toolbar</string>
+   </property>
+  </action>
+  <action name="actionShow_File_only">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show File only</string>
+   </property>
+   <property name="statusTip">
+    <string>Only File without Path are displayed in the File List</string>
+   </property>
+  </action>
+  <action name="actionShow_Path_at_File">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show Path &amp;&amp; File</string>
+   </property>
+   <property name="statusTip">
+    <string>Path and File are displayed in separated columns of the File List</string>
+   </property>
+  </action>
+  <action name="actionResize_column_widths_by_content">
+   <property name="text">
+    <string>Resize column widths by content</string>
+   </property>
+   <property name="statusTip">
+    <string>Modify the column sizes to have enough space for their content</string>
+   </property>
+  </action>
+  <action name="actionDefault_Language">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Original (English)</string>
+   </property>
+  </action>
+  <action name="actionBack_end">
+   <property name="text">
+    <string>Back end...</string>
+   </property>
+   <property name="statusTip">
+    <string>Set the location of the back end mp3gain</string>
+   </property>
+  </action>
+  <action name="actionLogFile">
+   <property name="text">
+    <string>File...</string>
+   </property>
+   <property name="statusTip">
+    <string>Set the output log file</string>
+   </property>
+  </action>
+  <action name="actionLogError">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Error</string>
+   </property>
+  </action>
+  <action name="actionLogAnalysis">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Analysis</string>
+   </property>
+  </action>
+  <action name="actionLogChange">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Change</string>
+   </property>
+  </action>
+  <action name="actionLogBackend">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Back end</string>
+   </property>
+  </action>
+  <action name="actionLogTimestampToFile">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>To File</string>
+   </property>
+   <property name="statusTip">
+    <string>Each line in the log has a timestamp</string>
+   </property>
+  </action>
+  <action name="actionLogTimestampToPanel">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>To Panel</string>
+   </property>
+  </action>
+  <action name="actionPanelAutomaticallyOpened">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Automatically opened if error</string>
+   </property>
+  </action>
+  <action name="actionLogDock">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Panel</string>
+   </property>
+  </action>
+  <action name="actionLogPanelError">
+   <property name="text">
+    <string>Error</string>
+   </property>
+  </action>
+  <action name="actionLogOpenAutomaticallyPanel">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Open automatically panel</string>
+   </property>
+   <property name="toolTip">
+    <string>Log panel is automaticaly opened if error occurs</string>
+   </property>
+   <property name="statusTip">
+    <string>Log panel is automaticaly opened if error occurs</string>
+   </property>
+  </action>
+  <action name="actionLogTrace">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Trace</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>DoubleProgressBar</class>
+   <extends>QProgressBar</extends>
+   <header>doubleprogressbar.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../resources/qmp3gain.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>exitButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>618</x>
+     <y>367</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>552</x>
+     <y>362</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionLogError</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>checkBox_logError</receiver>
+   <slot>setChecked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>274</x>
+     <y>324</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionLogAnalysis</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>checkBox_logAnalysis</receiver>
+   <slot>setChecked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>336</x>
+     <y>324</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionLogChange</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>checkBox_logChange</receiver>
+   <slot>setChecked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>404</x>
+     <y>324</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionLogBackend</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>checkBox_logBackend</receiver>
+   <slot>setChecked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>474</x>
+     <y>324</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_logAnalysis</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>actionLogAnalysis</receiver>
+   <slot>setChecked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>336</x>
+     <y>324</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_logBackend</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>actionLogBackend</receiver>
+   <slot>setChecked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>474</x>
+     <y>324</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_logChange</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>actionLogChange</receiver>
+   <slot>setChecked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>404</x>
+     <y>324</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_logError</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>actionLogError</receiver>
+   <slot>setChecked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>274</x>
+     <y>324</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionExit</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>365</x>
+     <y>238</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_logTrace</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>actionLogTrace</receiver>
+   <slot>setChecked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>510</x>
+     <y>324</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionLogTrace</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>checkBox_logTrace</receiver>
+   <slot>setChecked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>510</x>
+     <y>324</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

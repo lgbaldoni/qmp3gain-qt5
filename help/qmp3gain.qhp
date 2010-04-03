@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QtHelpProject version="1.0">
+	<namespace>zematix.hu.qmp3gain.0.9.0</namespace>
+	<virtualFolder>help</virtualFolder>
+	<customFilter name="MP3Guin 0.9.0">
+		<filterAttribute>qmp3gain</filterAttribute>
+		<filterAttribute>0.9.0</filterAttribute>
+	</customFilter>
+	<filterSection>
+		<filterAttribute>qmp3gain</filterAttribute>
+		<filterAttribute>0.9.0</filterAttribute>
+		<toc>
+			<section title="MP3Guin Help" ref="html/MP3Gain.htm">
+				<section title="Overview" ref="html/Overview.htm"/>
+				<section title="Concepts" ref="html/Concepts.htm"/>
+				<section title="MP3Guin Interface" ref="html/MP3Gain_Interface.htm">
+					<section title="Menus" ref="html/Menus.htm">
+						<section title="File menu" ref="html/File_menu.htm"/>
+						<section title="Analysis menu" ref="html/Analysis_menu.htm"/>
+						<section title="Modify Gain menu" ref="html/Modify_Gain_menu.htm"/>
+						<section title="Options menu" ref="html/Options_menu.htm"/>
+						<section title="Language menu" ref="html/Language_menu.htm"/>
+						<section title="Help menu" ref="html/Help_menu.htm"/>
+					</section>
+					<section title="Button Bar" ref="html/Button_Bar.htm"/>
+					<section title="Target Volume" ref="html/Target_Volume.htm"/>
+					<section title="File List" ref="html/File_List.htm"/>
+					<section title="Status" ref="html/Status.htm"/>
+				</section>
+				<section title="Tags" ref="html/Tags.htm"/>
+				<section title="How Do I...?" ref="html/How_Do_I.htm">
+					<section title="Make all my mp3s the same volume" ref="html/Correct_Several_Unrelated_Songs.htm"/>
+					<section title="Make each mp3 folder the same average volume" ref="html/Correct_a_Complete_Album_of_Songs.htm"/>
+				</section>
+				<section title="Troubleshooting" ref="html/Troubleshooting.htm">
+					<section title="Black screen" ref="html/BlackScreen.htm"/>
+					<section title="Tag Problems" ref="html/TagProblems.htm"/>
+				</section>
+				<section title="Credits" ref="html/Credits.htm"/>
+			</section>
+		</toc>
+		<keywords>
+			<keyword name="Overview" ref="html/Overview.htm"/>
+			<keyword name="Track Mode" ref="html/Overview.htm#TrackMode"/>
+			<keyword name="Album Mode" ref="html/Overview.htm#AlbumMode"/>
+			<keyword name="Concepts" ref="html/Concepts.htm"/>
+			<keyword name="Lossles method" ref="html/Concepts.htm#Lossless"/>
+			<keyword name="Interface" ref="html/MP3Gain_Interface.htm"/>
+			<keyword name="Menus" ref="html/Menus.htm"/>
+			<keyword name="File menu" ref="html/File_menu.htm"/>
+			<keyword name="Analysis menu" ref="html/Analysis_menu.htm"/>
+			<keyword name="Modify Gain menu" ref="html/Modify_Gain_menu.htm"/>
+			<keyword name="Constant Gain Change" ref="html/Modify_Gain_menu.htm#ConstantGain"/>
+			<keyword name="Options menu" ref="html/Options_menu.htm"/>
+			<keyword name="Maximizing" ref="html/Options_menu.htm#Maximizing"/>
+			<keyword name="Logs" ref="html/Options_menu.htm#Logs"/>
+			<keyword name="Language menu" ref="html/Language_menu.htm"/>
+			<keyword name="Help menu" ref="html/Help_menu.htm"/>
+			<keyword name="Button Bar" ref="html/Button_Bar.htm"/>
+			<keyword name="Target Volume" ref="html/Target_Volume.htm"/>
+			<keyword name="File List" ref="html/File_List.htm"/>
+			<keyword name="Status" ref="html/Status.htm"/>
+			<keyword name="Tags" ref="html/Tags.htm"/>
+			<keyword name="Troubleshooting" ref="html/Troubleshooting.htm"/>
+			<keyword name="Black screen" ref="html/BlackScreen.htm"/>
+			<keyword name="Tag Problems" ref="html/TagProblems.htm"/>
+		</keywords>
+		<files>
+			<file>html/NewDefault.css</file>
+			<file>html/MP3Gain.gif</file>
+			<file>html/ModeGraph.gif</file>
+			<file>html/ModeGraphKey.gif</file>
+			<file>html/AddFiles2.jpg</file>
+			<file>html/Analysis.jpg</file>
+			<file>html/ConstantGain2.jpg</file>
+			<file>html/Status3.jpg</file>
+			<file>html/AddFolder.jpg</file>
+			<file>html/Browse.jpg</file>
+			<file>html/FileList1.jpg</file>
+			<file>html/TargetVolume.jpg</file>
+			<file>html/AdvOptions.jpg</file>
+			<file>html/BrowseFolder.jpg</file>
+			<file>html/Interface.jpg</file>
+			<file>html/TrackAnalysis.jpg</file>
+			<file>html/AlbumAnalysis.jpg</file>
+			<file>html/ClearAll.jpg</file>
+			<file>html/Log.jpg</file>
+			<file>html/TrackGain.jpg</file>
+			<file>html/AlbumGain.jpg</file>
+			<file>html/ClearFiles.jpg</file>
+			<file>html/Status1.jpg</file>
+			<file>html/Wave1.jpg</file>
+			<file>html/AlbumResults.jpg</file>
+			<file>html/ConstantGain.jpg</file>
+			<file>html/Status2.jpg</file>
+			<file>html/Wave2.jpg</file>
+			<file>html/MP3Gain.htm</file>
+			<file>html/Overview.htm</file>
+			<file>html/Concepts.htm</file>
+			<file>html/MP3Gain_Interface.htm</file>
+			<file>html/Menus.htm</file>
+			<file>html/File_menu.htm</file>
+			<file>html/Analysis_menu.htm</file>
+			<file>html/Modify_Gain_menu.htm</file>
+			<file>html/Options_menu.htm</file>
+			<file>html/Language_menu.htm</file>
+			<file>html/Help_menu.htm</file>
+			<file>html/Button_Bar.htm</file>
+			<file>html/Target_Volume.htm</file>
+			<file>html/File_List.htm</file>
+			<file>html/Status.htm</file>
+			<file>html/Tags.htm</file>
+			<file>html/How_Do_I.htm</file>
+			<file>html/Correct_Several_Unrelated_Songs.htm</file>
+			<file>html/Correct_a_Complete_Album_of_Songs.htm</file>
+			<file>html/Troubleshooting.htm</file>
+			<file>html/BlackScreen.htm</file>
+			<file>html/TagProblems.htm</file>
+			<file>html/Credits.htm</file>
+		</files>
+	</filterSection>
+</QtHelpProject>

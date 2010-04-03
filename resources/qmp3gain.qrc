@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/add_file.gif</file>
+        <file>images/add_folder.gif</file>
+        <file>images/album_analysis.gif</file>
+        <file>images/album_gain.gif</file>
+        <file>images/clear_all.gif</file>
+        <file>images/clear_file.gif</file>
+        <file>images/constant_gain.gif</file>
+        <file>images/icon.png</file>
+        <file>images/track_analysis.gif</file>
+        <file>images/track_gain.gif</file>
+        <file>images/paypal-donate_secure.jpg</file>
+    </qresource>
+</RCC>
