@@ -464,31 +464,37 @@ void MainWindow::refreshUi(){
 }
 
 void MainWindow::enableGUI(){
-	// enable complete GUI except the cancelButton
+	// enable complete GUI except cancelButton and tableView
 	menubar->setEnabled(true);
 	toolBar->setEnabled(true);
 	doubleSpinBox_targetNormalValue->setEnabled(true);
-	tableView->setEnabled(true);
 	exitButton->setEnabled(true);
 	cancelButton->setEnabled(false);
 	isCancelled = false;
 	isPopupErrorSuppressed = QVariant();
 	isOpenLogPanelQuestionSuppressed = QVariant();
 	setProgress(QVariant(0), QVariant(0));
+
+	//logDockWidget
+	clearLogButton->setEnabled(true);
+	groupBox_logCheckboxes->setEnabled(true);
 }
 
 void MainWindow::disableGUI(){
-	// disable complete GUI except the cancelButton
+	// disable complete GUI except cancelButton and tableView
 	menubar->setEnabled(false);
 	toolBar->setEnabled(false);
 	doubleSpinBox_targetNormalValue->setEnabled(false);
-	tableView->setEnabled(false);
 	exitButton->setEnabled(false);
 	cancelButton->setEnabled(true);
 	isCancelled = false;
 	isPopupErrorSuppressed = QVariant();
 	isOpenLogPanelQuestionSuppressed = QVariant();
 	setProgress(QVariant(0), QVariant(0));
+
+	//logDockWidget
+	clearLogButton->setEnabled(false);
+	groupBox_logCheckboxes->setEnabled(false);
 }
 
 void MainWindow::refreshGUI() {

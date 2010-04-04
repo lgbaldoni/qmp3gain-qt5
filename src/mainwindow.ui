@@ -194,7 +194,7 @@
      <x>0</x>
      <y>0</y>
      <width>732</width>
-     <height>18</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -418,95 +418,104 @@
           </spacer>
          </item>
          <item>
-          <widget class="QCheckBox" name="checkBox_logError">
-           <property name="toolTip">
-            <string>Errors</string>
+          <widget class="QGroupBox" name="groupBox_logCheckboxes">
+           <property name="flat">
+            <bool>true</bool>
            </property>
-           <property name="statusTip">
-            <string>Errors</string>
-           </property>
-           <property name="styleSheet">
-            <string>QCheckBox { color: red }</string>
-           </property>
-           <property name="text">
-            <string>Error</string>
-           </property>
-           <property name="checked">
-            <bool>false</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="checkBox_logAnalysis">
-           <property name="toolTip">
-            <string>Analysis results</string>
-           </property>
-           <property name="statusTip">
-            <string>Analysis results</string>
-           </property>
-           <property name="styleSheet">
-            <string>QCheckBox { color: green }</string>
-           </property>
-           <property name="text">
-            <string>Analysis</string>
-           </property>
-           <property name="checked">
-            <bool>false</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="checkBox_logChange">
-           <property name="toolTip">
-            <string>Gain changes</string>
-           </property>
-           <property name="statusTip">
-            <string>Gain changes</string>
-           </property>
-           <property name="styleSheet">
-            <string>QCheckBox { color: blue }</string>
-           </property>
-           <property name="text">
-            <string>Change</string>
-           </property>
-           <property name="checked">
-            <bool>false</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="checkBox_logBackend">
-           <property name="toolTip">
-            <string>Back end output</string>
-           </property>
-           <property name="statusTip">
-            <string>Back end output</string>
-           </property>
-           <property name="styleSheet">
-            <string>QCheckBox { color: black }</string>
-           </property>
-           <property name="text">
-            <string>Back end</string>
-           </property>
-           <property name="checked">
-            <bool>false</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="checkBox_logTrace">
-           <property name="toolTip">
-            <string>Trace output</string>
-           </property>
-           <property name="statusTip">
-            <string>Trace output</string>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">QCheckBox { color: grey }</string>
-           </property>
-           <property name="text">
-            <string>Trace</string>
-           </property>
+           <layout class="QHBoxLayout" name="horizontalLayout_5">
+            <item>
+             <widget class="QCheckBox" name="checkBox_logError">
+              <property name="toolTip">
+               <string>Errors</string>
+              </property>
+              <property name="statusTip">
+               <string>Errors</string>
+              </property>
+              <property name="styleSheet">
+               <string>QCheckBox { color: red }</string>
+              </property>
+              <property name="text">
+               <string>Error</string>
+              </property>
+              <property name="checked">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="checkBox_logAnalysis">
+              <property name="toolTip">
+               <string>Analysis results</string>
+              </property>
+              <property name="statusTip">
+               <string>Analysis results</string>
+              </property>
+              <property name="styleSheet">
+               <string>QCheckBox { color: green }</string>
+              </property>
+              <property name="text">
+               <string>Analysis</string>
+              </property>
+              <property name="checked">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="checkBox_logChange">
+              <property name="toolTip">
+               <string>Gain changes</string>
+              </property>
+              <property name="statusTip">
+               <string>Gain changes</string>
+              </property>
+              <property name="styleSheet">
+               <string>QCheckBox { color: blue }</string>
+              </property>
+              <property name="text">
+               <string>Change</string>
+              </property>
+              <property name="checked">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="checkBox_logBackend">
+              <property name="toolTip">
+               <string>Back end output</string>
+              </property>
+              <property name="statusTip">
+               <string>Back end output</string>
+              </property>
+              <property name="styleSheet">
+               <string>QCheckBox { color: black }</string>
+              </property>
+              <property name="text">
+               <string>Back end</string>
+              </property>
+              <property name="checked">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="checkBox_logTrace">
+              <property name="toolTip">
+               <string>Trace output</string>
+              </property>
+              <property name="statusTip">
+               <string>Trace output</string>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QCheckBox { color: grey }</string>
+              </property>
+              <property name="text">
+               <string>Trace</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </item>
          <item>
