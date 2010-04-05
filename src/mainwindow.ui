@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>%1</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../resources/qmp3gain.qrc">
+    <normaloff>:/images/icon.png</normaloff>:/images/icon.png</iconset>
+  </property>
   <property name="toolTip">
    <string/>
   </property>
