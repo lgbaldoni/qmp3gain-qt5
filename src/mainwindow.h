@@ -11,6 +11,7 @@
 #include <QDir>
 #include <QPointer>
 #include <QWebView>
+#include <QSound>
 
 #include "ui_mainwindow.h"
 
@@ -100,6 +101,7 @@ private:
 	QPointer<QWebView> donationView;
 	QPointer<QLabel> messageLabel;
 	QPointer<QLabel> modelRowCountLabel;
+	QPointer<QSound> beepSound;
 
 	bool okToContinue();
 	QDir directoryOf(const QString &subdir);
@@ -201,6 +203,9 @@ private slots:
 	// menu: Modify_gain/Undo_gain_changes
 	void on_actionUndo_Gain_changes_triggered();
 
+	// menu: Options/Always_on_Top
+	void on_actionAlways_on_Top_toggled(bool checked);
+
 	// menu: Options/Tags/Remove_Tags_from_files
 	void on_actionRemove_Tags_from_files_triggered();
 
@@ -220,6 +225,9 @@ private slots:
 	void on_actionShow_Path_slash_File_triggered();
 	void on_actionShow_File_only_triggered();
 	void on_actionShow_Path_at_File_triggered();
+
+	// menu: Options/Beep when finished
+	void on_actionBeep_when_finished_toggled(bool checked);
 
 	// menu: Options/Reset "Warning" messages
 	void on_actionReset_warning_messages_triggered();

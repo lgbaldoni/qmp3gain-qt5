@@ -37,7 +37,7 @@ MainWindow::MainWindow(QWidget *parent)
 	connect(tableView, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(showContextMenuForWidget(const QPoint &)));
 	// modified default dB value
 	connect(doubleSpinBox_targetNormalValue, SIGNAL(valueChanged(double)), this, SLOT(updateModelRowsByNewTargetNormalValue(double)));
-	
+
 	createLanguageMenu();
 	
     // fill actions vector with checkable menu items
@@ -159,6 +159,9 @@ MainWindow::MainWindow(QWidget *parent)
 	operationMap.insert("max_no_clip_gain_for_album", QList<int>() << 50 << 50);
 	operationMap.insert("undo_gain_changes", QList<int>() << 100);
 
+	// init beepSound
+	on_actionBeep_when_finished_toggled(settings->value("actionBeep_when_finished", false).toBool());
+
 	createStatusBar();
 
 	refreshUi();
@@ -171,6 +174,7 @@ MainWindow::~MainWindow(){
 	delete menuLanguageActionGroup;
 	delete settings;
 	delete model;
+	delete beepSound;
 }
 
 /*
@@ -297,7 +301,7 @@ QDir MainWindow::directoryOf(const QString &subdir)
 		dir.cdUp();
 		dir.cdUp();
 	}
-#elif defined(Q_OS_LINUX)
+#elif defined(Q_OS_LINUX) || defined(Q_OS_UNIX)
 	if (dir.dirName().toLower() == "bin")
 		dir.cdUp();
 #endif
@@ -317,24 +321,30 @@ void MainWindow::switchLanguage(QAction *action)
 
 	QString qmPath = directoryOf("translations").absolutePath();
 	QString qmFile = appTitle.toLower() + QString("_") + locale;
-	writeLog(qmFile, LOGTYPE_TRACE);
+	QString qmPathFile = qmPath+"/"+qmFile+".qm";
 
 	bool isLoaded = appTranslator->load(qmFile, qmPath);
 	if (isLoaded) {
+		writeLog(tr("Translation file %1 is loaded").arg(qmPathFile), LOGTYPE_TRACE);
 		settings->setValue("locale", locale);
 		// search for the action belongs to our locale
 		foreach(QAction *a, menuLanguageActionGroup->actions()) {
-			writeLog(a->data().toString(), LOGTYPE_TRACE);
 			if (a->data().toString() == locale) {
 				a->setChecked(true);
+				writeLog(tr("%1 locale is used").arg(locale), LOGTYPE_TRACE);
 				break;
 			}
 		}
-
 	}
 	else{
+		if (locale==defaultLocale)
+			writeLog(tr("No translation file is necessary"), LOGTYPE_TRACE);
+		else
+			writeLog(tr("Translation file %1 cannot be found, %2 locale is refused").arg(qmPathFile).arg(locale), LOGTYPE_ERROR);
+
 		settings->setValue("locale", defaultLocale);
 		actionDefault_Language->setChecked(true);
+		writeLog(tr("Default %1 locale is used").arg(defaultLocale), LOGTYPE_TRACE);
 	}
 
 	retranslateUi(this);
@@ -478,6 +488,13 @@ void MainWindow::enableGUI(){
 	//logDockWidget
 	clearLogButton->setEnabled(true);
 	groupBox_logCheckboxes->setEnabled(true);
+
+	if (actionBeep_when_finished->isChecked()){
+		if (beepSound)
+			beepSound->play();
+		else
+			QApplication::beep();
+	}
 }
 
 void MainWindow::disableGUI(){
@@ -561,6 +578,10 @@ void MainWindow::refreshGUI() {
 void MainWindow::refreshMenu(){
 	bool isBackEndAvailable = !backEndVersion.isEmpty();
 	bool listEmpty = model->rowCount()==0;
+
+	// some options might be not used
+	if (!QSystemTrayIcon::isSystemTrayAvailable())
+		actionMinimize_to_tray->setEnabled(false);
 
 	actionLoad_Analysis_results->setEnabled(isBackEndAvailable);
 	actionSave_Analysis_results->setEnabled(!listEmpty);
@@ -3006,6 +3027,19 @@ void MainWindow::on_actionUndo_Gain_changes_triggered(){
 	}
 }
 
+// menu: Options/Always_on_Top
+void MainWindow::on_actionAlways_on_Top_toggled(bool checked){
+	Qt::WindowFlags flags = this->windowFlags();
+	if (checked){
+		flags |= Qt::WindowStaysOnTopHint;
+	}
+	else{
+		flags &= ~Qt::WindowStaysOnTopHint;
+	}
+	this->setWindowFlags(flags);
+	this->show();
+}
+
 // menu: Options/Tags/Remove_Tags_from_files
 void MainWindow::on_actionRemove_Tags_from_files_triggered(){
 	QProcess process;
@@ -3178,6 +3212,26 @@ void MainWindow::on_actionShow_Path_at_File_triggered(){
 	refreshGUI();
 }
 
+// menu: Options/Beep when finished
+void MainWindow::on_actionBeep_when_finished_toggled(bool checked){
+	if (checked){
+		if (QSound::isAvailable()){
+			QString resourcePath = directoryOf("resources/sounds").absolutePath();
+			QString beepFile(resourcePath+"/"+"beep.wav");
+			if (QFileInfo(beepFile).exists())
+				beepSound = new QSound(beepFile);
+			else
+				writeLog(tr("Beep %1 file cannot be found").arg(beepFile), LOGTYPE_ERROR);
+		}
+		else{
+			writeLog(tr("QSound is unavailable, QApplication::beep() will be used instead"), LOGTYPE_TRACE);
+		}
+	}
+	else{
+		delete beepSound;
+	}
+}
+
 // menu: Options/Reset "Warning" messages
 void MainWindow::on_actionReset_warning_messages_triggered(){
 	settings->setValue("clearAnalysis_ConfirmSuppressed", false);
@@ -3222,23 +3276,38 @@ void MainWindow::on_actionAdvanced_triggered(){
 // menu: Help/Contents
 void MainWindow::on_actionContents_triggered(){
 	QProcess *process = new QProcess;
-	QString app = QLibraryInfo::location(QLibraryInfo::BinariesPath) + QDir::separator();
-//#if !defined(Q_OS_MAC)
-	app += QLatin1String("assistant");
-//#else
-//	app += QLatin1String("Assistant.app/Contents/MacOS/Assistant");
-//#endif
 	QStringList args;
-	QFileInfo fi(directoryOf("help").absolutePath(), "qmp3gain.qhc");
-	args << QLatin1String("-collectionFile")
-		<< fi.absoluteFilePath().toLatin1()
-		<< QLatin1String("-enableRemoteControl");
-	QString trace = QString("%1 %2").arg(app).arg(args.join(" "));
-	writeLog(trace, LOGTYPE_BACKEND, 1, LOGOPTION_BOLD);
+	QString app = QLibraryInfo::location(QLibraryInfo::BinariesPath) + QDir::separator();
+#if !defined(Q_OS_MAC)
+	app += QLatin1String("assistant");
+#else
+	app += QLatin1String("Assistant.app/Contents/MacOS/Assistant");
+#endif
+	QString locale = settings->value("locale", QLocale::system().name()).toString();
 
-	process->start(app, args);
-	if (!process->waitForStarted())
-		return;
+	QFileInfo fi(directoryOf("help").absolutePath(), "qmp3gain_"+locale+".qhc");
+	if (!fi.exists()){
+		if (locale!=defaultLocale){
+			writeLog(tr("Help file %1 cannot be found").arg(fi.absoluteFilePath()), LOGTYPE_TRACE);
+		}
+		fi.setFile(directoryOf("help").absolutePath(), "qmp3gain.qhc");
+	}
+	if (fi.exists()){
+		args << QLatin1String("-collectionFile")
+			<< fi.absoluteFilePath().toLatin1()
+			<< QLatin1String("-enableRemoteControl");
+		writeLog(tr("Help file %1 is used").arg(fi.absoluteFilePath()), LOGTYPE_TRACE);
+		QString trace = QString("%1 %2").arg(app).arg(args.join(" "));
+		writeLog(trace, LOGTYPE_BACKEND, 1, LOGOPTION_BOLD);
+
+		process->start(app, args);
+		if (!process->waitForStarted())
+			return;
+	}
+	else{
+		writeLog(tr("Help file %1 cannot be found").arg(fi.absoluteFilePath()), LOGTYPE_ERROR);
+		delete process;
+	}
 }
 
 // menu: Help/Disclaimer
