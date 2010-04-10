@@ -12,6 +12,7 @@
 #include <QPointer>
 #include <QWebView>
 #include <QSound>
+#include <QSystemTrayIcon>
 
 #include "ui_mainwindow.h"
 
@@ -69,6 +70,7 @@ public slots:
 
 protected:
     void closeEvent(QCloseEvent *event);
+	void changeEvent (QEvent *event);
 	//void showEvent(QShowEvent *event);
 	void createStatusBar();
 
@@ -88,6 +90,7 @@ private:
 	const static QString appVersion;
 	const static QString backEndFixed;
 	const static QString donationUrl;
+	const static QString systemTrayIconToolTip_idle;
 	QString backEndFileName;
 	QString backEndVersion;
 	const static double defaultNormalTargetValue;
@@ -95,6 +98,7 @@ private:
 	const static double DB;
 	QSize iconDefaultSize;
 	bool isCancelled;
+	bool enabledGUI;
 	QVariant isPopupErrorSuppressed; // bool, exists just inside a function
 	QVariant isOpenLogPanelQuestionSuppressed; // bool, exists just inside a function
 	QPointer<QFile> fileLog;
@@ -102,6 +106,10 @@ private:
 	QPointer<QLabel> messageLabel;
 	QPointer<QLabel> modelRowCountLabel;
 	QPointer<QSound> beepSound;
+
+	QPointer<QAction> restoreTrayAction;
+	QPointer<QAction> quitTrayAction;
+	QPointer<QSystemTrayIcon> trayIcon;
 
 	bool okToContinue();
 	QDir directoryOf(const QString &subdir);
@@ -133,6 +141,7 @@ private:
 	void runGain(QModelIndexList indices, bool isAlbum = false, double passSlice = 100.0);
 	void runConstantGain(QModelIndexList indices, int mp3gain, bool isLeft, bool isRight, double passSlice = 100.0);
 	void updateStatusBar(const QString & msg);
+	void createTrayIcon();
 
 private slots:
 	void showContextMenuForWidget(const QPoint &pos);
@@ -141,6 +150,9 @@ private slots:
 	void loadDonationUrlProgress(int progress);
 	void loadDonationUrlFinished(bool isLoadFinished);
 	void updateStatusBar();
+	void trayIconActivated(QSystemTrayIcon::ActivationReason reason);
+	void trayShowMessage();
+	void trayHide();
 
 	void on_cancelButton_clicked();
 	void on_clearLogButton_clicked();

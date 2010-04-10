@@ -19,6 +19,7 @@ const QString MainWindow::defaultLocale = "en_US";
 const double MainWindow::DB = 20.0*log10(pow(2.0,0.25)); // 1 mp3Gain = ~1.5 dBGain
 const QString MainWindow::donationUrl =
 		"https://www.paypal.com/xclick/business=mp3gain@hotmail.com&item_name=MP3 Gain Donation&no_shipping=1&return=http://mp3gain.sourceforge.net/thanks.php";
+const QString MainWindow::systemTrayIconToolTip_idle = tr("No operation running");
 
 MainWindow::MainWindow(QWidget *parent)
 		: QMainWindow(parent)
@@ -27,6 +28,7 @@ MainWindow::MainWindow(QWidget *parent)
 	isCancelled = false;
 	lastAddedIndices = QModelIndexList();
 	menuLanguageActionGroup = new QActionGroup(this);
+	enabledGUI = false;
 
 	appTranslator = new QTranslator(this);
 	qApp->installTranslator(appTranslator);
@@ -175,6 +177,10 @@ MainWindow::~MainWindow(){
 	delete settings;
 	delete model;
 	delete beepSound;
+
+	delete trayIcon;
+	delete restoreTrayAction;
+	delete quitTrayAction;
 }
 
 /*
@@ -204,6 +210,35 @@ void MainWindow::closeEvent(QCloseEvent *event)
 		event->ignore();
 	}
 }
+
+void MainWindow::changeEvent (QEvent *event)
+{
+	switch (event->type()) {
+		case QEvent::WindowStateChange: {
+			QWindowStateChangeEvent *changeEvent = static_cast<QWindowStateChangeEvent*>(event);
+			if (changeEvent->isOverride())
+				break;
+			Qt::WindowStates oldState = changeEvent->oldState();
+			Qt::WindowStates newState = this->windowState();
+			if (!(oldState & Qt::WindowMinimized) && (newState & Qt::WindowMinimized)){
+				if (actionMinimize_to_tray->isChecked()){
+					if (!trayIcon)
+						createTrayIcon();
+
+					if (!trayIcon)
+						break;
+
+					trayIcon->show();
+					hide();
+				}
+			}
+			break;
+		}
+		default:
+			;
+	}
+}
+
 
 /*
 void MainWindow::showEvent(QShowEvent *event)
@@ -244,6 +279,118 @@ void MainWindow::updateStatusBar(){
 void MainWindow::updateStatusBar(const QString & msg){
 	messageLabel->setText(msg);
 	updateStatusBar();
+}
+
+void MainWindow::createTrayIcon()
+{
+	if (QSystemTrayIcon::isSystemTrayAvailable()){
+		QIcon icon;
+		icon.addFile(QString::fromUtf8(":/images/icon.png"), QSize(), QIcon::Normal, QIcon::Off);
+
+		// create tray actions
+		restoreTrayAction = new QAction(tr("&Restore"), this);
+		connect(restoreTrayAction, SIGNAL(triggered()), this, SLOT(trayHide()));
+
+		quitTrayAction = new QAction(tr("&Quit"), this);
+		quitTrayAction->setShortcut(QKeySequence(tr("Ctrl+Q", "SystemTrayIcon|Quit")));
+		connect(quitTrayAction, SIGNAL(triggered()), qApp, SLOT(quit()));
+
+		// create tray menu
+		QMenu *trayIconMenu = new QMenu(this);
+
+		/*
+		QLabel* label = new QLabel(QString("<b>"+this->appTitle)+"</b>");
+		label->setAlignment( Qt::AlignLeft );
+		*/
+
+		QWidget *widget;
+		QVBoxLayout *verticalLayout;
+		QHBoxLayout *horizontalLayout;
+		QLabel *label;
+		QLabel *label_2;
+		QSpacerItem *horizontalSpacer;
+
+		widget = new QWidget();
+		widget->setObjectName(QString::fromUtf8("widget"));
+		//widget->setGeometry(QRect(100, 90, 103, 42));
+		verticalLayout = new QVBoxLayout(widget);
+		verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+		horizontalLayout = new QHBoxLayout();
+		horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
+		label = new QLabel(widget);
+		label->setObjectName(QString::fromUtf8("label"));
+		label->setPixmap(QPixmap(QString::fromUtf8(":/images/icon.png")));
+		label->setMaximumSize(16, 16);
+		label->setScaledContents(true);
+
+		horizontalLayout->addWidget(label);
+
+		label_2 = new QLabel(widget);
+		label_2->setObjectName(QString::fromUtf8("label_2"));
+		label_2->setText(QString("<b>"+this->appTitle)+"</b>");
+		label_2->setAlignment(Qt::AlignCenter);
+
+		horizontalLayout->addWidget(label_2);
+
+		horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+		horizontalLayout->addItem(horizontalSpacer);
+
+		verticalLayout->addLayout(horizontalLayout);
+
+
+		QWidgetAction* titleAction = new QWidgetAction(this);
+		titleAction->setDefaultWidget(widget);
+
+		trayIconMenu->addAction(titleAction);
+		trayIconMenu->addSeparator();
+		trayIconMenu->addAction(restoreTrayAction);
+		trayIconMenu->addAction(quitTrayAction);
+
+		// create tray icon
+		trayIcon = new QSystemTrayIcon(this);
+		trayIcon->setContextMenu(trayIconMenu);
+
+		trayIcon->setIcon(icon);
+		trayIcon->setToolTip(this->systemTrayIconToolTip_idle);
+
+		connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
+				this, SLOT(trayIconActivated(QSystemTrayIcon::ActivationReason)));
+	}
+	else{
+		writeLog(tr("Minimize to tray option is checked and tray icon should be created but system tray is unavailable"), LOGTYPE_TRACE);
+	}
+
+}
+
+void MainWindow::trayIconActivated(QSystemTrayIcon::ActivationReason reason){
+	switch (reason) {
+		case QSystemTrayIcon::Trigger:
+		case QSystemTrayIcon::DoubleClick:
+			trayHide();
+			break;
+		case QSystemTrayIcon::MiddleClick:
+			trayShowMessage();
+			break;
+		default:
+			;
+	}
+}
+
+void MainWindow::trayShowMessage()
+{
+	if (QSystemTrayIcon::supportsMessages()){
+		QSystemTrayIcon::MessageIcon icon = QSystemTrayIcon::MessageIcon(QSystemTrayIcon::Information);
+		trayIcon->showMessage(appTitle, tr("Lossless volume modification of MP3 files"), icon, 5000);
+	}
+	else{
+		writeLog(tr("System tray does not support balloon messages"), LOGTYPE_TRACE);
+	}
+}
+
+void MainWindow::trayHide()
+{
+	trayIcon->hide();
+	showNormal();
 }
 
 void MainWindow::on_cancelButton_clicked()
@@ -495,6 +642,8 @@ void MainWindow::enableGUI(){
 		else
 			QApplication::beep();
 	}
+
+	this->enabledGUI = true;
 }
 
 void MainWindow::disableGUI(){
@@ -512,6 +661,8 @@ void MainWindow::disableGUI(){
 	//logDockWidget
 	clearLogButton->setEnabled(false);
 	groupBox_logCheckboxes->setEnabled(false);
+
+	this->enabledGUI = false;
 }
 
 void MainWindow::refreshGUI() {
@@ -673,8 +824,17 @@ void MainWindow::setProgress(QVariant progressFile, QVariant progressTotal){
 		double value = progressTotal.toDouble(&isValid);
 		if (isValid){
 			progressBar_Total->setValue(value);
+			if (trayIcon){
+				if (value!=0)
+					trayIcon->setToolTip(tr("Work in progress: %1%").arg(progressTotal.toString()));
+				else
+					trayIcon->setToolTip(this->systemTrayIconToolTip_idle);
+			}
 			writeLog(QString("<progressTotal>%1</progressTotal>").arg(progressBar_Total->value()), LOGTYPE_TRACE);
 		}
+	}else{
+		if (trayIcon)
+			trayIcon->setToolTip(this->systemTrayIconToolTip_idle);
 	}
 }
 
