@@ -1,0 +1,24 @@
+Short description:
+
+git clone git://qmp3gain.git.sourceforge.net/gitroot/qmp3gain/qmp3gain
+qmake qmp3gain.pro
+make
+
+Verbose description:
+
+1. Downloading the source (git client is needed):
+git clone git://qmp3gain.git.sourceforge.net/gitroot/qmp3gain/qmp3gain
+
+(2. Installing QT SDK (at least v4.5 is required) at http://qt.nokia.com/downloads/
+On Windows, after QT installation usually I make a copy of mingw32-make.exe file to make.exe to ease my later hand work, eg.
+copy c:\Qt\2009.05\mingw\bin\mingw32-make.exe c:\Qt\2009.05\mingw\bin\make.exe
+If you already have a make executable from another developer tool, forget it and use "mingw32-make" instead of "make" later.)
+
+3. Building the application
+(On Windows, launch a "Qt command prompt" from the new menu item, and) in the downloaded qmp3gain folder use the following commands:
+qmake qmp3gain.pro
+make
+
+4. Run the application
+After a successful build, run the generated executable file and enjoy it :) Good luck! 
+bin/mp3gain(.exe)
