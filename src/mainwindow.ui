@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>%1</string>
+   <string notr="true">%1</string>
   </property>
   <property name="windowIcon">
    <iconset resource="../resources/qmp3gain.qrc">
@@ -149,7 +149,7 @@
         <item>
          <widget class="QPushButton" name="exitButton">
           <property name="text">
-           <string>Exit</string>
+           <string>Quit</string>
           </property>
          </widget>
         </item>
@@ -218,7 +218,7 @@
     <addaction name="actionClear_Selected_Files"/>
     <addaction name="actionClear_All_files"/>
     <addaction name="separator"/>
-    <addaction name="actionExit"/>
+    <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menuAnalysis">
     <property name="title">
@@ -404,7 +404,7 @@
          <item>
           <widget class="QToolButton" name="clearLogButton">
            <property name="text">
-            <string>Clear</string>
+            <string extracomment="Log output clear button">Clear</string>
            </property>
           </widget>
          </item>
@@ -577,7 +577,7 @@
      <normaloff>:/images/add_file.gif</normaloff>:/images/add_file.gif</iconset>
    </property>
    <property name="text">
-    <string>Add File(s)</string>
+    <string>Add &amp;File(s)</string>
    </property>
    <property name="toolTip">
     <string>Add mp3 file(s) to the list</string>
@@ -586,7 +586,7 @@
     <string>Add mp3 file(s) to the list</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+F</string>
+    <string extracomment="File|Add_files">Ctrl+F</string>
    </property>
   </action>
   <action name="actionAdd_Folder">
@@ -595,7 +595,7 @@
      <normaloff>:/images/add_folder.gif</normaloff>:/images/add_folder.gif</iconset>
    </property>
    <property name="text">
-    <string>Add Folder</string>
+    <string>Add Fol&amp;der</string>
    </property>
    <property name="toolTip">
     <string>Add all mp3 files in a folder</string>
@@ -604,7 +604,7 @@
     <string>Add all mp3 files in a folder</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+D</string>
+    <string extracomment="File|Add_folder">Ctrl+D</string>
    </property>
   </action>
   <action name="actionSelect_All_Files">
@@ -612,10 +612,10 @@
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>Select All Files</string>
+    <string>Select &amp;All Files</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+A</string>
+    <string extracomment="File|Select_all_files">Ctrl+A</string>
    </property>
   </action>
   <action name="actionSelect_No_Files">
@@ -623,10 +623,10 @@
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>Select No Files</string>
+    <string>Select &amp;No Files</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+N</string>
+    <string extracomment="File|Select_no_files">Ctrl+N</string>
    </property>
   </action>
   <action name="actionInvert_selection">
@@ -634,10 +634,10 @@
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>Invert selection</string>
+    <string>In&amp;vert selection</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+V</string>
+    <string extracomment="File|Invert_selection">Ctrl+V</string>
    </property>
   </action>
   <action name="actionClear_Selected_Files">
@@ -682,9 +682,12 @@
     <string>Remove all files from list</string>
    </property>
   </action>
-  <action name="actionExit">
+  <action name="actionQuit">
    <property name="text">
-    <string>Exit</string>
+    <string>&amp;Quit</string>
+   </property>
+   <property name="shortcut">
+    <string extracomment="File|Quit">Ctrl+Q</string>
    </property>
   </action>
   <action name="actionTrack_Analysis">
@@ -702,7 +705,7 @@
      <normaloff>:/images/track_analysis.gif</normaloff>:/images/track_analysis.gif</iconset>
    </property>
    <property name="text">
-    <string>Track Analysis</string>
+    <string>&amp;Track Analysis</string>
    </property>
    <property name="toolTip">
     <string>Do Replay Gain analysis on files</string>
@@ -714,7 +717,7 @@
     <string/>
    </property>
    <property name="shortcut">
-    <string>Ctrl+T</string>
+    <string extracomment="Analysis|Track_analysis">Ctrl+T</string>
    </property>
   </action>
   <action name="actionAlbum_Analysis">
@@ -729,7 +732,7 @@
      <normaloff>:/images/album_analysis.gif</normaloff>:/images/album_analysis.gif</iconset>
    </property>
    <property name="text">
-    <string>Album Analysis</string>
+    <string>Alb&amp;um Analysis</string>
    </property>
    <property name="toolTip">
     <string>Do Replay Gain analysis on files as an album</string>
@@ -741,7 +744,7 @@
     <string/>
    </property>
    <property name="shortcut">
-    <string>Ctrl+U</string>
+    <string extracomment="Analysis|Album_analysis">Ctrl+U</string>
    </property>
   </action>
   <action name="actionClear_Analysis">
@@ -749,7 +752,7 @@
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>Clear Analysis</string>
+    <string>&amp;Clear Analysis</string>
    </property>
    <property name="statusTip">
     <string>Clear the analysis results in the file list</string>
@@ -770,7 +773,7 @@
      <normaloff>:/images/track_gain.gif</normaloff>:/images/track_gain.gif</iconset>
    </property>
    <property name="text">
-    <string>Track Gain</string>
+    <string>Track &amp;Gain</string>
    </property>
    <property name="iconText">
     <string>Track Gain</string>
@@ -782,7 +785,7 @@
     <string>Volume-correct all files listed in the File List to match the Target Volume</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+G</string>
+    <string extracomment="Modify_gain|Track_gain">Ctrl+G</string>
    </property>
   </action>
   <action name="actionAlbum_Gain">
@@ -797,7 +800,7 @@
      <normaloff>:/images/album_gain.gif</normaloff>:/images/album_gain.gif</iconset>
    </property>
    <property name="text">
-    <string>Album Gain</string>
+    <string>Al&amp;bum Gain</string>
    </property>
    <property name="iconText">
     <string>Album Gain</string>
@@ -806,7 +809,7 @@
     <string>Volume-correct all files listed in the File List so that the overall album volume matches the Target Volume</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+B</string>
+    <string extracomment="Modify_gain|Album_gain">Ctrl+B</string>
    </property>
   </action>
   <action name="actionConstant_Gain">
@@ -821,7 +824,7 @@
      <normaloff>:/images/constant_gain.gif</normaloff>:/images/constant_gain.gif</iconset>
    </property>
    <property name="text">
-    <string>Constant Gain</string>
+    <string>&amp;Constant Gain</string>
    </property>
    <property name="iconText">
     <string>Constant Gain</string>
@@ -833,7 +836,7 @@
     <string>Absolute gain change of all files listed in the File List</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+O</string>
+    <string extracomment="Modify_gain|Constant_gain">Ctrl+O</string>
    </property>
   </action>
   <action name="actionUndo_Gain_changes">
@@ -841,7 +844,7 @@
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>Undo Gain changes</string>
+    <string>&amp;Undo Gain changes</string>
    </property>
    <property name="statusTip">
     <string>Undo all gain changes to the mp3 files in the list</string>
@@ -956,7 +959,7 @@
   </action>
   <action name="actionAdvanced">
    <property name="text">
-    <string>Advanced...</string>
+    <string>&amp;Advanced...</string>
    </property>
    <property name="statusTip">
     <string>Allows you to modify some extra features</string>
@@ -1000,17 +1003,17 @@
   </action>
   <action name="actionContents">
    <property name="text">
-    <string>Contents</string>
+    <string>&amp;Contents</string>
    </property>
   </action>
   <action name="actionDisclaimer">
    <property name="text">
-    <string>Disclaimer...</string>
+    <string>&amp;Disclaimer...</string>
    </property>
   </action>
   <action name="actionAbout">
    <property name="text">
-    <string>About...</string>
+    <string>&amp;About...</string>
    </property>
   </action>
   <action name="actionMax_No_clip_Analysis">
@@ -1018,16 +1021,16 @@
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>Max No-clip Analysis</string>
+    <string>&amp;Max No-clip Analysis</string>
    </property>
    <property name="statusTip">
     <string>Find only the peak amplitudes of each of the mp3s in the list without spending any extra time</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+M</string>
+    <string extracomment="Analysis|Max_no-clip_analysis">Ctrl+M</string>
    </property>
    <property name="visible">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
   </action>
   <action name="actionMax_No_clip_Gain_for_Each_file">
@@ -1035,7 +1038,7 @@
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>Max No-clip Gain for Each file</string>
+    <string>Ma&amp;x No-clip Gain for Each file</string>
    </property>
    <property name="iconText">
     <string>This will change the gain on each mp3 file so that it is as loud as possible without clipping.</string>
@@ -1047,10 +1050,10 @@
     <string>Change the gain on each mp3 file so that it is as loud as possible without clipping</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+X</string>
+    <string extracomment="Modify_gain|Max_no-clip_gain_for_each_file">Ctrl+X</string>
    </property>
    <property name="visible">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
   </action>
   <action name="actionMax_No_clip_Gain_for_Album">
@@ -1058,7 +1061,7 @@
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>Max No-clip Gain for Album</string>
+    <string>Max No-c&amp;lip Gain for Album</string>
    </property>
    <property name="iconText">
     <string>This will look at each folder in the file list, find the single maximum gain which will not cause any clipping in any of the mp3s in the folder, and then apply that single gain change to all the mp3s in the folder.</string>
@@ -1070,10 +1073,10 @@
     <string>Look at each folder in the file list, find the single maximum gain which will not cause any clipping in any of the mp3s in the folder, and then apply that single gain change to all the mp3s in the folder</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+L</string>
+    <string extracomment="Modify_gain|Max_no-clip_gain_for_album">Ctrl+L</string>
    </property>
    <property name="visible">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
   </action>
   <action name="actionRe_calculate_do_not_read_tags">
@@ -1174,12 +1177,12 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Original (English)</string>
+    <string>&amp;Original (English)</string>
    </property>
   </action>
   <action name="actionBack_end">
    <property name="text">
-    <string>Back end...</string>
+    <string>&amp;Back end...</string>
    </property>
    <property name="statusTip">
     <string>Set the location of the back end mp3gain</string>
@@ -1447,7 +1450,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>actionExit</sender>
+   <sender>actionQuit</sender>
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
    <slot>close()</slot>

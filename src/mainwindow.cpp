@@ -19,7 +19,6 @@ const QString MainWindow::defaultLocale = "en_US";
 const double MainWindow::DB = 20.0*log10(pow(2.0,0.25)); // 1 mp3Gain = ~1.5 dBGain
 const QString MainWindow::donationUrl =
 		"https://www.paypal.com/xclick/business=mp3gain@hotmail.com&item_name=MP3 Gain Donation&no_shipping=1&return=http://mp3gain.sourceforge.net/thanks.php";
-const QString MainWindow::systemTrayIconToolTip_idle = tr("No operation running");
 
 MainWindow::MainWindow(QWidget *parent)
 		: QMainWindow(parent)
@@ -101,7 +100,34 @@ MainWindow::MainWindow(QWidget *parent)
 
 	// to resize toolbar icons later
 	iconDefaultSize = toolBar->iconSize();
-	
+
+	// this array is a must to enable translations of buttons of QDialogButtonBox
+	static const char *QDialogButtonBox_strings[] = {
+		// QDialogButtonBox buttons must be set in our translation file
+		QT_TRANSLATE_NOOP("QDialogButtonBox", "OK"),
+		QT_TRANSLATE_NOOP("QDialogButtonBox", "Open"),
+		QT_TRANSLATE_NOOP("QDialogButtonBox", "Save"),
+		QT_TRANSLATE_NOOP("QDialogButtonBox", "Cancel"),
+		QT_TRANSLATE_NOOP("QDialogButtonBox", "Close"),
+		QT_TRANSLATE_NOOP("QDialogButtonBox", "Discard"),
+		QT_TRANSLATE_NOOP("QDialogButtonBox", "Apply"),
+		QT_TRANSLATE_NOOP("QDialogButtonBox", "Reset"),
+		QT_TRANSLATE_NOOP("QDialogButtonBox", "Restore Defaults"),
+		QT_TRANSLATE_NOOP("QDialogButtonBox", "Help"),
+		QT_TRANSLATE_NOOP("QDialogButtonBox", "Save All"),
+		QT_TRANSLATE_NOOP("QDialogButtonBox", "&Yes"),
+		QT_TRANSLATE_NOOP("QDialogButtonBox", "Yes to &All"),
+		QT_TRANSLATE_NOOP("QDialogButtonBox", "&No"),
+		QT_TRANSLATE_NOOP("QDialogButtonBox", "N&o to All"),
+
+		QT_TRANSLATE_NOOP("QDialogButtonBox", "Abort"),
+		QT_TRANSLATE_NOOP("QDialogButtonBox", "Retry"),
+		QT_TRANSLATE_NOOP("QDialogButtonBox", "Ignore"),
+
+		QT_TRANSLATE_NOOP("QDialogButtonBox", "Don't Save"),
+		QT_TRANSLATE_NOOP("QDialogButtonBox", "Close without Saving")
+	};
+
 	// model and view columns for table containing files
 	static const char * _modelHeaderLabels[] = {
 		QT_TR_NOOP("Path/File"),
@@ -188,7 +214,7 @@ bool MainWindow::okToContinue()
 {
     if (isWindowModified()) {
         int r = QMessageBox::warning(this, tr("Spreadsheet"),
-						tr("The document has been modified.") + "\n" + tr("Do you want to save your changes?"),
+						tr("The document has been modified.\nDo you want to save your changes?"),
                         QMessageBox::Yes | QMessageBox::No
                         | QMessageBox::Cancel);
         if (r == QMessageBox::Yes) {
@@ -351,7 +377,7 @@ void MainWindow::createTrayIcon()
 		trayIcon->setContextMenu(trayIconMenu);
 
 		trayIcon->setIcon(icon);
-		trayIcon->setToolTip(this->systemTrayIconToolTip_idle);
+		trayIcon->setToolTip(tr("No operation running"));
 
 		connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
 				this, SLOT(trayIconActivated(QSystemTrayIcon::ActivationReason)));
@@ -408,7 +434,8 @@ void MainWindow::on_clearLogButton_clicked()
 		bool isConfirmSuppressed = settings->value("clearLogs_ConfirmSuppressed", false).toBool();
 		if (!isConfirmSuppressed){
 			int r = MyMessageBox::question(this, appTitle+" - "+tr("Clear Logs?"),
-						tr("This will clear all log results.") + "\n" + tr("Are you sure?"),
+						tr("This will clear all log results.\n"
+						   "Are you sure?"),
 						tr("Don't ask me again"),
 						isConfirmSuppressed,
 						QMessageBox::Yes | QMessageBox::No,
@@ -828,13 +855,13 @@ void MainWindow::setProgress(QVariant progressFile, QVariant progressTotal){
 				if (value!=0)
 					trayIcon->setToolTip(tr("Work in progress: %1%").arg(progressTotal.toString()));
 				else
-					trayIcon->setToolTip(this->systemTrayIconToolTip_idle);
+					trayIcon->setToolTip(tr("No operation running"));
 			}
 			writeLog(QString("<progressTotal>%1</progressTotal>").arg(progressBar_Total->value()), LOGTYPE_TRACE);
 		}
 	}else{
 		if (trayIcon)
-			trayIcon->setToolTip(this->systemTrayIconToolTip_idle);
+			trayIcon->setToolTip(tr("No operation running"));
 	}
 }
 
@@ -922,7 +949,7 @@ void MainWindow::setItem(int row, QString column, QVariant value) {
 			}
 		}
 	}else if (value.type()==QVariant::Bool){
-		QString trueStr = tr("Y");
+		QString trueStr = tr("Y", "Yes flag in some fields of the file list");
 		if (item){
 			if (!value.isNull() && value.toBool()){
 				item->setText(trueStr);
@@ -2394,8 +2421,7 @@ void MainWindow::on_actionLoad_Analysis_results_triggered(){
 			if (!docMain.setContent(&fileMain, true, &errorMsg, &errorLine,
 									&errorColumn)) {
 				QMessageBox::warning(0, tr("DOM Parser"),
-									 tr("Parse error at line %1, "
-										"column %2:\n%3")
+									 tr("Parse error at line %1, column %2:\n%3")
 									 .arg(errorLine)
 									 .arg(errorColumn)
 									 .arg(errorMsg));
@@ -2506,9 +2532,9 @@ void MainWindow::on_actionLoad_Analysis_results_triggered(){
 				}
 				else if (!isYesToAll_FileLastModified){
 					//QString("%1").arg(mp3Gain)
-					QString text = tr("File may have been modified after analysis was saved:") + "\n" +
-								   fileName + "\n" +
-								   tr("Load saved analysis results anyhow?");
+					QString text = tr("File may have been modified after analysis was saved:\n"
+								   "%1\n"
+								   "Load saved analysis results anyhow?").arg(fileName);
 					int button = QMessageBox::warning(this, appTitle, text,
 										 QMessageBox::Yes | QMessageBox::YesToAll | QMessageBox::No | QMessageBox::NoToAll | QMessageBox::Cancel,
 										 QMessageBox::Yes);
@@ -2536,9 +2562,9 @@ void MainWindow::on_actionLoad_Analysis_results_triggered(){
 					isAnalysisIgnored = true;
 				}
 				else if (!isYesToAll_FileSize){
-					QString text = tr("File size changed after analysis was saved:") + "\n" +
-							   fileName + "\n" +
-							   tr("Load saved analysis results anyhow?");
+					QString text = tr("File size changed after analysis was saved:\n"
+							   "%1\n"
+							   "Load saved analysis results anyhow?").arg(fileName);
 					int button = QMessageBox::warning(this, appTitle, text,
 										 QMessageBox::Yes | QMessageBox::YesToAll | QMessageBox::No | QMessageBox::NoToAll | QMessageBox::Cancel,
 										 QMessageBox::Yes);
@@ -2569,9 +2595,9 @@ void MainWindow::on_actionLoad_Analysis_results_triggered(){
 					isAnalysisIgnored = true;
 				}
 				if (false && !isYesToAll_FileExist){ // TODO: perhaps it should be activated in general settings
-					QString text = tr("File already exists in list:") + "\n" +
-								   fileName + "\n" +
-								   tr("Load saved analysis results anyhow?");
+					QString text = tr("File already exists in list:\n"
+								   "%1\n"
+								   "Load saved analysis results anyhow?").arg(fileName);
 					int button = QMessageBox::warning(this, appTitle, text,
 										 QMessageBox::Yes | QMessageBox::YesToAll | QMessageBox::No | QMessageBox::NoToAll | QMessageBox::Cancel,
 										 QMessageBox::Yes);
@@ -2911,7 +2937,8 @@ void MainWindow::on_actionClear_Analysis_triggered(){
 		bool isConfirmSuppressed = settings->value("clearAnalysis_ConfirmSuppressed", false).toBool();
 		if (!isConfirmSuppressed){
 			int r = MyMessageBox::question(this, appTitle+" - "+tr("Clear Analysis?"),
-						tr("This will clear all analysis results.") + "\n" + tr("Are you sure?"),
+						tr("This will clear all analysis results.\n"
+						   "Are you sure?"),
 						tr("Don't ask me again"),
 						isConfirmSuppressed,
 						QMessageBox::Yes | QMessageBox::No,

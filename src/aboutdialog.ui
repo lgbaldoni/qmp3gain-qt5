@@ -19,25 +19,15 @@
      <item>
       <layout class="QVBoxLayout">
        <item>
-        <widget class="QToolButton" name="toolButton">
+        <widget class="QLabel" name="iconLabel">
          <property name="text">
-          <string>...</string>
+          <string notr="true"/>
          </property>
-         <property name="icon">
-          <iconset resource="../resources/qmp3gain.qrc">
-           <normaloff>:/images/icon.png</normaloff>:/images/icon.png</iconset>
+         <property name="pixmap">
+          <pixmap resource="../resources/qmp3gain.qrc">:/images/icon.png</pixmap>
          </property>
-         <property name="iconSize">
-          <size>
-           <width>32</width>
-           <height>32</height>
-          </size>
-         </property>
-         <property name="shortcut">
-          <string>Ctrl+S</string>
-         </property>
-         <property name="autoRaise">
-          <bool>true</bool>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
          </property>
         </widget>
        </item>
@@ -132,7 +122,7 @@
        <item>
         <widget class="QLabel" name="label_5">
          <property name="text">
-          <string>Performs ReplayGain analysis of MP3 files. For more information about ReplayGain, go to </string>
+          <string>Performs ReplayGain analysis of MP3 files. For more information about ReplayGain, go to</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignJustify|Qt::AlignVCenter</set>
@@ -151,7 +141,7 @@
           </font>
          </property>
          <property name="text">
-          <string>&lt;a href=&quot;http://replaygain.hydrogenaudio.org&quot;&gt;http://replaygain.hydrogenaudio.org&lt;/a&gt;</string>
+          <string notr="true">&lt;a href=&quot;http://replaygain.hydrogenaudio.org&quot;&gt;http://replaygain.hydrogenaudio.org&lt;/a&gt;</string>
          </property>
          <property name="openExternalLinks">
           <bool>true</bool>
@@ -190,7 +180,7 @@
           </font>
          </property>
          <property name="text">
-          <string>&lt;a href=&quot;http://qmp3gain.sourceforge.net&quot;&gt;http://qmp3gain.sourceforge.net&lt;/a&gt;</string>
+          <string notr="true">&lt;a href=&quot;http://qmp3gain.sourceforge.net&quot;&gt;http://qmp3gain.sourceforge.net&lt;/a&gt;</string>
          </property>
          <property name="openExternalLinks">
           <bool>true</bool>
@@ -229,7 +219,7 @@
           </font>
          </property>
          <property name="text">
-          <string>&lt;a href=&quot;http://mp3gain.sourceforge.net&quot;&gt;http://mp3gain.sourceforge.net&lt;/a&gt;</string>
+          <string notr="true">&lt;a href=&quot;http://mp3gain.sourceforge.net&quot;&gt;http://mp3gain.sourceforge.net&lt;/a&gt;</string>
          </property>
          <property name="openExternalLinks">
           <bool>true</bool>
@@ -268,7 +258,7 @@
           </font>
          </property>
          <property name="text">
-          <string>&lt;a href=&quot;mailto:brazso@zematix.hu&quot;&gt;brazso@zematix.hu&lt;/a&gt;</string>
+          <string notr="true">&lt;a href=&quot;mailto:brazso@zematix.hu&quot;&gt;brazso@zematix.hu&lt;/a&gt;</string>
          </property>
          <property name="openExternalLinks">
           <bool>true</bool>
@@ -310,7 +300,7 @@
           </font>
          </property>
          <property name="text">
-          <string>&lt;a href=&quot;http://www.mpg123.de&quot;&gt;http://www.mpg123.de&lt;/a&gt;</string>
+          <string notr="true">&lt;a href=&quot;http://www.mpg123.de&quot;&gt;http://www.mpg123.de&lt;/a&gt;</string>
          </property>
          <property name="openExternalLinks">
           <bool>true</bool>

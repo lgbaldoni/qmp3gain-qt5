@@ -58,7 +58,7 @@
      <item>
       <widget class="QToolButton" name="donationButton">
        <property name="text">
-        <string>...</string>
+        <string notr="true"/>
        </property>
        <property name="icon">
         <iconset resource="../resources/qmp3gain.qrc">

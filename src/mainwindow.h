@@ -90,7 +90,6 @@ private:
 	const static QString appVersion;
 	const static QString backEndFixed;
 	const static QString donationUrl;
-	const static QString systemTrayIconToolTip_idle;
 	QString backEndFileName;
 	QString backEndVersion;
 	const static double defaultNormalTargetValue;
