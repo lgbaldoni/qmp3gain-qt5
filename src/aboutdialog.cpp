@@ -21,7 +21,7 @@ AboutDialog::AboutDialog(QWidget *parent)
 	translationLabel->setVisible(false);
 	//translationVerticalSpacer->setVisible(false);
 	
-	// set appTitle, e.g. "%1 (GUI)" -> "MP3Guin (GUI)"
+	// set appTitle, e.g. "%1 (GUI)" -> "QMP3Gain (GUI)"
 	appTitleLabel->setText(appTitleLabel->text().arg(MainWindow::getAppTitle()));
 	
 	// add appVersion to label, e.g. "Version %1" -> "Version 1.3.4"
