@@ -10,15 +10,15 @@
 </head>
 <body>
 
-<h3>My tags (&quot;Artist&quot;, &quot;Title&quot;, etc.) are not working after using MP3Gain</h3>
+<h3>My tags (&quot;Artist&quot;, &quot;Title&quot;, etc.) are not working after using QMP3Gain</h3>
 
 <p>
 <hr />
-MP3Gain stores &quot;Analysis&quot; and &quot;Undo&quot; information in special tags inside the mp3 file itself. These tags are in the <a href="http://doc.hydrogenaudio.org/wikis/hydrogenaudio/APEv2/wikipage_view" target="_external">APEv2</a> format. APEv2 tags are carefully designed to <b>not</b> interfere with other tag formats, such as the popular <a href="http://www.id3.org/id3v1.html" target="_external">ID3v1</a> format.
+QMP3Gain stores &quot;Analysis&quot; and &quot;Undo&quot; information in special tags inside the mp3 file itself. These tags are in the <a href="http://doc.hydrogenaudio.org/wikis/hydrogenaudio/APEv2/wikipage_view" target="_external">APEv2</a> format. APEv2 tags are carefully designed to <b>not</b> interfere with other tag formats, such as the popular <a href="http://www.id3.org/id3v1.html" target="_external">ID3v1</a> format.
 </p>
 
 <p>
-Unfortunately, some mp3 players do not strictly adhere to the ID3v1 standard when reading tags. As a result, when MP3Gain writes its APEv2 tags, these mp3 players might get confused and try to read the MP3Gain tags instead of the regular ID3v1 tags such as &quot;Artist&quot;, &quot;Title&quot;, etc. As a result, the player will show random garbage in these fields.
+Unfortunately, some mp3 players do not strictly adhere to the ID3v1 standard when reading tags. As a result, when QMP3Gain writes its APEv2 tags, these mp3 players might get confused and try to read the QMP3Gain tags instead of the regular ID3v1 tags such as &quot;Artist&quot;, &quot;Title&quot;, etc. As a result, the player will show random garbage in these fields.
 </p>
 
 <p>
@@ -26,16 +26,16 @@ Unfortunately, some mp3 players do not strictly adhere to the ID3v1 standard whe
 </p>
 
 <p>
-If you use MP3Gain and discover that your mp3 player has this problem, then here's what you need to do:
+If you use QMP3Gain and discover that your mp3 player has this problem, then here's what you need to do:
 <ul>
-<li>Select &quot;Options - Tags - Ignore (do not read or write tags)&quot; from the MP3Gain menu. This will prevent MP3Gain from writing any more tags to your files.</li>
-<li>To remove tags that MP3Gain has already written, simply load the affected mp3s into MP3Gain and do &quot;Options - Tags - Remove Tags from files&quot;</li>
+<li>Select &quot;Options - Tags - Ignore (do not read or write tags)&quot; from the QMP3Gain menu. This will prevent QMP3Gain from writing any more tags to your files.</li>
+<li>To remove tags that QMP3Gain has already written, simply load the affected mp3s into QMP3Gain and do &quot;Options - Tags - Remove Tags from files&quot;</li>
 </ul>
 </p>
 
 <p>
 <b>IMPORTANT</b><br />
-If you choose the &quot;Options - Tags - Ignore&quot; option, then you will not be able to <i>automatically</i> undo changes made by MP3Gain. You <i>will</i> still be able to undo any changes, but you will have to manually keep track of what changes you make to your files.
+If you choose the &quot;Options - Tags - Ignore&quot; option, then you will not be able to <i>automatically</i> undo changes made by QMP3Gain. You <i>will</i> still be able to undo any changes, but you will have to manually keep track of what changes you make to your files.
 </p>
 
 </body>

@@ -2,7 +2,7 @@
 <QtHelpProject version="1.0">
 	<namespace>zematix.hu.qmp3gain.0.9.0</namespace>
 	<virtualFolder>help</virtualFolder>
-	<customFilter name="MP3Guin 0.9.0">
+	<customFilter name="QMP3Gain 0.9.0">
 		<filterAttribute>qmp3gain</filterAttribute>
 		<filterAttribute>0.9.0</filterAttribute>
 	</customFilter>
@@ -10,10 +10,10 @@
 		<filterAttribute>qmp3gain</filterAttribute>
 		<filterAttribute>0.9.0</filterAttribute>
 		<toc>
-			<section title="MP3Guin Help" ref="html/MP3Gain.htm">
+			<section title="QMP3Gain Help" ref="html/MP3Gain.htm">
 				<section title="Overview" ref="html/Overview.htm"/>
 				<section title="Concepts" ref="html/Concepts.htm"/>
-				<section title="MP3Guin Interface" ref="html/MP3Gain_Interface.htm">
+				<section title="QMP3Gain Interface" ref="html/MP3Gain_Interface.htm">
 					<section title="Menus" ref="html/Menus.htm">
 						<section title="File menu" ref="html/File_menu.htm"/>
 						<section title="Analysis menu" ref="html/Analysis_menu.htm"/>
@@ -26,6 +26,7 @@
 					<section title="Target Volume" ref="html/Target_Volume.htm"/>
 					<section title="File List" ref="html/File_List.htm"/>
 					<section title="Status" ref="html/Status.htm"/>
+					<section title="Log Panel" ref="html/Log_Panel.htm"/>
 				</section>
 				<section title="Tags" ref="html/Tags.htm"/>
 				<section title="How Do I...?" ref="html/How_Do_I.htm">
@@ -60,6 +61,7 @@
 			<keyword name="Target Volume" ref="html/Target_Volume.htm"/>
 			<keyword name="File List" ref="html/File_List.htm"/>
 			<keyword name="Status" ref="html/Status.htm"/>
+			<keyword name="Log Panel" ref="html/Log_Panel.htm"/>
 			<keyword name="Tags" ref="html/Tags.htm"/>
 			<keyword name="Troubleshooting" ref="html/Troubleshooting.htm"/>
 			<keyword name="Black screen" ref="html/BlackScreen.htm"/>
@@ -109,6 +111,7 @@
 			<file>html/Target_Volume.htm</file>
 			<file>html/File_List.htm</file>
 			<file>html/Status.htm</file>
+			<file>html/Log_Panel.htm</file>
 			<file>html/Tags.htm</file>
 			<file>html/How_Do_I.htm</file>
 			<file>html/Correct_Several_Unrelated_Songs.htm</file>
