@@ -652,7 +652,6 @@ void MainWindow::enableGUI(){
 	menubar->setEnabled(true);
 	toolBar->setEnabled(true);
 	doubleSpinBox_targetNormalValue->setEnabled(true);
-	exitButton->setEnabled(true);
 	cancelButton->setEnabled(false);
 	isCancelled = false;
 	isPopupErrorSuppressed = QVariant();
@@ -678,7 +677,6 @@ void MainWindow::disableGUI(){
 	menubar->setEnabled(false);
 	toolBar->setEnabled(false);
 	doubleSpinBox_targetNormalValue->setEnabled(false);
-	exitButton->setEnabled(false);
 	cancelButton->setEnabled(true);
 	isCancelled = false;
 	isPopupErrorSuppressed = QVariant();
