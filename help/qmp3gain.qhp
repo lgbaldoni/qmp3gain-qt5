@@ -54,7 +54,7 @@
 			<keyword name="Constant Gain Change" ref="html/Modify_Gain_menu.htm#ConstantGain"/>
 			<keyword name="Options menu" ref="html/Options_menu.htm"/>
 			<keyword name="Maximizing" ref="html/Options_menu.htm#Maximizing"/>
-			<keyword name="Logs" ref="html/Options_menu.htm#Logs"/>
+			<keyword name="Logs" ref="html/Logs.htm"/>
 			<keyword name="Language menu" ref="html/Language_menu.htm"/>
 			<keyword name="Help menu" ref="html/Help_menu.htm"/>
 			<keyword name="Button Bar" ref="html/Button_Bar.htm"/>
@@ -111,8 +111,11 @@
 			<file>html/Target_Volume.htm</file>
 			<file>html/File_List.htm</file>
 			<file>html/Status.htm</file>
+			<file>html/Logs.htm</file>
+			<file>html/Log_File.png</file>
 			<file>html/Log_Panel.htm</file>
 			<file>html/Log_Panel.png</file>
+			<file>html/Log_Panel2.png</file>
 			<file>html/Tags.htm</file>
 			<file>html/How_Do_I.htm</file>
 			<file>html/Correct_Several_Unrelated_Songs.htm</file>

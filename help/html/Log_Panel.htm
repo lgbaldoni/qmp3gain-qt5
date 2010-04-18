@@ -16,41 +16,46 @@
 <hr>
 <center><img src="Log_Panel.png"></center>
 <p>
-Log Panel is a detachable section inside the user interface of the QMP3Gain application. It contains a read only, scrollable text area for the log output, some checbox input elements for (un)selecting the type of the output to be displayed, and a button for erasing the content of the log from the text area.
+<b>Log Panel</b> is an optional section inside the user interface of the QMP3Gain application. It contains a read only, scrollable text area for the log output, some checbox input elements for (un)selecting the type of the output to be displayed, and a button for erasing the content of the log from the text area.
 <p>
-There are 5 types of possible log output, all of them have different colors. The last 2 are not visualized at default, but they can be enabled in the <a href="Options_menu.htm#Advanced">Options menu</a>
+<a name="output_types"></a>There are 5 types of possible log output, all of them have different colors. The last 2 are not visualized at default, but they can be enabled in the <a href="Options_menu.htm#advanced">Options menu</a>.
 <p>
+
 
 <table>
 <col style="width: 25%; font-weight: bold;">
-<col style="width: 76%;">
+<col style="width: 75%;">
 
 <tr>
-	<td><font color="red">Error</font></td>
+	<td style="color: red; font-weight: bold;">Error</td>
 	<td>Error messages emerged during the operation of the application</td>
 </tr>
 
 <tr>
-	<td><font color="green">Analysis</font></td>
+	<td style="color: green; font-weight: bold;">Analysis</td>
 	<td>Analysis results made on the MP3 files</td>
 </tr>
 
 <tr>
-	<td><font color="blue">Change</font></td>
+	<td style="color: blue; font-weight: bold;">Change</td>
 	<td>Volume gain modifications made on the MP3 files</td>
 </tr>
 
 <tr>
-	<td><font color="black">Back end</font> (optional)</td>
+	<td style="color: black; font-weight: bold;">Back end (optional)</td>
 	<td>Application communication with the MP3Gain backend</td>
 </tr>
 
 <tr>
-	<td><font color="grey">Trace</font> (optional)</td>
+	<td style="color: gray; font-weight: bold;">Trace (optional)</td>
 	<td>Application trace information escpecially for possible bug hunting</td>
 </tr>
-
 </table>
+<p>
+<b>Log Panel</b> is closeable but anytime it can be opened again in the <a href="Options_menu.htm#panel">Options/Logs/Panel menu</a>. Moreover this panel is easily detachable from the main window, its window can be resized, closed or docked to the bottom part of the main window again. <p>
+<center><img src="Log_Panel2.png"></center>
+<p>
+If the <b>Log Panel</b> is closed then no log output is written to the panel at all, but you may also use <a href="Options_menu.htm#log_file">Option/Logs/File menu</a> to send the output to a file instead of the screen. Moreover both output channels can be used in parallel.
 
 </body>
 
