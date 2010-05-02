@@ -657,6 +657,7 @@ void MainWindow::enableGUI(){
 	isPopupErrorSuppressed = QVariant();
 	isOpenLogPanelQuestionSuppressed = QVariant();
 	setProgress(QVariant(0), QVariant(0));
+	updateStatusBar("");
 
 	//logDockWidget
 	clearLogButton->setEnabled(true);
@@ -841,7 +842,7 @@ void MainWindow::setProgress(QVariant progressFile, QVariant progressTotal){
 		double value = progressFile.toDouble(&isValid);
 		if (isValid){
 			progressBar_File->setValue(value);
-			writeLog(QString("<progressFile>%1</progressFile>").arg(progressBar_File->value()), LOGTYPE_TRACE);
+			writeLog(QString("progressFile: %1%").arg(progressBar_File->value()), LOGTYPE_TRACE);
 		}
 	}
 	if (!progressTotal.isNull()){
@@ -855,7 +856,7 @@ void MainWindow::setProgress(QVariant progressFile, QVariant progressTotal){
 				else
 					trayIcon->setToolTip(tr("No operation running"));
 			}
-			writeLog(QString("<progressTotal>%1</progressTotal>").arg(progressBar_Total->value()), LOGTYPE_TRACE);
+			writeLog(QString("progressTotal: %1%").arg(progressBar_Total->value()), LOGTYPE_TRACE);
 		}
 	}else{
 		if (trayIcon)
@@ -1392,7 +1393,7 @@ int MainWindow::runAnalysis(QModelIndexList indices, bool isAlbum, bool isMaxNoc
 
 		if (startProgress==0.0 && passSlice==100.0) disableGUI();
 
-		int n_index = 0;
+		int total_index = 0;
 
 		QStringList argOptions;
 
@@ -1407,11 +1408,15 @@ int MainWindow::runAnalysis(QModelIndexList indices, bool isAlbum, bool isMaxNoc
 		argOptions << getArgumentsByOptions();
 
 		QMultiHash<QString, QModelIndex> indexByPath;
-		//QMultiMap<QString, QModelIndex> indexByPath;
 
 		if (isAlbum){
 			// in album mode a process can start only the files belong to their parent path
-			foreach(QModelIndex index, indices) {
+			// irreversed order is used in iterator trying to keep later the original order
+			//foreach(QModelIndex index, indices) {
+			QListIterator<QModelIndex> indicesIterator(indices);
+			indicesIterator.toBack();
+			while (indicesIterator.hasPrevious()){
+				QModelIndex index = indicesIterator.previous();
 				int row = model->itemFromIndex(index)->row();
 				QString pathName = getItemText(row, "Path");
 				indexByPath.insert(pathName, index);
@@ -1422,25 +1427,18 @@ int MainWindow::runAnalysis(QModelIndexList indices, bool isAlbum, bool isMaxNoc
 			indexByPath.insert("dummyPath", QModelIndex());
 		}
 
-		//foreach(QString pathName, indexByPath.uniqueKeys()){
-		QListIterator<QString> indexByPathKeysIterator(indexByPath.uniqueKeys());
-		indexByPathKeysIterator.toBack();
-		while (indexByPathKeysIterator.hasPrevious()){
-			QString pathName = indexByPathKeysIterator.previous();
+		foreach(QString pathName, indexByPath.uniqueKeys()){
 			QModelIndexList indicesByProcess = isAlbum ? indexByPath.values(pathName) : indices;
-			QStringList args = argOptions;
+			QStringList argFiles;
 
-			//foreach(QModelIndex index, indicesByProcess) {
-			QListIterator<QModelIndex> indicesByProcessIterator(indicesByProcess);
-			indicesByProcessIterator.toBack();
-			while (indicesByProcessIterator.hasPrevious()){
-				QModelIndex index = indicesByProcessIterator.previous();
+			foreach(QModelIndex index, indicesByProcess) {
 				int row = model->itemFromIndex(index)->row();
 				QString fileName = getItemText(row, "Path/File");
 				//writeLog(fileName, LOGTYPE_TRACE);
-				args << fileName;
+				argFiles << fileName;
 			}
 
+			QStringList args = argOptions << argFiles;
 			process.setProcessChannelMode(QProcess::MergedChannels);
 			QString trace = QString("%1 %2").arg(this->getBackEnd()).arg(args.join(" "));
 			writeLog(trace, LOGTYPE_BACKEND, 1, LOGOPTION_BOLD);
@@ -1502,13 +1500,20 @@ int MainWindow::runAnalysis(QModelIndexList indices, bool isAlbum, bool isMaxNoc
 						else if (line.endsWith("bytes analyzed")){ // optional
 							// single track: " 23% of 2650308 bytes analyzed"
 							// more tracks: "[1/2]  7% of 2650308 bytes analyzed"
-							int n=0;
-							if (line.startsWith("[")){
-								n = line.indexOf("]")+1;
+							int percent = 0;
+							int actFileNumber = 1;
+							QRegExp rx("(?:^)(?:\\[(\\d+)(?:/)(\\d+)(?:\\]))?(?: *)(\\d+)(?:% of )(\\d+)(?: bytes analyzed$)");
+							int pos = rx.indexIn(line);
+							if (pos > -1) {
+								actFileNumber = rx.cap(1).isEmpty() ? 1 : rx.cap(1).toInt();
+								//int totalFileNumber = rx.cap(2).isEmpty() ? 1 : rx.cap(2).toInt();
+								percent = rx.cap(3).toInt();
+								//long fileSize = rx.cap(4).toLong();
 							}
-							int percent = line.mid(n,3).toInt();
+							if (percent>100) percent=100; // some bug from the back end
 							setProgress(QVariant(percent),
-										QVariant(startProgress+passSlice*((n_index+percent/100.0)/indices.size())));
+										QVariant(startProgress+passSlice*((total_index+percent/100.0)/indices.size())));
+							updateStatusBar(QString("Analyzing %1").arg(argFiles.at(actFileNumber-1)));
 						}
 						else {
 							QStringList tokens = line.split(QChar('\t'));
@@ -1577,9 +1582,9 @@ int MainWindow::runAnalysis(QModelIndexList indices, bool isAlbum, bool isMaxNoc
 						}
 
 						if (isNextIndex){
-							n_index++;
+							total_index++;
 							setProgress(QVariant(0),
-										QVariant(startProgress+passSlice*(((double)n_index)/indices.size())));
+										QVariant(startProgress+passSlice*(((double)total_index)/indices.size())));
 						}
 
 						qApp->processEvents(QEventLoop::AllEvents);
@@ -1793,7 +1798,7 @@ void MainWindow::runGain(QModelIndexList indices, bool isAlbum, double passSlice
 
 		if (startProgress==0.0 && passSlice==100.0) disableGUI();
 
-		int n_index = 0;
+		int total_index = 0;
 
 		QStringList argOptions;
 
@@ -1808,7 +1813,12 @@ void MainWindow::runGain(QModelIndexList indices, bool isAlbum, double passSlice
 
 		if (isAlbum){
 			// in album mode a process can start only the files belong to their parent path
-			foreach(QModelIndex index, indices) {
+			// irreversed order is used in iterator trying to keep later the original order
+			//foreach(QModelIndex index, indices) {
+			QListIterator<QModelIndex> indicesIterator(indices);
+			indicesIterator.toBack();
+			while (indicesIterator.hasPrevious()){
+				QModelIndex index = indicesIterator.previous();
 				int row = model->itemFromIndex(index)->row();
 				QString pathName = getItemText(row, "Path");
 				indexByPath.insert(pathName, index);
@@ -1819,26 +1829,18 @@ void MainWindow::runGain(QModelIndexList indices, bool isAlbum, double passSlice
 			indexByPath.insert("dummyPath", QModelIndex());
 		}
 
-		//foreach(QString pathName, indexByPath.uniqueKeys()){
-		QListIterator<QString> indexByPathKeysIterator(indexByPath.uniqueKeys());
-		indexByPathKeysIterator.toBack();
-		while (indexByPathKeysIterator.hasPrevious()){
-			QString pathName = indexByPathKeysIterator.previous();
+		foreach(QString pathName, indexByPath.uniqueKeys()){
 			QModelIndexList indicesByProcess = isAlbum ? indexByPath.values(pathName) : indices;
-			QStringList args = argOptions;
+			QStringList argFiles;
 
-			//foreach(QModelIndex index, indicesByProcess) {
-			QListIterator<QModelIndex> indicesByProcessIterator(indicesByProcess);
-			indicesByProcessIterator.toBack();
-			while (indicesByProcessIterator.hasPrevious()){
-				QModelIndex index = indicesByProcessIterator.previous();
+			foreach(QModelIndex index, indicesByProcess) {
 				int row = model->itemFromIndex(index)->row();
 				QString fileName = getItemText(row, "Path/File");
 				//writeLog(fileName, LOGTYPE_TRACE);
-				args << fileName;
+				argFiles << fileName;
 			}
 
-
+			QStringList args = argOptions << argFiles;
 			process.setProcessChannelMode(QProcess::MergedChannels);
 			QString trace = QString("%1 %2").arg(this->getBackEnd()).arg(args.join(" "));
 			writeLog(trace, LOGTYPE_BACKEND, 1, LOGOPTION_BOLD);
@@ -1859,11 +1861,11 @@ void MainWindow::runGain(QModelIndexList indices, bool isAlbum, double passSlice
 			...
 			[1/2] 98% of 6848512 bytes analyzed\r
 			/home/brazso/work/audio/2Pac - California Love.mp3	-7	-10.330000	44325.970901	189	126
-			  1% of 6848512 bytes written\r (analysis is optional, if no tag is found)
+			Applying mp3 gain change of -7 to /home/brazso/work/audio/2Pac - California Love.mp3...
+			  1% of 6848512 bytes written\r (writing is optional, if not 0 gain change is found)
 			  3% of 6848512 bytes written\r
 			...
 			 98% of 6848512 bytes written\r
-			Applying mp3 gain change of -7 to /home/brazso/work/audio/2Pac - California Love.mp3...
 			[2/2]  1% of 6465618 bytes analyzed\r
 			...
 			[2/2] 98% of 6465618 bytes analyzed
@@ -1889,19 +1891,20 @@ void MainWindow::runGain(QModelIndexList indices, bool isAlbum, double passSlice
 			( "-c" argument makes this warning and confirmation question out )
 			WARNING: /home/brazso/work/audio/2Pac - California Love.mp3 may clip with mp3 gain change -6
 			Make change? [y/n]
-			  1% of 6848834 bytes written
+			Applying mp3 gain change of -6 to /home/brazso/work/audio/2Pac - California Love.mp3...
+			  1% of 6848834 bytes written (writing is optional, if not 0 gain change is found)
 			...
 			 98% of 6848834 bytes written
-			Applying mp3 gain change of -6 to /home/brazso/work/audio/2Pac - California Love.mp3...
-			  1% of 6465618 bytes written
+			Applying mp3 gain change of -6 to /home/brazso/work/audio/2Pac - Changes.mp3...
+			  1% of 6465618 bytes written (writing is optional, if not 0 gain change is found)
 			...
 			 98% of 6465618 bytes written
-			Applying mp3 gain change of -6 to /home/brazso/work/audio/2Pac - Changes.mp3...
 			*/
 			enum resultColumns { File, MP3_gain, dB_gain, Max_Amplitude, Max_global_gain, Min_global_gain, enumMax };
-			QList<int> passes = QList<int>() << 95 << 5; // analysis, gain (in track mode)
+			QList<int> passes = QList<int>() << 90 << 10; // analysis, gain (in track mode)
 			bool hasAnalysis = false;
 			QStringList tokens;
+			QString prevLine;
 
 			for (bool isAfterLast = false, isWaitForReadyRead = false;
 				(isWaitForReadyRead = process.waitForReadyRead(-1)) || !isAfterLast;
@@ -1929,34 +1932,50 @@ void MainWindow::runGain(QModelIndexList indices, bool isAlbum, double passSlice
 
 						if (errType){
 							if (errType!=ERRTYPE_SUPPRESSED){
+								hasAnalysis = false;
 								isNextIndex = true; // for the time being all errors increase the iterator
 							}
 						}
 						else if (line.endsWith("bytes analyzed")){ // optional
 							// single track: "  5% of 2650308 bytes analyzed"
 							// more tracks: "[1/2] 13% of 2650308 bytes analyzed"
-							hasAnalysis = true;
-							int n=0;
-							if (line.startsWith("[")){
-								n = line.indexOf("]")+1;
+							if (prevLine.endsWith("bytes written")){
+								//isNextIndex = true;
+								total_index++;
 							}
-							int percent;
+							int percent = 0;
+							int actFileNumber = 1;
+							QRegExp rx("(?:^)(?:\\[(\\d+)(?:/)(\\d+)(?:\\]))?(?: *)(\\d+)(?:% of )(\\d+)(?: bytes analyzed$)");
+							int pos = rx.indexIn(line);
+							if (pos > -1) {
+								actFileNumber = rx.cap(1).isEmpty() ? 1 : rx.cap(1).toInt();
+								//int totalFileNumber = rx.cap(2).isEmpty() ? 1 : rx.cap(2).toInt();
+								percent = rx.cap(3).toInt();
+								//long fileSize = rx.cap(4).toLong();
+							}
+							if (percent>100) percent=100; // some bug from the back end
 							if (!isAlbum)
-								percent = (int)round(line.mid(n,3).toDouble()*passes[0]/100.0);
-							else
-								percent = line.mid(n,3).toInt();
+								percent = (int)round(percent*passes[0]/100.0);
 							setProgress(QVariant(percent),
-										QVariant(startProgress+passSlice*(((n_index+percent/100.0))/(indices.size()*(isAlbum ? 2 : 1)))));
+										QVariant(startProgress+passSlice*(((total_index+percent/100.0))/(indices.size()*(isAlbum ? 2 : 1)))));
+							updateStatusBar(QString("Analyzing %1").arg(argFiles.at(actFileNumber-1)));
 						}
 						else if (line.endsWith("bytes written")){
 							// " 43% of 2650308 bytes written"
-							int percent;
-							if (!isAlbum)
-								percent = !hasAnalysis ? line.left(3).toInt() : (int)(passes[0]+round(line.left(3).toDouble()*passes[1]/100.0));
-							else
-								percent = line.left(3).toInt();
+							int percent = 0;
+							QRegExp rx("(?:^ *)(\\d+)(?:% of )(\\d+)(?: bytes written$)");
+							int pos = rx.indexIn(line);
+							if (pos > -1) {
+								percent = rx.cap(1).toInt();
+								//long fileSize = rx.cap(2).toLong();
+							}
+							if (percent>100) percent=100; // some bug from the back end
+							if (!isAlbum && hasAnalysis)
+								percent = (int)(passes[0]+round(percent*passes[1]/100.0));
 							setProgress(QVariant(percent),
-										QVariant(startProgress+passSlice*(((n_index+percent/100.0))/(indices.size()*(isAlbum ? 2 : 1)))));
+										QVariant(startProgress+passSlice*(((total_index+percent/100.0))/(indices.size()*(isAlbum ? 2 : 1)))));
+							double gainValue = tokens[MP3_gain].toInt()*DB; // dBGain
+							updateStatusBar(QString("Applying gain of %1 dB to %2").arg(gainValue, 0, 'f', 1).arg(tokens[File]));
 						}
 						// Applying mp3 gain change of -5 to /home/brazso/work/audio/2Pac - Changes.mp3...
 						// No changes to /home/brazso/work/audio/Alizee - Lolita.mp3 are necessary
@@ -2003,22 +2022,24 @@ void MainWindow::runGain(QModelIndexList indices, bool isAlbum, double passSlice
 								updateModelRowsByAnalysisAlbum(isAlbum, fileName, tokens[MP3_gain].toInt(), tokens[dB_gain].toDouble(), QVariant(tokens[Max_Amplitude].toDouble()), /*isLog=*/ true);
 								updateModelRowsByMP3GainAlbum(fileName, tokens[MP3_gain].toInt());
 							}
-							hasAnalysis = false;
-							isNextIndex = true;
+							if (!prevLine.startsWith("\"Album\"\t")){
+								isNextIndex = true;
+							}
 						}
 						else {
-							QStringList tmpTokens = line.split(QChar('\t'));
+							QStringList tmpTokens = prevLine.split(QChar('\t'));
+							bool isPrevLineFile = tmpTokens.size()==enumMax && tmpTokens[File]=="File";
+							tmpTokens = line.split(QChar('\t'));
 							if (tmpTokens.size()==enumMax && tmpTokens[File]!="File"){
 								tokens = tmpTokens;
 								if (!isAlbum){
 									//updateModelRowByAnalysisTrack(tokens[File], tokens[MP3_gain].toInt(), tokens[dB_gain].toDouble(), tokens[Max_Amplitude].toDouble());
 									//updateModelRowByMP3GainTrack(tokens[File], tokens[MP3_gain].toInt());
-									//n_index++;
-									//setProgress(QVariant(0),
-									//	QVariant(startProgress+passSlice*(((double)n_index)/(indices.size()*(isAlbum ? 2 : 1)))));
+									hasAnalysis = prevLine.endsWith("bytes analyzed");
+									isNextIndex = !hasAnalysis && !isPrevLineFile;
 								}else{
 									if (tokens[File]=="\"Album\""){
-										//updateModelRowsByAnalysisAlbum(isAlbum, indicesByProcess, tokens[MP3_gain].toInt(), tokens[dB_gain].toDouble(), QVariant(tokens[Max_Amplitude].toDouble()));
+										//updateModelRowsByAnalysisAlbum(isAlbum, indicesByeess, tokens[MP3_gain].toInt(), tokens[dB_gain].toDouble(), QVariant(tokens[Max_Amplitude].toDouble()));
 										//updateModelRowsByMP3GainAlbum(indicesByProcess, tokens[MP3_gain].toInt());
 									}else{
 										bool isConvertOk;
@@ -2032,20 +2053,23 @@ void MainWindow::runGain(QModelIndexList indices, bool isAlbum, double passSlice
 											updateStatusBar(msg);
 										}
 										updateModelRowByAnalysisTrack(tokens[File], tokens[MP3_gain].toInt(), tokens[dB_gain].toDouble(), tokens[Max_Amplitude].toDouble(), /*maxNoclipGain=*/ false,/*isLog=*/ true);
+										//hasAnalysis = prevLine.endsWith("bytes analyzed");
+										//isNextIndex = !hasAnalysis && !isPrevLineFile;
 										isNextIndex = true;
 									}
 								}
 							}
 						}
 						if (isNextIndex){
-							n_index++;
+							total_index++;
 							setProgress(QVariant(0),
-										QVariant(startProgress+passSlice*(((double)n_index)/(indices.size()*(isAlbum ? 2 : 1)))));
+										QVariant(startProgress+passSlice*(((double)total_index)/(indices.size()*(isAlbum ? 2 : 1)))));
 						}
 
 						qApp->processEvents(QEventLoop::AllEvents);
 						if (isCancelled) throw(-1);
-					}
+						prevLine = line;
+					} // foreach
 				} while (!in.atEnd());
 			}
 		}
@@ -2106,10 +2130,16 @@ void MainWindow::runConstantGain(QModelIndexList indices, int mp3Gain, bool isLe
 		D:\Users\Brazso\music\test_mp3>mp3gain -o -g 1 "Arash - Boro Boro.mp3" "Austin Powers - Theme Song.mp3"
 		File    MP3 gain        dB gain Max Amplitude   Max global_gain Min global_gain
 		Applying gain change of 1 to Arash - Boro Boro.mp3...
-
+		  1% of 10532812 bytes written
+		  3% of 10532812 bytes written
+		...
+		 99% of 10532812 bytes written
 		done
 		Applying gain change of 1 to Austin Powers - Theme Song.mp3...
-
+		  2% of 6503689 bytes written
+		  5% of 6503689 bytes written
+		...
+		 97% of 6503689 bytes written
 		done
 		*/
 
@@ -2123,7 +2153,7 @@ void MainWindow::runConstantGain(QModelIndexList indices, int mp3Gain, bool isLe
 		*/
 
 		enum resultColumns { File, MP3_gain, dB_gain, Max_Amplitude, Max_global_gain, Min_global_gain, enumMax };
-		int n_index = 0;
+		int total_index = 0;
 
 		for (bool isAfterLast = false, isWaitForReadyRead = false;
 			(isWaitForReadyRead = process.waitForReadyRead(-1)) || !isAfterLast;
@@ -2134,9 +2164,7 @@ void MainWindow::runConstantGain(QModelIndexList indices, int mp3Gain, bool isLe
 
 			// the following error message has no line feed from mp3gain backend
 			QString replaceStr("Can't adjust single channel for mono or joint stereo");
-			result.replace(replaceStr, replaceStr+"\\n");
-
-			writeLog(result, LOGTYPE_TRACE);
+			result.replace(replaceStr, replaceStr+"\r");
 
 			QTextStream in(&result);
 			do {
@@ -2159,22 +2187,28 @@ void MainWindow::runConstantGain(QModelIndexList indices, int mp3Gain, bool isLe
 							isNextIndex = true; // for the time being all errors increase the iterator
 						}
 					}
-					else if (line.endsWith("bytes analyzed")){
-						// "  [1/2]  310532274f 2650308 bytes analyzed"
-						int n=0;
-						if (line.startsWith("[")){
-							n = line.indexOf("]")+1;
+					else if (line.endsWith("bytes written")){
+						// " 43% of 2650308 bytes written"
+						int percent = 0;
+						QRegExp rx("(?:^ *)(\\d+)(?:% of )(\\d+)(?: bytes written$)");
+						int pos = rx.indexIn(line);
+						if (pos > -1) {
+							percent = rx.cap(1).toInt();
+							//long fileSize = rx.cap(2).toLong();
 						}
-						int percent = line.mid(n,3).toInt();
+						if (percent>100) percent=100; // some bug from the back end
+						if (percent>100) percent=100; // some bug from the back end
 						setProgress(QVariant(percent),
-									QVariant(startProgress+passSlice*(((n_index+percent/100.0))/indices.size())));
+									QVariant(startProgress+passSlice*(((total_index+percent/100.0))/indices.size())));
+					}
+					else if (line=="done"){
+						isNextIndex = true;
 					}
 					else{
 						QStringList tokens = line.split(QChar('\t'));
 
 						if (tokens.size()==enumMax && tokens[File]=="File")
 							continue;
-						writeLog(line, LOGTYPE_TRACE);
 						QRegExp rx("(?:Applying gain change of )(-?\\d+)(?: to )(.*)(?:\\.\\.\\.)");
 						if (!(isLeft && isRight)){
 							rx=QRegExp("(?:Applying gain change of )(-?\\d+)(?: to CHANNEL \\d of )(.*)(?:\\.\\.\\.)");
@@ -2182,7 +2216,6 @@ void MainWindow::runConstantGain(QModelIndexList indices, int mp3Gain, bool isLe
 						int pos = rx.indexIn(line);
 						if (pos > -1) {
 							QStringList list = rx.capturedTexts();
-							writeLog(list.join(" "), LOGTYPE_TRACE);
 							if (list.size()==3){
 								QString fileName = rx.cap(2);
 								int mp3Gain = rx.cap(1).toInt();
@@ -2193,9 +2226,9 @@ void MainWindow::runConstantGain(QModelIndexList indices, int mp3Gain, bool isLe
 						}
 					}
 					if (isNextIndex){
-						n_index++;
+						total_index++;
 						setProgress(QVariant(),
-									QVariant(startProgress+passSlice*(((double)n_index)/indices.size())));
+									QVariant(startProgress+passSlice*(((double)total_index)/indices.size())));
 					}
 
 					qApp->processEvents(QEventLoop::AllEvents);
@@ -3138,10 +3171,20 @@ void MainWindow::on_actionUndo_Gain_changes_triggered(){
 		D:\Users\Brazso\music\test_mp3>mp3gain -u -o "Arash - Boro Boro.mp3" "Austin Powers - Theme Song.mp3"
 		File    left global_gain change right global_gain change
 		Arash - Boro Boro.mp3   7       7
+		1% of 10533134 bytes written (optional, if not 0 gain is found)
+		3% of 10533134 bytes written
+		...
+		99% of 10533134 bytes written
 		Austin Powers - Theme Song.mp3  0       0
+		2% of 6504011 bytes written (optional, if not 0 gain is found)
+		5% of 6504011 bytes written
+		...
+		97% of 6504011 bytes written
 		*/
 		enum resultColumns { File, left_global_gain_change, right_global_gain_change, enumMax };
-		int n_index = 0;
+		int total_index = 0;
+		QString prevLine;
+		bool prevLineHadError = false;
 
 		for (bool isAfterLast = false, isWaitForReadyRead = false;
 			(isWaitForReadyRead = process.waitForReadyRead(-1)) || !isAfterLast;
@@ -3149,7 +3192,10 @@ void MainWindow::on_actionUndo_Gain_changes_triggered(){
 
 			QByteArray newData = process.readAllStandardOutput();
 			QString result = QString::fromLocal8Bit(newData);
-			//writeLog(QString("waitForReadyRead:" %1).arg(result), LOGTYPE_TRACE);
+
+			// the following error message has no line feed from mp3gain backend
+			QString replaceStr("Can't adjust single channel for mono or joint stereo");
+			result.replace(replaceStr, replaceStr+"\r");
 
 			QTextStream in(&result);
 			do {
@@ -3174,29 +3220,42 @@ void MainWindow::on_actionUndo_Gain_changes_triggered(){
 					}
 					else if (line.endsWith("bytes written")){
 						// " 12% of 7260121 bytes written"
-						int percent = line.left(3).toInt();
+						int percent = 0;
+						QRegExp rx("(?:^ *)(\\d+)(?:% of )(\\d+)(?: bytes written$)");
+						int pos = rx.indexIn(line);
+						if (pos > -1) {
+							percent = rx.cap(1).toInt();
+							//long fileSize = rx.cap(2).toLong();
+						}
+						if (percent>100) percent=100; // some bug from the back end
 						setProgress(QVariant(percent),
-									QVariant(startProgress+passSlice*(((n_index+percent/100.0))/indices.size())));
+									QVariant(startProgress+passSlice*(((total_index+percent/100.0))/indices.size())));
 					}
 					else{
-						QStringList tokens = line.split(QChar('\t'));
+						QStringList tokens = prevLine.split(QChar('\t'));
+						bool isPrevLineFile = tokens.size()==enumMax && tokens[File]=="File";
 
-						if (tokens.size()!=enumMax || (tokens.size()==enumMax && tokens[File]=="File"))
-							continue;
-						//writeLog(tokens[File], LOGTYPE_TRACE);
-						updateModelRowByMP3GainTrack(tokens[File], (tokens[left_global_gain_change].toInt()+tokens[right_global_gain_change].toInt())/2);
-						isNextIndex = true;
+						tokens = line.split(QChar('\t'));
+
+						if (tokens.size()==enumMax && tokens[File]!="File"){
+							//writeLog(tokens[File], LOGTYPE_TRACE);
+							updateModelRowByMP3GainTrack(tokens[File], (tokens[left_global_gain_change].toInt()+tokens[right_global_gain_change].toInt())/2);
+							if (!isPrevLineFile && !prevLineHadError)
+								isNextIndex = true;
+						}
 					}
 
 					if (isNextIndex){
-						n_index++;
+						total_index++;
 						setProgress(QVariant(),
-									QVariant(startProgress+passSlice*(((double)n_index)/indices.size())));
+									QVariant(startProgress+passSlice*(((double)total_index)/indices.size())));
 					}
 
 					qApp->processEvents(QEventLoop::AllEvents);
 					if (isCancelled) throw(-1);
-				}
+					prevLine = line;
+					prevLineHadError = errType && errType!=ERRTYPE_SUPPRESSED;
+				} // foreach
 			} while (!in.atEnd());
 		}
 		throw(0);
@@ -3274,7 +3333,7 @@ void MainWindow::on_actionRemove_Tags_from_files_triggered(){
 
 		enum resultColumns { File, MP3_gain, dB_gain, Max_Amplitude, Max_global_gain, Min_global_gain, enumMax };
 
-		int n_index = 0;
+		int total_index = 0;
 
 		for (bool isAfterLast = false, isWaitForReadyRead = false;
 			(isWaitForReadyRead = process.waitForReadyRead(-1)) || !isAfterLast;
@@ -3313,9 +3372,9 @@ void MainWindow::on_actionRemove_Tags_from_files_triggered(){
 					}
 
 					if (isNextIndex){
-						n_index++;
+						total_index++;
 						setProgress(QVariant(),
-									QVariant(startProgress+passSlice*(((double)n_index)/indices.size())));
+									QVariant(startProgress+passSlice*(((double)total_index)/indices.size())));
 					}
 
 					qApp->processEvents(QEventLoop::AllEvents);
@@ -3452,6 +3511,7 @@ void MainWindow::on_actionBack_end_triggered(){
 void MainWindow::on_actionAdvanced_triggered(){
 	// modal dialog
 	AdvancedOptionsDialog* dialog = new AdvancedOptionsDialog(this);
+	//dialog->groupBox_threadPriority->setVisible(false);
 	if (dialog->exec()){
 	}
 	delete dialog; // call destructor directly to store options before refreshGUI
