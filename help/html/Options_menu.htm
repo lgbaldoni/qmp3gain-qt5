@@ -138,7 +138,7 @@ warning messages start popping up again.</td></tr>
  you to modify <b>Thread Priority</b> 
  and <b>Performance</b> variables, and allows you to turn on "maximizing" features.</p>
 <p>
-<center><img src="AdvOptions.jpg" width=299 height=177></center>
+<center><img src="AdvOptions.jpg"></center>
 <p>
 <table>
 <col style="width: 40.164%; font-weight: bold;">
@@ -149,25 +149,35 @@ warning messages start popping up again.</td></tr>
 <td>This adjusts what priority 
  the program has in using your computer's resources. If you know what this 
  means, feel free to play with this setting. If you don't know what this 
- means, just leave it alone :)</td></tr>
+ means, just leave it alone :) If you see this feature disabled, then it is unsupported yet.</td></tr>
 
 <tr>
 <td>Performance</td>
-<td>Checking these boxes might make QMP3Gain run slightly faster on your machine. Unfortunately,
-it also might make your computer freeze up when you apply Gain changes.
-If that happens, just reboot, start QMP3Gain again, and un-check the box you checked.</td></tr>
+<td>Checking these boxes might make QMP3Gain run slightly faster on your machine.</td></tr>
 
 <tr>
 <a name=Maximizing></a>
 <td>Enable &quot;Maximizing&quot; features</td>
-<td>"Maximizing" is the word I use to describe what most audio programs call "normalizing":
+<td>"Maximizing" is the word to describe what most audio programs call "normalizing":
 finding the maximum amplitude of sound files and setting them to a specified level.<br>
-This is <b>not</b> a good way to make audio files sound like they're the same volume. It was my
-experience with a "normalizing" program that made me write QMP3Gain.<br>
+This is <b>not</b> a good way to make audio files sound like they're the same volume.<br>
 When you check this box, a message pops up with a link to some files that demonstrate the volume differences
 that can remain between songs when you maximize the amplitudes of audio files instead of
 volume normalizing.
 </td></tr>
+
+<tr>
+<td>Extra output log</td>
+<td>
+Depths of some log output type can be set here.<br/>
+<b>Back end log depth</b> sets the log's depth of communication with the MP3Gain back end:<br/>
+- 0 value means there is no back end log at all<br/>
+- 1 value includes all communication messages except the progress percents<br/>
+- 2 value includes all communication<br/>
+<b>Trace log depth</b> sets the log's depth of operation of QMP3Gain, it's mostly for possible bug hunting:<br/>
+- 0 value means there is no trace log at all<br/>
+- 1 value includes all trace messages<br/>
+</td>
 </table>
 
 </td></tr>
