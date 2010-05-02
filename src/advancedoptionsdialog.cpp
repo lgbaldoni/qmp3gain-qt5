@@ -23,6 +23,10 @@ AdvancedOptionsDialog::AdvancedOptionsDialog(QWidget *parent)
 		fields << checkBox_ShowHiddenFields;
 		fields << checkBox_UseNoTempFiles;
 		fields << checkBox_ShowNoFileProgress;
+		fields << radioButton_threadRealtime;
+		fields << radioButton_threadHigh;
+		fields << radioButton_threadNormal;
+		fields << radioButton_threadIdle;
 	}
 	
 	MainWindow* mainWindow = qobject_cast<MainWindow*>(this->parent());
@@ -53,6 +57,8 @@ void AdvancedOptionsDialog::readSettings(QSettings *settings){
 			(qobject_cast<QSlider*>(fields[i]))->setValue(settings->value(fields[i]->objectName(), (qobject_cast<QSlider*>(fields[i]))->value()).toInt());
 		else if (fields[i]->objectName().startsWith("checkBox"))
 			(qobject_cast<QCheckBox*>(fields[i]))->setChecked(settings->value(fields[i]->objectName(), (qobject_cast<QCheckBox*>(fields[i]))->isChecked()).toBool());
+		else if (fields[i]->objectName().startsWith("radioButton"))
+			(qobject_cast<QRadioButton*>(fields[i]))->setChecked(settings->value(fields[i]->objectName(), (qobject_cast<QRadioButton*>(fields[i]))->isChecked()).toBool());
 	}
 	settings->endGroup();
 }
@@ -64,6 +70,8 @@ void AdvancedOptionsDialog::writeSettings(QSettings *settings){
 			settings->setValue(fields[i]->objectName(), (qobject_cast<QSlider*>(fields[i]))->value());
 		else if (fields[i]->objectName().startsWith("checkBox"))
 			settings->setValue(fields[i]->objectName(), (qobject_cast<QCheckBox*>(fields[i]))->isChecked());
+		else if (fields[i]->objectName().startsWith("radioButton"))
+			settings->setValue(fields[i]->objectName(), (qobject_cast<QRadioButton*>(fields[i]))->isChecked());
 	}
 	settings->endGroup();
 }

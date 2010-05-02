@@ -6,51 +6,76 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>378</width>
-    <height>240</height>
+    <width>351</width>
+    <height>353</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>%1 - Advanced Options</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_3">
+  <layout class="QVBoxLayout" name="verticalLayout_4">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QGroupBox" name="groupBox_extra_features">
+      <widget class="QGroupBox" name="groupBox_threadPriority">
        <property name="enabled">
-        <bool>true</bool>
-       </property>
-       <property name="autoFillBackground">
         <bool>false</bool>
        </property>
+       <property name="toolTip">
+        <string>This adjusts what priority the program has in using your computer's resources</string>
+       </property>
        <property name="title">
-        <string>Extra features</string>
+        <string>Thread Priority</string>
+       </property>
+       <property name="flat">
+        <bool>false</bool>
        </property>
        <property name="checkable">
         <bool>false</bool>
        </property>
-       <layout class="QVBoxLayout" name="verticalLayout_2">
+       <layout class="QVBoxLayout" name="verticalLayout_5">
         <item>
-         <widget class="QCheckBox" name="checkBox_Maximizing">
+         <widget class="QRadioButton" name="radioButton_threadRealtime">
           <property name="toolTip">
-           <string>New analysis and gain functions can be activated</string>
+           <string>Applicaton has maximum priority of the computer's resource.
+Its usage is not recommended.</string>
           </property>
           <property name="text">
-           <string>Enable &quot;Maximizing&quot; features</string>
+           <string>Realtime</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QCheckBox" name="checkBox_ShowHiddenFields">
+         <widget class="QRadioButton" name="radioButton_threadHigh">
           <property name="toolTip">
-           <string>Show &quot;Max Amplitude&quot; and dBGain fields in the list</string>
-          </property>
-          <property name="statusTip">
-           <string/>
+           <string>Applicaton has high priority of the computer's resource.
+Its usage might be not recommended</string>
           </property>
           <property name="text">
-           <string>Show hidden fields</string>
+           <string>High</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="radioButton_threadNormal">
+          <property name="toolTip">
+           <string>Applicaton has normal priority of the computer's resource</string>
+          </property>
+          <property name="text">
+           <string>Normal</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="radioButton_threadIdle">
+          <property name="toolTip">
+           <string>Applicaton has slight priority of the computer's resource</string>
+          </property>
+          <property name="text">
+           <string>Idle</string>
           </property>
          </widget>
         </item>
@@ -58,40 +83,85 @@
       </widget>
      </item>
      <item>
-      <widget class="QGroupBox" name="groupBox_performance">
-       <property name="title">
-        <string>Performance</string>
-       </property>
-       <layout class="QVBoxLayout">
-        <item>
-         <widget class="QCheckBox" name="checkBox_UseNoTempFiles">
-          <property name="toolTip">
-           <string>Gain modifications can be done directly in the files</string>
-          </property>
-          <property name="text">
-           <string>Do not use Temp files</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QCheckBox" name="checkBox_ShowNoFileProgress">
-          <property name="toolTip">
-           <string>File progress bar can be switch off</string>
-          </property>
-          <property name="text">
-           <string>Do not show file progress</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="QGroupBox" name="groupBox_extra_features">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="autoFillBackground">
+          <bool>false</bool>
+         </property>
+         <property name="title">
+          <string>Extra features</string>
+         </property>
+         <property name="checkable">
+          <bool>false</bool>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <widget class="QCheckBox" name="checkBox_Maximizing">
+            <property name="toolTip">
+             <string>New analysis and gain functions can be activated</string>
+            </property>
+            <property name="text">
+             <string>Enable &quot;Maximizing&quot; features</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkBox_ShowHiddenFields">
+            <property name="toolTip">
+             <string>Show &quot;Max Amplitude&quot; and dBGain fields in the list</string>
+            </property>
+            <property name="statusTip">
+             <string/>
+            </property>
+            <property name="text">
+             <string>Show hidden fields</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_performance">
+         <property name="title">
+          <string>Performance</string>
+         </property>
+         <layout class="QVBoxLayout">
+          <item>
+           <widget class="QCheckBox" name="checkBox_UseNoTempFiles">
+            <property name="toolTip">
+             <string>Gain modifications can be done directly in the files</string>
+            </property>
+            <property name="text">
+             <string>Do not use Temp files</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkBox_ShowNoFileProgress">
+            <property name="toolTip">
+             <string>File progress bar can be switch off</string>
+            </property>
+            <property name="text">
+             <string>Do not show file progress</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
      </item>
     </layout>
    </item>
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>Hard core features</string>
+      <string>Extra output log</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
@@ -118,6 +188,9 @@
         </item>
         <item row="0" column="2">
          <widget class="QSlider" name="horizontalSlider_logBackendDepth">
+          <property name="toolTip">
+           <string>Sets the depth of communication with the MP3Gain back end</string>
+          </property>
           <property name="maximum">
            <number>2</number>
           </property>
@@ -146,6 +219,9 @@
         </item>
         <item row="0" column="3">
          <widget class="QSpinBox" name="spinBox_logBackendDepth">
+          <property name="toolTip">
+           <string>Sets the depth of communication with the MP3Gain back end</string>
+          </property>
           <property name="maximum">
            <number>2</number>
           </property>
@@ -173,6 +249,9 @@
         </item>
         <item row="1" column="2">
          <widget class="QSlider" name="horizontalSlider_logTraceDepth">
+          <property name="toolTip">
+           <string>Sets the depth of the trace, it's mostly for possible bug hunting</string>
+          </property>
           <property name="maximum">
            <number>1</number>
           </property>
@@ -185,7 +264,11 @@
          </widget>
         </item>
         <item row="1" column="3">
-         <widget class="QSpinBox" name="spinBox_logTraceDepth"/>
+         <widget class="QSpinBox" name="spinBox_logTraceDepth">
+          <property name="toolTip">
+           <string>Sets the depth of the trace, it's mostly for possible bug hunting</string>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>
