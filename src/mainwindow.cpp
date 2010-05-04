@@ -485,7 +485,7 @@ QDir MainWindow::directoryOf(const QString &subdir)
 
 void MainWindow::switchLanguage(QAction *action)
 {
-	QString locale = "";
+	QString locale("");
 
 	if (!action) {
 		locale = settings->value("locale", QLocale::system().name()).toString();
@@ -1052,7 +1052,6 @@ void MainWindow::updateModelRowByAnalysisTrack(QModelIndex modelIndex, int mp3Ga
 	int row = modelIndex.row();
 	double gainValue = mp3Gain*DB; // dBGain
 	QStandardItem *item = 0;
-	QString value = "";
 
 	if (!maxNoclipGain){
 		setItem(row, "Volume", QVariant(doubleSpinBox_targetNormalValue->value()-dBGain));
@@ -1478,32 +1477,35 @@ int MainWindow::runAnalysis(QModelIndexList indices, bool isAlbum, bool isMaxNoc
 
 				QTextStream in(&result);
 				do {
-					QString line=in.readLine();
-					if (line==QString::null || line.isEmpty())
+					Line line;
+					line.content = in.readLine();
+					if (line.content==QString::null || line.content.isEmpty())
 						continue;
 
-					QStringList lines = line.split(QChar('\r'), QString::SkipEmptyParts);
-					foreach (line, lines){
-						if (line.trimmed().isEmpty()){
+					QStringList lines = line.content.split(QChar('\r'), QString::SkipEmptyParts);
+					foreach (line.content, lines){
+						if (line.content.trimmed().isEmpty()){
 							continue;
 						}
 
-						writeLog(line, LOGTYPE_BACKEND, line.endsWith("bytes analyzed") ? 2 : 1);
+						writeLog(line.content, LOGTYPE_BACKEND, line.content.endsWith("bytes analyzed") ? 2 : 1);
 						bool isNextIndex = false;
-						ErrType errType = hasError(line);
+						line.errType = hasError(line.content);
 
-						if (errType){
-							if (errType!=ERRTYPE_SUPPRESSED){
+						if (line.errType){
+							line.type = LINETYPE_ERROR;
+							if (line.errType!=ERRTYPE_SUPPRESSED){
 								isNextIndex = true; // for the time being all errors increase the iterator
 							}
 						}
-						else if (line.endsWith("bytes analyzed")){ // optional
+						else if (line.content.endsWith("bytes analyzed")){ // optional
+							line.type = LINETYPE_ANALYSIS;
 							// single track: " 23% of 2650308 bytes analyzed"
 							// more tracks: "[1/2]  7% of 2650308 bytes analyzed"
 							int percent = 0;
 							int actFileNumber = 1;
 							QRegExp rx("(?:^)(?:\\[(\\d+)(?:/)(\\d+)(?:\\]))?(?: *)(\\d+)(?:% of )(\\d+)(?: bytes analyzed$)");
-							int pos = rx.indexIn(line);
+							int pos = rx.indexIn(line.content);
 							if (pos > -1) {
 								actFileNumber = rx.cap(1).isEmpty() ? 1 : rx.cap(1).toInt();
 								//int totalFileNumber = rx.cap(2).isEmpty() ? 1 : rx.cap(2).toInt();
@@ -1516,68 +1518,75 @@ int MainWindow::runAnalysis(QModelIndexList indices, bool isAlbum, bool isMaxNoc
 							updateStatusBar(QString("Analyzing %1").arg(argFiles.at(actFileNumber-1)));
 						}
 						else {
-							QStringList tokens = line.split(QChar('\t'));
+							QStringList tokens = line.content.split(QChar('\t'));
 
-							if (!isOnlyWithStoredTagInfo){
-								if (tokens.size()!=enumMax || (tokens.size()==enumMax && tokens[File]=="File"))
-									continue;
-							}else{
-								if (tokens.size()!=enumMaxEx || (tokens.size()==enumMaxEx && tokens[File]=="File"))
-									continue;
+							bool isIgnore = true;
+							if (tokens.size()!=(!isOnlyWithStoredTagInfo ? (int)enumMax : (int)enumMaxEx))
+								;
+							else if (tokens[File]=="File"){
+								line.type = LINETYPE_FILE_HEADER;
+							}
+							else{
+								isIgnore = false;
 							}
 
-							double mp3Gain = 0, dbGain = 0, maxAmplitude = 0;
-							bool isConvertOk = true;
-							if (isConvertOk)
-								mp3Gain = tokens[MP3_gain].toInt(&isConvertOk);
-							if (isConvertOk)
-								dbGain = tokens[dB_gain].toDouble(&isConvertOk);
-							if (isConvertOk)
-								maxAmplitude = tokens[Max_Amplitude].toDouble(&isConvertOk);
-							if (!isConvertOk) {
-								if (isOnlyWithStoredTagInfo){
-									// we may get NA values here in the tokens
-									errType=ERRTYPE_SUPPRESSED;
-								}
-								else{
-									errType=ERRTYPE_CANNOT_FIND_MP3_FRAME;
-									QString msg = QString("%1 %2").arg(tr("Error while analyzing in file")).arg(tokens[File]);
-									writeLog(msg, LOGTYPE_ERROR);
-								}
-							}else{
-								updateStatusBar(QString("Analyzing %1").arg(tokens[File]));
-							}
-
-							if (!isOnlyWithStoredTagInfo && tokens[File]=="\"Album\""){ // contains album info
-								if (!errType)
-									updateModelRowsByAnalysisAlbum(isAlbum, indicesByProcess, mp3Gain, dbGain, QVariant(maxAmplitude), /*isLog =*/ true);
-							}else{
-								if (!errType) {
+							if (!isIgnore){
+								double mp3Gain = 0, dbGain = 0, maxAmplitude = 0;
+								bool isConvertOk = true;
+								if (isConvertOk)
+									mp3Gain = tokens[MP3_gain].toInt(&isConvertOk);
+								if (isConvertOk)
+									dbGain = tokens[dB_gain].toDouble(&isConvertOk);
+								if (isConvertOk)
+									maxAmplitude = tokens[Max_Amplitude].toDouble(&isConvertOk);
+								if (!isConvertOk) {
 									if (isOnlyWithStoredTagInfo){
-										double dbGainDiff = doubleSpinBox_targetNormalValue->value()-defaultNormalTargetValue;
-										dbGain += dbGainDiff;
-										mp3Gain = (int)round(dbGain/DB);
+										// we may get NA values here in the tokens
+										line.type = LINETYPE_ERROR;
+										line.errType=ERRTYPE_SUPPRESSED;
 									}
-									updateModelRowByAnalysisTrack(tokens[File], mp3Gain, dbGain, maxAmplitude, isMaxNoclip,
-																  /*isLog =*/ !isOnlyWithStoredTagInfo);
-									if (isOnlyWithStoredTagInfo){
-										bool hasAlbumInfo = true;
-										int albumMp3Gain(tokens[Album_MP3_gain].toInt(&isConvertOk));
-										hasAlbumInfo &= isConvertOk;
-										double albumDbGain = tokens[Album_dB_gain].toDouble(&isConvertOk);
-										hasAlbumInfo &= isConvertOk;
-										double albumMaxAmplitude = tokens[Album_Max_Amplitude].toDouble(&isConvertOk);
-										hasAlbumInfo &= isConvertOk;
-										if (hasAlbumInfo){
-											QList<QStandardItem *> found = model->findItems(tokens[File], Qt::MatchExactly, 0);
-											if (found.count()>0) {
-												QModelIndex index = model->indexFromItem(found.at(0));
-												updateModelRowsByAnalysisAlbum(isAlbum, QModelIndexList() << index, albumMp3Gain, albumDbGain, QVariant(albumMaxAmplitude));
+									else{
+										line.type = LINETYPE_ERROR;
+										line.errType=ERRTYPE_CANNOT_FIND_MP3_FRAME;
+										QString msg = QString("%1 %2").arg(tr("Error while analyzing in file")).arg(tokens[File]);
+										writeLog(msg, LOGTYPE_ERROR);
+									}
+								}else{
+									updateStatusBar(QString("Analyzing %1").arg(tokens[File]));
+								}
+
+								if (!isOnlyWithStoredTagInfo && tokens[File]=="\"Album\""){ // contains album info
+									line.type = LINETYPE_FILE_ALBUM;
+									if (!line.errType)
+										updateModelRowsByAnalysisAlbum(isAlbum, indicesByProcess, mp3Gain, dbGain, QVariant(maxAmplitude), /*isLog =*/ true);
+								}else{
+									if (!line.errType) {
+										if (isOnlyWithStoredTagInfo){
+											double dbGainDiff = doubleSpinBox_targetNormalValue->value()-defaultNormalTargetValue;
+											dbGain += dbGainDiff;
+											mp3Gain = (int)round(dbGain/DB);
+										}
+										updateModelRowByAnalysisTrack(tokens[File], mp3Gain, dbGain, maxAmplitude, isMaxNoclip,
+																	  /*isLog =*/ !isOnlyWithStoredTagInfo);
+										if (isOnlyWithStoredTagInfo){
+											bool hasAlbumInfo = true;
+											int albumMp3Gain(tokens[Album_MP3_gain].toInt(&isConvertOk));
+											hasAlbumInfo &= isConvertOk;
+											double albumDbGain = tokens[Album_dB_gain].toDouble(&isConvertOk);
+											hasAlbumInfo &= isConvertOk;
+											double albumMaxAmplitude = tokens[Album_Max_Amplitude].toDouble(&isConvertOk);
+											hasAlbumInfo &= isConvertOk;
+											if (hasAlbumInfo){
+												QList<QStandardItem *> found = model->findItems(tokens[File], Qt::MatchExactly, 0);
+												if (found.count()>0) {
+													QModelIndex index = model->indexFromItem(found.at(0));
+													updateModelRowsByAnalysisAlbum(isAlbum, QModelIndexList() << index, albumMp3Gain, albumDbGain, QVariant(albumMaxAmplitude));
+												}
 											}
 										}
 									}
+									isNextIndex = true;
 								}
-								isNextIndex = true;
 							}
 						}
 
@@ -1618,7 +1627,6 @@ void MainWindow::updateModelRowByMP3GainTrack(QString fileName, int mp3Gain, boo
 	if (found.count()==0) return;
 	int row = found.at(0)->row();
 	QStandardItem *item = 0;
-	QString value = "";
 
 	item = getItem(row, "Volume");
 	bool isTrackDisplayed = item;
@@ -1700,7 +1708,6 @@ void MainWindow::updateModelRowsByMP3GainAlbum(QModelIndexList indices, int mp3G
 	double dBGain = mp3Gain*DB;
 	double gainValue = isTrackModifiable ? dBGain : 0.0;
 	QStandardItem *item = 0;
-	QString value = "";
 
 	foreach(QModelIndex index, indices) {
 		int row = model->itemFromIndex(index)->row();
@@ -1904,7 +1911,7 @@ void MainWindow::runGain(QModelIndexList indices, bool isAlbum, double passSlice
 			QList<int> passes = QList<int>() << 90 << 10; // analysis, gain (in track mode)
 			bool hasAnalysis = false;
 			QStringList tokens;
-			QString prevLine;
+			Line prevLine;
 
 			for (bool isAfterLast = false, isWaitForReadyRead = false;
 				(isWaitForReadyRead = process.waitForReadyRead(-1)) || !isAfterLast;
@@ -1916,37 +1923,40 @@ void MainWindow::runGain(QModelIndexList indices, bool isAlbum, double passSlice
 
 				QTextStream in(&result);
 				do {
-					QString line=in.readLine();
-					if (line==QString::null || line.isEmpty())
+					Line line;
+					line.content = in.readLine();
+					if (line.content==QString::null || line.content.isEmpty())
 						continue;
 
-					QStringList lines = line.split(QChar('\r'), QString::SkipEmptyParts);
-					foreach (line, lines){
-						if (line.trimmed().isEmpty()){
+					QStringList lines = line.content.split(QChar('\r'), QString::SkipEmptyParts);
+					foreach (line.content, lines){
+						if (line.content.trimmed().isEmpty()){
 							continue;
 						}
 
-						writeLog(line, LOGTYPE_BACKEND, line.endsWith("bytes analyzed") || line.endsWith("bytes written") ? 2 : 1);
+						writeLog(line.content, LOGTYPE_BACKEND, line.content.endsWith("bytes analyzed") || line.content.endsWith("bytes written") ? 2 : 1);
 						bool isNextIndex = false;
-						ErrType errType = hasError(line);
+						line.errType = hasError(line.content);
 
-						if (errType){
-							if (errType!=ERRTYPE_SUPPRESSED){
+						if (line.errType){
+							line.type = LINETYPE_ERROR;
+							if (line.errType!=ERRTYPE_SUPPRESSED){
 								hasAnalysis = false;
 								isNextIndex = true; // for the time being all errors increase the iterator
 							}
 						}
-						else if (line.endsWith("bytes analyzed")){ // optional
+						else if (line.content.endsWith("bytes analyzed")){ // optional
+							line.type = LINETYPE_ANALYSIS;
 							// single track: "  5% of 2650308 bytes analyzed"
 							// more tracks: "[1/2] 13% of 2650308 bytes analyzed"
-							if (prevLine.endsWith("bytes written")){
+							if (prevLine.type==LINETYPE_WRITTEN){
 								//isNextIndex = true;
 								total_index++;
 							}
 							int percent = 0;
 							int actFileNumber = 1;
 							QRegExp rx("(?:^)(?:\\[(\\d+)(?:/)(\\d+)(?:\\]))?(?: *)(\\d+)(?:% of )(\\d+)(?: bytes analyzed$)");
-							int pos = rx.indexIn(line);
+							int pos = rx.indexIn(line.content);
 							if (pos > -1) {
 								actFileNumber = rx.cap(1).isEmpty() ? 1 : rx.cap(1).toInt();
 								//int totalFileNumber = rx.cap(2).isEmpty() ? 1 : rx.cap(2).toInt();
@@ -1960,11 +1970,12 @@ void MainWindow::runGain(QModelIndexList indices, bool isAlbum, double passSlice
 										QVariant(startProgress+passSlice*(((total_index+percent/100.0))/(indices.size()*(isAlbum ? 2 : 1)))));
 							updateStatusBar(QString("Analyzing %1").arg(argFiles.at(actFileNumber-1)));
 						}
-						else if (line.endsWith("bytes written")){
+						else if (line.content.endsWith("bytes written")){
+							line.type = LINETYPE_WRITTEN;
 							// " 43% of 2650308 bytes written"
 							int percent = 0;
 							QRegExp rx("(?:^ *)(\\d+)(?:% of )(\\d+)(?: bytes written$)");
-							int pos = rx.indexIn(line);
+							int pos = rx.indexIn(line.content);
 							if (pos > -1) {
 								percent = rx.cap(1).toInt();
 								//long fileSize = rx.cap(2).toLong();
@@ -1979,8 +1990,9 @@ void MainWindow::runGain(QModelIndexList indices, bool isAlbum, double passSlice
 						}
 						// Applying mp3 gain change of -5 to /home/brazso/work/audio/2Pac - Changes.mp3...
 						// No changes to /home/brazso/work/audio/Alizee - Lolita.mp3 are necessary
-						else if ( line.startsWith("Applying mp3 gain change of ") ||
-								  line.startsWith("No changes to ") ){
+						else if ( line.content.startsWith("Applying mp3 gain change of ") ||
+								  line.content.startsWith("No changes to ") ){
+							line.type = LINETYPE_APPLY_GAIN;
 							if (!isAlbum){
 								bool isConvertOk;
 								double gainValue = tokens[MP3_gain].toInt(&isConvertOk)*DB; // dBGain
@@ -1997,7 +2009,7 @@ void MainWindow::runGain(QModelIndexList indices, bool isAlbum, double passSlice
 							} else {
 								QString fileName;
 								QRegExp rx("(?:^Applying mp3 gain change of )(-?\\d+)(?: to )(.*)(?:\\.\\.\\.$)");
-								int pos = rx.indexIn(line);
+								int pos = rx.indexIn(line.content);
 								if (pos > -1) {
 									QStringList list = rx.capturedTexts();
 									writeLog(list.join(" "), LOGTYPE_TRACE);
@@ -2009,7 +2021,7 @@ void MainWindow::runGain(QModelIndexList indices, bool isAlbum, double passSlice
 									}
 								}else{
 									rx.setPattern("(?:^No changes to )(.*)(?: are necessary$)");
-									pos = rx.indexIn(line);
+									pos = rx.indexIn(line.content);
 									if (pos > -1) {
 										QStringList list = rx.capturedTexts();
 										writeLog(list.join(" "), LOGTYPE_TRACE);
@@ -2022,40 +2034,43 @@ void MainWindow::runGain(QModelIndexList indices, bool isAlbum, double passSlice
 								updateModelRowsByAnalysisAlbum(isAlbum, fileName, tokens[MP3_gain].toInt(), tokens[dB_gain].toDouble(), QVariant(tokens[Max_Amplitude].toDouble()), /*isLog=*/ true);
 								updateModelRowsByMP3GainAlbum(fileName, tokens[MP3_gain].toInt());
 							}
-							if (!prevLine.startsWith("\"Album\"\t")){
+							if (prevLine.type!=LINETYPE_FILE_ALBUM){
 								isNextIndex = true;
 							}
 						}
 						else {
-							QStringList tmpTokens = prevLine.split(QChar('\t'));
-							bool isPrevLineFile = tmpTokens.size()==enumMax && tmpTokens[File]=="File";
-							tmpTokens = line.split(QChar('\t'));
-							if (tmpTokens.size()==enumMax && tmpTokens[File]!="File"){
-								tokens = tmpTokens;
-								if (!isAlbum){
-									//updateModelRowByAnalysisTrack(tokens[File], tokens[MP3_gain].toInt(), tokens[dB_gain].toDouble(), tokens[Max_Amplitude].toDouble());
-									//updateModelRowByMP3GainTrack(tokens[File], tokens[MP3_gain].toInt());
-									hasAnalysis = prevLine.endsWith("bytes analyzed");
-									isNextIndex = !hasAnalysis && !isPrevLineFile;
-								}else{
-									if (tokens[File]=="\"Album\""){
-										//updateModelRowsByAnalysisAlbum(isAlbum, indicesByeess, tokens[MP3_gain].toInt(), tokens[dB_gain].toDouble(), QVariant(tokens[Max_Amplitude].toDouble()));
-										//updateModelRowsByMP3GainAlbum(indicesByProcess, tokens[MP3_gain].toInt());
+							QStringList tmpTokens = line.content.split(QChar('\t'));
+							if (tmpTokens.size()==enumMax){
+								if (tmpTokens[File]=="File"){
+									line.type = LINETYPE_FILE_HEADER;
+								}
+								else{
+									line.type = LINETYPE_FILE_CONTENT;
+									tokens = tmpTokens;
+									if (!isAlbum){
+										//updateModelRowByAnalysisTrack(tokens[File], tokens[MP3_gain].toInt(), tokens[dB_gain].toDouble(), tokens[Max_Amplitude].toDouble());
+										//updateModelRowByMP3GainTrack(tokens[File], tokens[MP3_gain].toInt());
+										hasAnalysis = prevLine.type==LINETYPE_ANALYSIS;
+										isNextIndex = !hasAnalysis && prevLine.type!=LINETYPE_FILE_HEADER;
 									}else{
-										bool isConvertOk;
-										double gainValue = tokens[MP3_gain].toInt(&isConvertOk)*DB; // dBGain
-										if (isConvertOk){
-											QString msg;
-											if (gainValue==0)
-												msg = tr("No changes to %1").arg(tokens[File]);
-											else
-												msg = tr("Applying gain of %1 dB to %2").arg(gainValue, 0, 'f', 1).arg(tokens[File]);
-											updateStatusBar(msg);
+										if (tokens[File]=="\"Album\""){
+											line.type = LINETYPE_FILE_ALBUM;
+											//updateModelRowsByAnalysisAlbum(isAlbum, indicesByeess, tokens[MP3_gain].toInt(), tokens[dB_gain].toDouble(), QVariant(tokens[Max_Amplitude].toDouble()));
+											//updateModelRowsByMP3GainAlbum(indicesByProcess, tokens[MP3_gain].toInt());
+										}else{
+											bool isConvertOk;
+											double gainValue = tokens[MP3_gain].toInt(&isConvertOk)*DB; // dBGain
+											if (isConvertOk){
+												QString msg;
+												if (gainValue==0)
+													msg = tr("No changes to %1").arg(tokens[File]);
+												else
+													msg = tr("Applying gain of %1 dB to %2").arg(gainValue, 0, 'f', 1).arg(tokens[File]);
+												updateStatusBar(msg);
+											}
+											updateModelRowByAnalysisTrack(tokens[File], tokens[MP3_gain].toInt(), tokens[dB_gain].toDouble(), tokens[Max_Amplitude].toDouble(), /*maxNoclipGain=*/ false,/*isLog=*/ true);
+											isNextIndex = true;
 										}
-										updateModelRowByAnalysisTrack(tokens[File], tokens[MP3_gain].toInt(), tokens[dB_gain].toDouble(), tokens[Max_Amplitude].toDouble(), /*maxNoclipGain=*/ false,/*isLog=*/ true);
-										//hasAnalysis = prevLine.endsWith("bytes analyzed");
-										//isNextIndex = !hasAnalysis && !isPrevLineFile;
-										isNextIndex = true;
 									}
 								}
 							}
@@ -2333,7 +2348,7 @@ void MainWindow::loadDonationUrlFinished(bool isLoadFinished){
 // !backEndFileName: this->backEndFileName, this->backEndFixed
 //  backEndFileName: backEndFileName, this->backEndFixed
 QString MainWindow::findBackEndVersionByProcess(const QString & backEndFileName){
-	QString result = "";
+	QString result("");
 
 	try{
 		QProcess process;
@@ -3136,8 +3151,6 @@ void MainWindow::on_actionUndo_Gain_changes_triggered(){
 	const double passSlice = 100.0;
 
 	try {
-		QString result = "";
-
 		QModelIndexList indices = getModelIndices();
 		if (indices.isEmpty()) throw(0);
 
@@ -3183,8 +3196,7 @@ void MainWindow::on_actionUndo_Gain_changes_triggered(){
 		*/
 		enum resultColumns { File, left_global_gain_change, right_global_gain_change, enumMax };
 		int total_index = 0;
-		QString prevLine;
-		bool prevLineHadError = false;
+		Line prevLine;
 
 		for (bool isAfterLast = false, isWaitForReadyRead = false;
 			(isWaitForReadyRead = process.waitForReadyRead(-1)) || !isAfterLast;
@@ -3199,30 +3211,33 @@ void MainWindow::on_actionUndo_Gain_changes_triggered(){
 
 			QTextStream in(&result);
 			do {
-				QString line=in.readLine();
-				if (line==QString::null || line.isEmpty())
+				Line line;
+				line.content = in.readLine();
+				if (line.content==QString::null || line.content.isEmpty())
 					continue;
 
-				QStringList lines = line.split(QChar('\r'), QString::SkipEmptyParts);
-				foreach (line, lines){
-					if (line.trimmed().isEmpty()){
+				QStringList lines = line.content.split(QChar('\r'), QString::SkipEmptyParts);
+				foreach (line.content, lines){
+					if (line.content.trimmed().isEmpty()){
 						continue;
 					}
 
-					writeLog(line, LOGTYPE_BACKEND, line.endsWith("bytes written") ? 2 : 1);
+					writeLog(line.content, LOGTYPE_BACKEND, line.content.endsWith("bytes written") ? 2 : 1);
 					bool isNextIndex = false;
-					ErrType errType = hasError(line);
+					line.errType = hasError(line.content);
 
-					if (errType){
-						if (errType!=ERRTYPE_SUPPRESSED){
+					if (line.errType){
+						line.type = LINETYPE_ERROR;
+						if (line.errType!=ERRTYPE_SUPPRESSED){
 							isNextIndex = true; // for the time being all errors increase the iterator
 						}
 					}
-					else if (line.endsWith("bytes written")){
+					else if (line.content.endsWith("bytes written")){
+						line.type = LINETYPE_WRITTEN;
 						// " 12% of 7260121 bytes written"
 						int percent = 0;
 						QRegExp rx("(?:^ *)(\\d+)(?:% of )(\\d+)(?: bytes written$)");
-						int pos = rx.indexIn(line);
+						int pos = rx.indexIn(line.content);
 						if (pos > -1) {
 							percent = rx.cap(1).toInt();
 							//long fileSize = rx.cap(2).toLong();
@@ -3232,16 +3247,19 @@ void MainWindow::on_actionUndo_Gain_changes_triggered(){
 									QVariant(startProgress+passSlice*(((total_index+percent/100.0))/indices.size())));
 					}
 					else{
-						QStringList tokens = prevLine.split(QChar('\t'));
-						bool isPrevLineFile = tokens.size()==enumMax && tokens[File]=="File";
+						QStringList tokens = line.content.split(QChar('\t'));
 
-						tokens = line.split(QChar('\t'));
-
-						if (tokens.size()==enumMax && tokens[File]!="File"){
-							//writeLog(tokens[File], LOGTYPE_TRACE);
-							updateModelRowByMP3GainTrack(tokens[File], (tokens[left_global_gain_change].toInt()+tokens[right_global_gain_change].toInt())/2);
-							if (!isPrevLineFile && !prevLineHadError)
-								isNextIndex = true;
+						if (tokens.size()==enumMax){
+							if (tokens[File]=="File"){
+								line.type = LINETYPE_FILE_HEADER;
+							}
+							else{
+								line.type = LINETYPE_FILE_CONTENT;
+								//writeLog(tokens[File], LOGTYPE_TRACE);
+								updateModelRowByMP3GainTrack(tokens[File], (tokens[left_global_gain_change].toInt()+tokens[right_global_gain_change].toInt())/2);
+								if (prevLine.type!=LINETYPE_FILE_HEADER && !prevLine.errType)
+									isNextIndex = true;
+							}
 						}
 					}
 
@@ -3254,7 +3272,6 @@ void MainWindow::on_actionUndo_Gain_changes_triggered(){
 					qApp->processEvents(QEventLoop::AllEvents);
 					if (isCancelled) throw(-1);
 					prevLine = line;
-					prevLineHadError = errType && errType!=ERRTYPE_SUPPRESSED;
 				} // foreach
 			} while (!in.atEnd());
 		}
@@ -3291,8 +3308,6 @@ void MainWindow::on_actionRemove_Tags_from_files_triggered(){
 	const double passSlice = 100.0;
 
 	try {
-		QString result = "";
-
 		QModelIndexList indices = getModelIndices();
 		if (indices.isEmpty()) throw(0);
 

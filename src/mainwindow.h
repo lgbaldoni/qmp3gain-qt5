@@ -64,6 +64,24 @@ public:
 				  OPTYPE_MAX_NO_CLIP_GAIN_FOR_EACH_FILE, OPTYPE_MAX_NO_CLIP_GAIN_FOR_ALBUM,
 				  OPTYPE_TRACK_ANALYSIS, OPTYPE_TRACK_GAIN, OPTYPE_UNDO_GAIN_CHANGES };
 	*/
+	enum LineType { LINETYPE_UNDEFINED = 0,
+					LINETYPE_ERROR,
+					LINETYPE_ANALYSIS,
+					LINETYPE_WRITTEN,
+					LINETYPE_APPLY_GAIN,
+					LINETYPE_FILE_HEADER,
+					LINETYPE_FILE_ALBUM,
+					LINETYPE_FILE_CONTENT };
+	struct Line
+	{
+		QString content;
+		LineType type;
+		ErrType errType;
+
+		Line() : content(QString()), type(LINETYPE_UNDEFINED), errType(ERRTYPE_NONE)
+		{
+		}
+	};
 
 public slots:
 	void switchLanguage(QAction *action = 0);
