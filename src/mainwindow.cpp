@@ -1523,12 +1523,10 @@ int MainWindow::runAnalysis(QModelIndexList indices, bool isAlbum, bool isMaxNoc
 							bool isIgnore = true;
 							if (tokens.size()!=(!isOnlyWithStoredTagInfo ? (int)enumMax : (int)enumMaxEx))
 								;
-							else if (tokens[File]=="File"){
+							else if (tokens[File]=="File")
 								line.type = LINETYPE_FILE_HEADER;
-							}
-							else{
+							else
 								isIgnore = false;
-							}
 
 							if (!isIgnore){
 								double mp3Gain = 0, dbGain = 0, maxAmplitude = 0;
@@ -2183,61 +2181,67 @@ void MainWindow::runConstantGain(QModelIndexList indices, int mp3Gain, bool isLe
 
 			QTextStream in(&result);
 			do {
-				QString line=in.readLine();
-				if (line==QString::null || line.isEmpty())
+				Line line;
+				line.content = in.readLine();
+				if (line.content==QString::null || line.content.isEmpty())
 					continue;
 
-				QStringList lines = line.split(QChar('\r'), QString::SkipEmptyParts);
-				foreach (line, lines){
-					if (line.trimmed().isEmpty()){
+				QStringList lines = line.content.split(QChar('\r'), QString::SkipEmptyParts);
+				foreach (line.content, lines){
+					if (line.content.trimmed().isEmpty()){
 						continue;
 					}
 
-					writeLog(line, LOGTYPE_BACKEND, line.endsWith("bytes analyzed") ? 2 : 1);
+					writeLog(line.content, LOGTYPE_BACKEND, line.content.endsWith("bytes analyzed") ? 2 : 1);
 					bool isNextIndex = false;
-					ErrType errType = hasError(line);
+					line.errType = hasError(line.content);
 
-					if (errType){
-						if (errType!=ERRTYPE_SUPPRESSED){
+					if (line.errType){
+						line.type = LINETYPE_ERROR;
+						if (line.errType!=ERRTYPE_SUPPRESSED){
 							isNextIndex = true; // for the time being all errors increase the iterator
 						}
 					}
-					else if (line.endsWith("bytes written")){
+					else if (line.content.endsWith("bytes written")){
+						line.type = LINETYPE_WRITTEN;
 						// " 43% of 2650308 bytes written"
 						int percent = 0;
 						QRegExp rx("(?:^ *)(\\d+)(?:% of )(\\d+)(?: bytes written$)");
-						int pos = rx.indexIn(line);
+						int pos = rx.indexIn(line.content);
 						if (pos > -1) {
 							percent = rx.cap(1).toInt();
 							//long fileSize = rx.cap(2).toLong();
 						}
 						if (percent>100) percent=100; // some bug from the back end
-						if (percent>100) percent=100; // some bug from the back end
 						setProgress(QVariant(percent),
 									QVariant(startProgress+passSlice*(((total_index+percent/100.0))/indices.size())));
 					}
-					else if (line=="done"){
+					else if (line.content=="done"){
 						isNextIndex = true;
 					}
 					else{
-						QStringList tokens = line.split(QChar('\t'));
+						QStringList tokens = line.content.split(QChar('\t'));
 
-						if (tokens.size()==enumMax && tokens[File]=="File")
-							continue;
-						QRegExp rx("(?:Applying gain change of )(-?\\d+)(?: to )(.*)(?:\\.\\.\\.)");
-						if (!(isLeft && isRight)){
-							rx=QRegExp("(?:Applying gain change of )(-?\\d+)(?: to CHANNEL \\d of )(.*)(?:\\.\\.\\.)");
+						if (tokens.size()==enumMax && tokens[File]=="File"){
+							line.type = LINETYPE_FILE_HEADER;
 						}
-						int pos = rx.indexIn(line);
-						if (pos > -1) {
-							QStringList list = rx.capturedTexts();
-							if (list.size()==3){
-								QString fileName = rx.cap(2);
-								int mp3Gain = rx.cap(1).toInt();
-								updateModelRowByMP3GainTrack(fileName, mp3Gain);
+						else{
+							QRegExp rx("(?:Applying gain change of )(-?\\d+)(?: to )(.*)(?:\\.\\.\\.)");
+							if (!(isLeft && isRight)){
+								rx=QRegExp("(?:Applying gain change of )(-?\\d+)(?: to CHANNEL \\d of )(.*)(?:\\.\\.\\.)");
 							}
-						}else{
-							// error message?
+							int pos = rx.indexIn(line.content);
+							if (pos > -1) {
+								line.type = LINETYPE_APPLY_GAIN;
+								QStringList list = rx.capturedTexts();
+								if (list.size()==3){
+									QString fileName = rx.cap(2);
+									int mp3Gain = rx.cap(1).toInt();
+									updateModelRowByMP3GainTrack(fileName, mp3Gain);
+								}
+							}else{
+								// error message?
+							}
 						}
 					}
 					if (isNextIndex){
@@ -3360,30 +3364,37 @@ void MainWindow::on_actionRemove_Tags_from_files_triggered(){
 
 			QTextStream in(&result);
 			do {
-				QString line=in.readLine();
-				if (line==QString::null || line.isEmpty())
+				Line line;
+				line.content = in.readLine();
+				if (line.content==QString::null || line.content.isEmpty())
 					continue;
 
-				QStringList lines = line.split(QChar('\r'), QString::SkipEmptyParts);
-				foreach (line, lines){
-					if (line.trimmed().isEmpty()){
+				QStringList lines = line.content.split(QChar('\r'), QString::SkipEmptyParts);
+				foreach (line.content, lines){
+					if (line.content.trimmed().isEmpty()){
 						continue;
 					}
 
-					writeLog(line, LOGTYPE_BACKEND);
+					writeLog(line.content, LOGTYPE_BACKEND);
 					bool isNextIndex = false;
-					ErrType errType = hasError(line);
+					line.errType = hasError(line.content);
 
-					if (errType){
-						if (errType!=ERRTYPE_SUPPRESSED){
+					if (line.errType){
+						line.type = LINETYPE_ERROR;
+						if (line.errType!=ERRTYPE_SUPPRESSED){
 							isNextIndex = true; // for the time being all errors increase the iterator
 						}
 					}
 					else{
-						QStringList tokens = line.split(QChar('\t'));
-						if (tokens.size()!=enumMax || (tokens.size()==enumMax && tokens[File]=="File"))
-							continue;
-						isNextIndex = true;
+						QStringList tokens = line.content.split(QChar('\t'));
+						if (tokens.size()==enumMax){
+							if (tokens[File]=="File")
+								line.type = LINETYPE_FILE_HEADER;
+							else{
+								line.type = LINETYPE_FILE_CONTENT;
+								isNextIndex = true;
+							}
+						}
 					}
 
 					if (isNextIndex){
