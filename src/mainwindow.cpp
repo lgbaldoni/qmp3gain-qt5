@@ -634,7 +634,8 @@ void MainWindow::readSettings()
 }
 
 void MainWindow::refreshUi(){
-	setWindowTitle ( windowTitle().arg ( appTitle ) );
+	if (windowTitle().contains("%1"))
+		setWindowTitle(windowTitle().arg(appTitle));
 	
 	// explanation: labelTargetNormalValue->text() = "dB (default %1)"
 	labelTargetNormalValue->setText(QString(labelTargetNormalValue->text()).arg(defaultNormalTargetValue, 0, 'f', 1));
