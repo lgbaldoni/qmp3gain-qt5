@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
 	MainWindow mainWin;
 	mainWin.switchLanguage();
 	mainWin.show();
-	if (mainWin.getBackEndVersion().isEmpty()){
+	if (!mainWin.isBackEndAvailable()){
 		mainWin.showNoBackEndVersion(true);
 	}
 	return app.exec();

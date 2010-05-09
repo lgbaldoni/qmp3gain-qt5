@@ -19,6 +19,7 @@ const QString MainWindow::defaultLocale = "en_US";
 const double MainWindow::DB = 20.0*log10(pow(2.0,0.25)); // 1 mp3Gain = ~1.5 dBGain
 const QString MainWindow::donationUrl =
 		"https://www.paypal.com/xclick/business=mp3gain@hotmail.com&item_name=MP3 Gain Donation&no_shipping=1&return=http://mp3gain.sourceforge.net/thanks.php";
+const QString MainWindow::requiredBackEndVersion = "1.5.2";
 
 MainWindow::MainWindow(QWidget *parent)
 		: QMainWindow(parent)
@@ -207,6 +208,25 @@ MainWindow::~MainWindow(){
 	delete trayIcon;
 	delete restoreTrayAction;
 	delete quitTrayAction;
+}
+
+long MainWindow::getVersionNumber(const QString & versionString)
+{
+	if (versionString.isEmpty())
+		return 0;
+
+	long major;
+	long minor;
+	long subminor;
+	QRegExp rx("(?:^)(\\d+)(?:\\.)(\\d+)(?:\\.)(\\d+)(?:$)");
+	int pos = rx.indexIn(versionString);
+	if (pos > -1) {
+		major = rx.cap(1).toInt();
+		minor = rx.cap(2).toInt();
+		subminor = rx.cap(3).toInt();
+	}
+
+	return major*1000000+minor*1000+subminor;
 }
 
 /*
@@ -754,7 +774,7 @@ void MainWindow::refreshGUI() {
 }
 
 void MainWindow::refreshMenu(){
-	bool isBackEndAvailable = !backEndVersion.isEmpty();
+	bool isBackEndAvailable = this->isBackEndAvailable();
 	bool listEmpty = model->rowCount()==0;
 
 	// some options might be not used
@@ -2393,9 +2413,13 @@ QString MainWindow::findBackEndVersionByProcess(const QString & backEndFileName)
 }
 
 void MainWindow::showNoBackEndVersion(bool isStartBackEndDialog){
-	QString msg = tr("Backend mp3gain cannot be found.\n"
+	QString msg = tr("MP3Gain back end cannot be found.\n"
 					 "Please make it available!");
 	if (isStartBackEndDialog){
+		if (!backEndVersion.isEmpty()){
+			msg = tr("Required MP3Gain back end version is %1 or later, but only %2 is found.\n"
+					 "Please make a newer version available!").arg(this->requiredBackEndVersion).arg(backEndVersion);
+		}
 		QMessageBox::warning(this, appTitle, msg);
 		on_actionBack_end_triggered();
 	}else{

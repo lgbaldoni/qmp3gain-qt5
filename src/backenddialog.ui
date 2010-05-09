@@ -7,13 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>410</width>
-    <height>114</height>
+    <height>126</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>%1 - Specify back end</string>
   </property>
-  <layout class="QVBoxLayout">
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QGridLayout">
      <item row="0" column="0">
@@ -46,22 +46,18 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QLabel" name="label_Status">
-       <property name="text">
-        <string>Status: %1</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_Version">
-       <property name="text">
-        <string>Version: %1</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <widget class="QLabel" name="label_Version">
+     <property name="text">
+      <string>Version: %1</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="label_Status">
+     <property name="text">
+      <string>Status: %1</string>
+     </property>
+    </widget>
    </item>
    <item>
     <spacer>

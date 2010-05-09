@@ -60,7 +60,13 @@ void BackEndDialog::refreshStatusAndVersion(bool isInit){
 	QString backEndVersion = isInit ? mainWindow->getBackEndVersion() : mainWindow->findBackEndVersionByProcess(lineEdit_fileName->text());
 	if (backEndVersion.isEmpty()){
 		status = "<b><font color=red>"+tr("invalid (not found)")+"</font></b>";
-	}else{
+	}
+	else if(mainWindow->getVersionNumber(backEndVersion)<mainWindow->getVersionNumber(mainWindow->getRequiredBackEndVersion()))
+	{
+		status = "<b><font color=red>"+tr("invalid (%1 or later required)").arg(mainWindow->getRequiredBackEndVersion())+"</font></b>";
+		version = backEndVersion;
+	}
+	else{
 		status = "<b><font color=green>"+tr("ok")+"</font></b>";
 		isStatusOk = true;
 		version = backEndVersion;

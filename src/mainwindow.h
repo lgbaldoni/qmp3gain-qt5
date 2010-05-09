@@ -29,16 +29,19 @@ public:
 	inline const QString & getBackEnd() { return backEndFileName.isEmpty() ? backEndFixed : backEndFileName; }
 	inline static const QString & getBackEndFixed() { return backEndFixed; }
 	inline static const QString & getDonationUrl() { return donationUrl; }
+	inline static const QString & getRequiredBackEndVersion() { return requiredBackEndVersion; }
 	inline QString & getBackEndFileName() { return backEndFileName; }
 	inline void setBackEndFileName(const QString & backEndFileName) { this->backEndFileName = backEndFileName; }
 	inline QString & getBackEndVersion() { return backEndVersion; }
 	inline void setBackEndVersion(const QString & backEndVersion) { this->backEndVersion = backEndVersion; }
+	inline bool isBackEndAvailable() { return !backEndVersion.isEmpty() && getVersionNumber(backEndVersion)>=getVersionNumber(this->requiredBackEndVersion); }
 	inline QPointer<QFile> getFileLog() { return fileLog; }
 	inline void setFileLog(QPointer<QFile> fileLog) { this->fileLog = fileLog; }
 	inline QPointer<QWebView> getDonationView() { return donationView; }
 	inline void setDonationView(QPointer<QWebView> donationView) { this->donationView = donationView; }
 	inline QStandardItem* getItem(int row, const QString & column) { return model->item(row, modelHeaderList.indexOf(column)); }
 	inline QModelIndex getItemIndex(int row, const QString & column) { return model->index(row, modelHeaderList.indexOf(column)); }
+	long getVersionNumber(const QString & versionString);
 	void showNoBackEndVersion(bool isStartBackEndDialog = false);
 	QString findBackEndVersionByProcess(const QString & backEndFileName = QString());
 	enum LogType { LOGTYPE_ERROR, LOGTYPE_ANALYSIS, LOGTYPE_CHANGE, LOGTYPE_BACKEND, LOGTYPE_TRACE };
@@ -108,8 +111,10 @@ private:
 	const static QString appVersion;
 	const static QString backEndFixed;
 	const static QString donationUrl;
+	const static QString requiredBackEndVersion;
 	QString backEndFileName;
 	QString backEndVersion;
+	bool backEndAvailable;
 	const static double defaultNormalTargetValue;
 	const static QString defaultLocale;
 	const static double DB;
