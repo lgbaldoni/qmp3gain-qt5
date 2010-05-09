@@ -237,6 +237,7 @@ bool MainWindow::okToContinue()
 						tr("The document has been modified.\nDo you want to save your changes?"),
                         QMessageBox::Yes | QMessageBox::No
                         | QMessageBox::Cancel);
+		operationTime.restart();
         if (r == QMessageBox::Yes) {
             return true; //save();
         } else if (r == QMessageBox::Cancel) {
@@ -460,6 +461,7 @@ void MainWindow::on_clearLogButton_clicked()
 						isConfirmSuppressed,
 						QMessageBox::Yes | QMessageBox::No,
 						QMessageBox::No);
+			operationTime.restart();
 			if (r == QMessageBox::No) {
 				throw(0);
 			}
@@ -648,6 +650,7 @@ void MainWindow::readSettings()
 		if (!fileLog->open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text)){
 			QMessageBox::critical(this, appTitle,
 					tr("Cannot write log file: %1").arg(fileLog->fileName()));
+			operationTime.restart();
 			delete fileLog;
 		}
 	}
@@ -684,7 +687,9 @@ void MainWindow::enableGUI(){
 	clearLogButton->setEnabled(true);
 	groupBox_logCheckboxes->setEnabled(true);
 
-	if (actionBeep_when_finished->isChecked()){
+	int spinBox_beepAfter = settings->value("advancedOptionsDialog/spinBox_beepAfter", 0).toInt();
+	int elapsedTime = operationTime.elapsed()/1000; // ms -> second
+	if (actionBeep_when_finished->isChecked() && elapsedTime>=spinBox_beepAfter){
 		if (beepSound)
 			beepSound->play();
 		else
@@ -710,6 +715,7 @@ void MainWindow::disableGUI(){
 	groupBox_logCheckboxes->setEnabled(false);
 
 	this->enabledGUI = false;
+	operationTime.start();
 }
 
 void MainWindow::refreshGUI() {
@@ -1362,6 +1368,7 @@ MainWindow::ErrType MainWindow::hasError(const QString & input) {
 										isConfirmSuppressed,
 										QMessageBox::Yes | QMessageBox::No,
 										QMessageBox::Yes);
+							operationTime.restart();
 							if (isConfirmSuppressed){
 								settings->setValue("openLogPanelForErrorAnswer", r==QMessageBox::Yes);
 							}
@@ -1393,6 +1400,7 @@ MainWindow::ErrType MainWindow::hasError(const QString & input) {
 								tr("Don't bother me again with error messages"),
 								isConfirmSuppressed,
 								QMessageBox::Close);
+					operationTime.restart();
 					if (isConfirmSuppressed){
 						isPopupErrorSuppressed = QVariant(true);
 					}
@@ -1409,9 +1417,8 @@ int MainWindow::runAnalysis(QModelIndexList indices, bool isAlbum, bool isMaxNoc
 	double startProgress = progressBar_Total->doubleValue();
 
 	try {
-		if (indices.isEmpty()) throw(0);
-
 		if (startProgress==0.0 && passSlice==100.0) disableGUI();
+		if (indices.isEmpty()) throw(0);
 
 		int total_index = 0;
 
@@ -1820,9 +1827,8 @@ void MainWindow::runGain(QModelIndexList indices, bool isAlbum, double passSlice
 	double startProgress = progressBar_Total->doubleValue();
 
 	try {
-		if (indices.isEmpty()) throw(0);
-
 		if (startProgress==0.0 && passSlice==100.0) disableGUI();
+		if (indices.isEmpty()) throw(0);
 
 		int total_index = 0;
 
@@ -2126,9 +2132,8 @@ void MainWindow::runConstantGain(QModelIndexList indices, int mp3Gain, bool isLe
 	double startProgress = progressBar_Total->doubleValue();
 
 	try {
-		if (indices.isEmpty() || mp3Gain==0) throw(0);
-
 		if (startProgress==0.0 && passSlice==100.0) disableGUI();
+		if (indices.isEmpty() || mp3Gain==0) throw(0);
 
 		QStringList args;
 		if (isLeft && isRight){
@@ -2360,6 +2365,7 @@ void MainWindow::loadDonationUrlFinished(bool isLoadFinished){
 				writeLog(QString("Donation URL cannot be opened by QDesktopServices: %1").arg(donationUrl), LOGTYPE_TRACE);
 				QMessageBox::critical(this, appTitle,
 						tr("Could not open donation URL"));
+				operationTime.restart();
 				delete donationView;
 			}
 		}else{
@@ -2421,9 +2427,11 @@ void MainWindow::showNoBackEndVersion(bool isStartBackEndDialog){
 					 "Please make a newer version available!").arg(this->requiredBackEndVersion).arg(backEndVersion);
 		}
 		QMessageBox::warning(this, appTitle, msg);
+		operationTime.restart();
 		on_actionBack_end_triggered();
 	}else{
 		QMessageBox::critical(this, appTitle, msg);
+		operationTime.restart();
 	}
 }
 
@@ -2500,6 +2508,7 @@ void MainWindow::on_actionLoad_Analysis_results_triggered(){
 									 .arg(errorLine)
 									 .arg(errorColumn)
 									 .arg(errorMsg));
+				operationTime.restart();
 				throw -1;
 			}
 			rootElement = docMain.documentElement();
@@ -2613,6 +2622,7 @@ void MainWindow::on_actionLoad_Analysis_results_triggered(){
 					int button = QMessageBox::warning(this, appTitle, text,
 										 QMessageBox::Yes | QMessageBox::YesToAll | QMessageBox::No | QMessageBox::NoToAll | QMessageBox::Cancel,
 										 QMessageBox::Yes);
+					operationTime.restart();
 
 					if (button==QMessageBox::YesToAll){
 						isYesToAll_FileLastModified = true;
@@ -2643,6 +2653,7 @@ void MainWindow::on_actionLoad_Analysis_results_triggered(){
 					int button = QMessageBox::warning(this, appTitle, text,
 										 QMessageBox::Yes | QMessageBox::YesToAll | QMessageBox::No | QMessageBox::NoToAll | QMessageBox::Cancel,
 										 QMessageBox::Yes);
+					operationTime.restart();
 
 					if (button==QMessageBox::YesToAll){
 						isYesToAll_FileSize = true;
@@ -2676,6 +2687,7 @@ void MainWindow::on_actionLoad_Analysis_results_triggered(){
 					int button = QMessageBox::warning(this, appTitle, text,
 										 QMessageBox::Yes | QMessageBox::YesToAll | QMessageBox::No | QMessageBox::NoToAll | QMessageBox::Cancel,
 										 QMessageBox::Yes);
+					operationTime.restart();
 
 					if (button==QMessageBox::YesToAll){
 						isYesToAll_FileExist = true;
@@ -2945,11 +2957,10 @@ void MainWindow::on_actionClear_Selected_Files_triggered(){
 	const double passSlice = 100;
 
 	try {
+		if (startProgress==0.0 && passSlice==100.0) disableGUI();
 		QItemSelectionModel *selectionModel = tableView->selectionModel();
 		QModelIndexList indices = selectionModel->selectedRows();
 		if (indices.isEmpty()) throw(0);
-
-		if (startProgress==0.0 && passSlice==100.0) disableGUI();
 
 		// index.row() is not updated if an element is deleted from the model
 		// therefore the rows must be deleted from the higher to the lower positions
@@ -3006,6 +3017,7 @@ void MainWindow::on_actionClear_Analysis_triggered(){
 	const double passSlice = 100.0;
 
 	try {
+		if (startProgress==0.0 && passSlice==100.0) disableGUI();
 		QModelIndexList indices = getModelIndices();
 		if (indices.isEmpty()) throw(0);
 
@@ -3018,6 +3030,7 @@ void MainWindow::on_actionClear_Analysis_triggered(){
 						isConfirmSuppressed,
 						QMessageBox::Yes | QMessageBox::No,
 						QMessageBox::No);
+			operationTime.restart();
 			if (r == QMessageBox::No) {
 				throw(0);
 			}
@@ -3025,8 +3038,6 @@ void MainWindow::on_actionClear_Analysis_triggered(){
 				settings->setValue("clearAnalysis_ConfirmSuppressed", true);
 			}
 		}
-
-		if (startProgress==0.0 && passSlice==100.0) disableGUI();
 
 		for (int i = 0; i<indices.size(); i++) {
 			int row = model->itemFromIndex(indices.at(i))->row();
@@ -3103,10 +3114,9 @@ void MainWindow::on_actionMax_No_clip_Gain_for_Each_file_triggered(){
 	const double passSlice =  100.0;
 
 	try {
+		if (startProgress==0.0 && passSlice==100.0) disableGUI();
 		QModelIndexList indices = getModelIndices();
 		if (indices.isEmpty()) throw(0);
-
-		if (startProgress==0.0 && passSlice==100.0) disableGUI();
 
 		// calculate passes
 		QList<int> passes = operationMap["max_no_clip_gain_for_each_file"];
@@ -3138,10 +3148,9 @@ void MainWindow::on_actionMax_No_clip_Gain_for_Album_triggered(){
 	const double passSlice = 100.0;
 
 	try {
+		if (startProgress==0.0 && passSlice==100.0) disableGUI();
 		QModelIndexList indices = getModelIndices();
 		if (indices.isEmpty()) throw(0);
-
-		if (startProgress==0.0 && passSlice==100.0) disableGUI();
 
 		// calculate passes
 		QList<int> passes = operationMap["max_no_clip_gain_for_album"];
@@ -3180,10 +3189,9 @@ void MainWindow::on_actionUndo_Gain_changes_triggered(){
 	const double passSlice = 100.0;
 
 	try {
+		if (startProgress==0.0 && passSlice==100.0) disableGUI();
 		QModelIndexList indices = getModelIndices();
 		if (indices.isEmpty()) throw(0);
-
-		if (startProgress==0.0 && passSlice==100.0) disableGUI();
 
 		QStringList args;
 		args << "-u"; // undo changes made by mp3gain (based on stored tag info)
@@ -3337,10 +3345,9 @@ void MainWindow::on_actionRemove_Tags_from_files_triggered(){
 	const double passSlice = 100.0;
 
 	try {
+		if (startProgress==0.0 && passSlice==100.0) disableGUI();
 		QModelIndexList indices = getModelIndices();
 		if (indices.isEmpty()) throw(0);
-
-		if (startProgress==0.0 && passSlice==100.0) disableGUI();
 
 		QStringList args;
 		args << "-s" << "d"; // delete stored tag info (no other processing)

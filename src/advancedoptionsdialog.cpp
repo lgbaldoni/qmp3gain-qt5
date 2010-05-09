@@ -21,6 +21,7 @@ AdvancedOptionsDialog::AdvancedOptionsDialog(QWidget *parent)
 		fields << horizontalSlider_logBackendDepth;
 		fields << horizontalSlider_logTraceDepth;
 		fields << checkBox_ShowHiddenFields;
+		fields << spinBox_beepAfter;
 		fields << checkBox_UseNoTempFiles;
 		fields << checkBox_ShowNoFileProgress;
 		fields << radioButton_threadRealtime;
@@ -35,6 +36,7 @@ AdvancedOptionsDialog::AdvancedOptionsDialog(QWidget *parent)
 	isAccepted = false;
 	horizontalSlider_logBackendDepth_origValue = horizontalSlider_logBackendDepth->value();
 	horizontalSlider_logTraceDepth_origValue = horizontalSlider_logTraceDepth->value();
+	spinBox_beepAfter_origValue = spinBox_beepAfter->value();
 	}
 
 AdvancedOptionsDialog::~AdvancedOptionsDialog(){
@@ -55,6 +57,8 @@ void AdvancedOptionsDialog::readSettings(QSettings *settings){
 	for (int i=0; i<fields.count(); i++){
 		if (fields[i]->objectName().startsWith("horizontalSlider"))
 			(qobject_cast<QSlider*>(fields[i]))->setValue(settings->value(fields[i]->objectName(), (qobject_cast<QSlider*>(fields[i]))->value()).toInt());
+		if (fields[i]->objectName().startsWith("spinBox"))
+			(qobject_cast<QSpinBox*>(fields[i]))->setValue(settings->value(fields[i]->objectName(), (qobject_cast<QSpinBox*>(fields[i]))->value()).toInt());
 		else if (fields[i]->objectName().startsWith("checkBox"))
 			(qobject_cast<QCheckBox*>(fields[i]))->setChecked(settings->value(fields[i]->objectName(), (qobject_cast<QCheckBox*>(fields[i]))->isChecked()).toBool());
 		else if (fields[i]->objectName().startsWith("radioButton"))
@@ -68,6 +72,8 @@ void AdvancedOptionsDialog::writeSettings(QSettings *settings){
 	for (int i=0; i<fields.count(); i++){
 		if (fields[i]->objectName().startsWith("horizontalSlider"))
 			settings->setValue(fields[i]->objectName(), (qobject_cast<QSlider*>(fields[i]))->value());
+		if (fields[i]->objectName().startsWith("spinBox"))
+			settings->setValue(fields[i]->objectName(), (qobject_cast<QSpinBox*>(fields[i]))->value());
 		else if (fields[i]->objectName().startsWith("checkBox"))
 			settings->setValue(fields[i]->objectName(), (qobject_cast<QCheckBox*>(fields[i]))->isChecked());
 		else if (fields[i]->objectName().startsWith("radioButton"))

@@ -13,6 +13,7 @@
 #include <QWebView>
 #include <QSound>
 #include <QSystemTrayIcon>
+#include <QTime>
 
 #include "ui_mainwindow.h"
 
@@ -128,6 +129,7 @@ private:
 	QPointer<QLabel> messageLabel;
 	QPointer<QLabel> modelRowCountLabel;
 	QPointer<QSound> beepSound;
+	QTime operationTime;
 
 	QPointer<QAction> restoreTrayAction;
 	QPointer<QAction> quitTrayAction;

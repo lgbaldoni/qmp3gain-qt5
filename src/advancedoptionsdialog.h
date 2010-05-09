@@ -18,6 +18,7 @@ private:
 	bool isAccepted;
 	int horizontalSlider_logBackendDepth_origValue;
 	int horizontalSlider_logTraceDepth_origValue;
+	int spinBox_beepAfter_origValue;
 	QVector<QObject*> fields;
 	void readSettings(QSettings *settings);
 	void writeSettings(QSettings *settings);
