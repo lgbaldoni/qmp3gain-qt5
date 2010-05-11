@@ -10,9 +10,27 @@
 #include "logoptionsdialog.h"
 #include "mymessagebox.h"
 
+#ifndef APP_MAJOR_VER
+#define APP_MAJOR_VER "?"
+#endif
+#ifndef APP_MINOR_VER
+#define APP_MINOR_VER "?"
+#endif
+#ifndef APP_SUBMINOR_VER
+#define APP_SUBMINOR_VER "?"
+#endif
+#ifndef APP_LASTCOMMIT_ID
+#define APP_LASTCOMMIT_ID "?"
+#endif
+#ifndef APP_LASTCOMMIT_DATE
+#define APP_LASTCOMMIT_DATE "?"
+#endif
+
 // init const static variables
 const QString MainWindow::appTitle = "QMP3Gain";
-const QString MainWindow::appVersion = "0.9.0";
+const QString MainWindow::appVersion = QString() + APP_MAJOR_VER + "." + APP_MINOR_VER + "." + APP_SUBMINOR_VER;
+const QString MainWindow::appLastCommitId = QString() + APP_LASTCOMMIT_ID; // "bcde360"
+const QString MainWindow::appLastCommitDate = QString() + APP_LASTCOMMIT_DATE;  // "2010-05-10 00:08:20 +0200"
 const QString MainWindow::backEndFixed = "mp3gain"; // only used if backEndFileName is empty, see this->getBackEnd()
 const double MainWindow::defaultNormalTargetValue = 89.0;
 const QString MainWindow::defaultLocale = "en_US";
@@ -215,9 +233,9 @@ long MainWindow::getVersionNumber(const QString & versionString)
 	if (versionString.isEmpty())
 		return 0;
 
-	long major;
-	long minor;
-	long subminor;
+	long major = 0;
+	long minor = 0;
+	long subminor = 0;
 	QRegExp rx("(?:^)(\\d+)(?:\\.)(\\d+)(?:\\.)(\\d+)(?:$)");
 	int pos = rx.indexIn(versionString);
 	if (pos > -1) {
@@ -657,8 +675,11 @@ void MainWindow::readSettings()
 }
 
 void MainWindow::refreshUi(){
-	if (windowTitle().contains("%1"))
-		setWindowTitle(windowTitle().arg(appTitle));
+	if (windowTitle().contains("%1")){
+		QString title = appTitle;
+		title += " "+appVersion+"."+appLastCommitId+" ("+appLastCommitDate+")";
+		setWindowTitle(windowTitle().arg(title));
+	}
 	
 	// explanation: labelTargetNormalValue->text() = "dB (default %1)"
 	labelTargetNormalValue->setText(QString(labelTargetNormalValue->text()).arg(defaultNormalTargetValue, 0, 'f', 1));

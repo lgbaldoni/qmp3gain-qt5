@@ -27,6 +27,8 @@ public:
 	inline QPointer<QSettings> getSettings() { return settings; }
 	inline static const QString & getAppTitle() { return appTitle; }
 	inline static const QString & getAppVersion() { return appVersion; }
+	inline static const QString & getAppLastCommitId() { return appLastCommitId; }
+	inline static const QString & getAppLastCommitDate() { return appLastCommitDate; }
 	inline const QString & getBackEnd() { return backEndFileName.isEmpty() ? backEndFixed : backEndFileName; }
 	inline static const QString & getBackEndFixed() { return backEndFixed; }
 	inline static const QString & getDonationUrl() { return donationUrl; }
@@ -35,7 +37,7 @@ public:
 	inline void setBackEndFileName(const QString & backEndFileName) { this->backEndFileName = backEndFileName; }
 	inline QString & getBackEndVersion() { return backEndVersion; }
 	inline void setBackEndVersion(const QString & backEndVersion) { this->backEndVersion = backEndVersion; }
-	inline bool isBackEndAvailable() { return !backEndVersion.isEmpty() && getVersionNumber(backEndVersion)>=getVersionNumber(this->requiredBackEndVersion); }
+	inline bool isBackEndAvailable(const QString & backEndVersion = QString()) { return getVersionNumber(!backEndVersion.isEmpty() ? backEndVersion : this->backEndVersion)>=getVersionNumber(this->requiredBackEndVersion); }
 	inline QPointer<QFile> getFileLog() { return fileLog; }
 	inline void setFileLog(QPointer<QFile> fileLog) { this->fileLog = fileLog; }
 	inline QPointer<QWebView> getDonationView() { return donationView; }
@@ -110,6 +112,8 @@ private:
 	QPointer<QStandardItemModel> model;
 	const static QString appTitle;
 	const static QString appVersion;
+	const static QString appLastCommitId;
+	const static QString appLastCommitDate;
 	const static QString backEndFixed;
 	const static QString donationUrl;
 	const static QString requiredBackEndVersion;
