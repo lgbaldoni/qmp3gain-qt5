@@ -45,3 +45,8 @@ include( ../translations/translations.pri )
 include( ../help/help.pri )
 QMAKE_DISTCLEAN += object_script.qmp3gain.Debug \
 	object_script.qmp3gain.Release
+DEFINES += APP_MAJOR_VER=\"\\\"0\\\"\"
+DEFINES += APP_MINOR_VER=\"\\\"9\\\"\"
+DEFINES += APP_SUBMINOR_VER=\"\\\"0\\\"\"
+DEFINES += APP_LASTCOMMIT_ID=\"\\\"$$system(git rev-parse --short HEAD)\\\"\"
+QMAKE_CXXFLAGS += -DAPP_LASTCOMMIT_DATE=\"\\\"$$system('git log --pretty=format:"%ad" --date=iso -1')\\\"\"
