@@ -61,7 +61,7 @@ void BackEndDialog::refreshStatusAndVersion(bool isInit){
 	if (backEndVersion.isEmpty()){
 		status = "<b><font color=red>"+tr("invalid (not found)")+"</font></b>";
 	}
-	else if(mainWindow->getVersionNumber(backEndVersion)<mainWindow->getVersionNumber(mainWindow->getRequiredBackEndVersion()))
+	else if(!mainWindow->isBackEndAvailable(backEndVersion))
 	{
 		status = "<b><font color=red>"+tr("invalid (%1 or later required)").arg(mainWindow->getRequiredBackEndVersion())+"</font></b>";
 		version = backEndVersion;
