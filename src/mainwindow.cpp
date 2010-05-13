@@ -1491,7 +1491,7 @@ int MainWindow::runAnalysis(QModelIndexList indices, bool isAlbum, bool isMaxNoc
 				argFiles << fileName;
 			}
 
-			QStringList args = argOptions << argFiles;
+			QStringList args = QStringList() << argOptions << argFiles;
 			process.setProcessChannelMode(QProcess::MergedChannels);
 			QString trace = QString("%1 %2").arg(this->getBackEnd()).arg(args.join(" "));
 			writeLog(trace, LOGTYPE_BACKEND, 1, LOGOPTION_BOLD);
@@ -1898,7 +1898,7 @@ void MainWindow::runGain(QModelIndexList indices, bool isAlbum, double passSlice
 				argFiles << fileName;
 			}
 
-			QStringList args = argOptions << argFiles;
+			QStringList args = QStringList() << argOptions << argFiles;
 			process.setProcessChannelMode(QProcess::MergedChannels);
 			QString trace = QString("%1 %2").arg(this->getBackEnd()).arg(args.join(" "));
 			writeLog(trace, LOGTYPE_BACKEND, 1, LOGOPTION_BOLD);
