@@ -1001,18 +1001,19 @@ void MainWindow::setItem(int row, QString column, QVariant value) {
 			}
 		}
 	}else if (value.type()==QVariant::Bool){
-		QString trueStr = tr("Y", "Yes flag in some fields of the file list");
+		QString trueStr = tr("Y", "Yes flag in some clipping fields of the file list");
+		QString falseStr = tr("", "No flag in some clipping fields of the file list");
 		if (item){
-			if (!value.isNull() && value.toBool()){
-				item->setText(trueStr);
+			if (!value.isNull()){
+				item->setText(value.toBool() ? trueStr : falseStr);
 				item->setData(value);
 			}else{
 				item->setData(0); // before item delete to enable automatic model/view refresh
 				delete item;
 			}
 		}else{
-			if (!value.isNull() && value.toBool()){
-				item = new QStandardItem(trueStr);
+			if (!value.isNull()){
+				item = new QStandardItem(value.toBool() ? trueStr : falseStr);
 				item->setData(value);
 				model->setItem(row, modelHeaderList.indexOf(column), item);
 			}else{
@@ -1108,9 +1109,9 @@ void MainWindow::updateModelRowByAnalysisTrack(QModelIndex modelIndex, int mp3Ga
 
 	if (!maxNoclipGain){
 		setItem(row, "Volume", QVariant(doubleSpinBox_targetNormalValue->value()-dBGain));
-		setItem(row, "Max Amplitude", QVariant(maxAmplitude));
 	}
 
+	setItem(row, "Max Amplitude", QVariant(maxAmplitude));
 	bool clipping = maxAmplitude>32767.0;
 	setItem(row, "clipping", QVariant(clipping));
 
@@ -1681,31 +1682,55 @@ void MainWindow::updateModelRowByMP3GainTrack(QString fileName, int mp3Gain, boo
 	QStandardItem *item = 0;
 
 	item = getItem(row, "Volume");
-	bool isTrackDisplayed = item;
-	if (isTrackDisplayed){
+	if (item && !item->data().isNull())
 		setItem(row, "Volume", QVariant(item->data().toDouble()+gainValue));
 
-		item = getItem(row, "Max Amplitude");
+	QVariant newMaxAmplitude = QVariant(); // double
+	item = getItem(row, "Max Amplitude");
+	if (item && !item->data().isNull()){
 		double maxAmplitude = item->data().toDouble();
-		double newMaxAmplitude = maxAmplitude*pow(2.0, round(gainValue/DB)/4.0);
-		setItem(row, "Max Amplitude", QVariant(newMaxAmplitude));
+		newMaxAmplitude = QVariant(maxAmplitude*pow(2.0, round(gainValue/DB)/4.0));
+		setItem(row, "Max Amplitude", newMaxAmplitude);
+	}
 
-		bool clipping = newMaxAmplitude>32767.0;
-		setItem(row, "clipping", clipping);
+	// depends on "Max Amplitude" field
+	if (!newMaxAmplitude.isNull()){
+		item = getItem(row, "clipping");
+		if (item && !item->data().isNull()){
+			bool clipping = newMaxAmplitude.toDouble()>32767.0;
+			setItem(row, "clipping", QVariant(clipping));
+		}
+	}
 
-		item = getItem(row, "Track Gain");
-		double newGainValue = item->data().toDouble()-dBGain;
-		setItem(row, "Track Gain", QVariant(newGainValue));
+	QVariant newGainValue = QVariant(); // double
+	item = getItem(row, "Track Gain");
+	if (item && !item->data().isNull()){
+		newGainValue = QVariant(item->data().toDouble()-dBGain);
+		setItem(row, "Track Gain", newGainValue);
+	}
 
-		item = getItem(row, "dBGain");
+	item = getItem(row, "dBGain");
+	if (item && !item->data().isNull()){
 		double newdBGain = item->data().toDouble()-dBGain;
 		setItem(row, "dBGain", QVariant(newdBGain));
+	}
 
-		bool clippingTrack = newMaxAmplitude*pow(2.0, round(newGainValue/DB)/4.0)>32767.0;
-		setItem(row, "clip(Track)", clippingTrack);
+	// depends on "Max Amplitude" and "Track Gain" fields
+	if (!newMaxAmplitude.isNull() && !newGainValue.isNull()){
+		item = getItem(row, "clip(Track)");
+		if (item && !item->data().isNull()){
+			bool clippingTrack = newMaxAmplitude.toDouble()*pow(2.0, round(newGainValue.toDouble()/DB)/4.0)>32767.0;
+			setItem(row, "clip(Track)", QVariant(clippingTrack));
+		}
+	}
 
-		int mp3GainNoClip = (int)floor((15.0-log10(newMaxAmplitude)/log10(2.0))*4.0);
-		setItem(row, "Max Noclip Gain", QVariant(mp3GainNoClip*DB));
+	// depends on "Max Amplitude" field
+	if (!newMaxAmplitude.isNull()){
+		item = getItem(row, "Max Noclip Gain");
+		if (item && !item->data().isNull()){
+			int mp3GainNoClip = (int)floor((15.0-log10(newMaxAmplitude.toDouble())/log10(2.0))*4.0);
+			setItem(row, "Max Noclip Gain", QVariant(mp3GainNoClip*DB));
+		}
 	}
 
 	if (isAlbumErase){
@@ -1766,57 +1791,94 @@ void MainWindow::updateModelRowsByMP3GainAlbum(QModelIndexList indices, int mp3G
 
 		if (isTrackModifiable){
 			item = getItem(row, "Volume");
-			bool isTrackDisplayed = item;
-			if (isTrackDisplayed){
+			if (item && !item->data().isNull()){
 				setItem(row, "Volume", QVariant(item->data().toDouble()+gainValue));
+			}
 
-				item = getItem(row, "Max Amplitude");
+			QVariant newMaxAmplitude = QVariant(); // double
+			item = getItem(row, "Max Amplitude");
+			if (item && !item->data().isNull()){
 				double maxAmplitude = item->data().toDouble();
-				double newMaxAmplitude = maxAmplitude*pow(2.0, round(gainValue/DB)/4.0);
+				newMaxAmplitude = QVariant(maxAmplitude*pow(2.0, round(gainValue/DB)/4.0));
 				setItem(row, "Max Amplitude", QVariant(newMaxAmplitude));
+			}
 
-				bool clipping = newMaxAmplitude>32767.0;
-				setItem(row, "clipping", clipping);
+			// depends on "Max Amplitude" field
+			if (!newMaxAmplitude.isNull()){
+				item = getItem(row, "clipping");
+				if (item && !item->data().isNull()){
+					bool clipping = newMaxAmplitude.toDouble()>32767.0;
+					setItem(row, "clipping", QVariant(clipping));
+				}
+			}
 
-				item = getItem(row, "Track Gain");
+			QVariant newGainValue = QVariant(); // double
+			item = getItem(row, "Track Gain");
+			if (item && !item->data().isNull()){
 				double newGainValue = item->data().toDouble()-gainValue; // or dBGain ?
 				setItem(row, "Track Gain", QVariant(newGainValue));
+			}
 
-				item = getItem(row, "dBGain");
+			item = getItem(row, "dBGain");
+			if (item && !item->data().isNull()){
 				double newdBGain = item->data().toDouble()-gainValue; // or dBGain ?
 				setItem(row, "dBGain", QVariant(newdBGain));
+			}
 
-				bool clippingTrack = newMaxAmplitude*pow(2.0, round(newGainValue/DB)/4.0)>32767.0;
-				setItem(row, "clip(Track)", clippingTrack);
+			// depends on "Max Amplitude" and "Track Gain" fields
+			if (!newMaxAmplitude.isNull() && !newGainValue.isNull()){
+				item = getItem(row, "clip(Track)");
+				if (item && !item->data().isNull()){
+					bool clippingTrack = newMaxAmplitude.toDouble()*pow(2.0, round(newGainValue.toDouble()/DB)/4.0)>32767.0;
+					setItem(row, "clip(Track)", QVariant(clippingTrack));
+				}
+			}
 
-				int mp3GainNoClip = (int)floor((15.0-log10(newMaxAmplitude)/log10(2.0))*4.0);
-				setItem(row, "Max Noclip Gain", mp3GainNoClip*DB);
+			// depends on "Max Amplitude" field
+			if (!newMaxAmplitude.isNull()){
+				item = getItem(row, "Max Noclip Gain");
+				if (item && !item->data().isNull()){
+					int mp3GainNoClip = (int)floor((15.0-log10(newMaxAmplitude.toDouble())/log10(2.0))*4.0);
+					setItem(row, "Max Noclip Gain", mp3GainNoClip*DB);
+				}
 			}
 		}
 
 		item = getItem(row, "Album Volume");
-		bool isAlbumDisplayed = item;
-		if (isAlbumDisplayed){
+		if (item && !item->data().isNull()){
 			//QString value = QString("%1").arg(doubleSpinBox_targetNormalValue->value()-tokens[dB_gain].toDouble(), 0, 'f', 1);
 			setItem(row, "Album Volume", QVariant(item->data().toDouble()+gainValue));
-			item = getItem(row, "Album Max Amplitude");
+		}
+
+		item = getItem(row, "Album Max Amplitude");
+		if (item && !item->data().isNull()){
 			double maxAlbumAmplitude = item->data().toDouble();
 			double newMaxAlbumAmplitude = maxAlbumAmplitude*pow(2.0, round(gainValue/DB)/4.0);
 			setItem(row, "Album Max Amplitude", QVariant(newMaxAlbumAmplitude));
+		}
 
-			item = getItem(row, "Album Gain");
-			double newGainValue = item->data().toDouble()-dBGain;
+		QVariant newGainValue = QVariant(); // double
+		item = getItem(row, "Album Gain");
+		if (item && !item->data().isNull()){
+			newGainValue = QVariant(item->data().toDouble()-dBGain);
 			setItem(row, "Album Gain", QVariant(newGainValue));
+		}
 
-			item = getItem(row, "Album dBGain");
+		item = getItem(row, "Album dBGain");
+		if (item && !item->data().isNull()){
 			double newAlbumDBGain = item->data().toDouble()-dBGain;
 			setItem(row, "Album dBGain", QVariant(newAlbumDBGain));
+		}
 
+		// depends on "Max Amplitude" and "Track Gain" fields
+		if (!newGainValue.isNull()){
 			item = getItem(row, "Max Amplitude");
-			double maxAmplitude = item->data().toDouble();
-			double newMaxAmplitude = maxAmplitude*pow(2.0, round(gainValue/DB)/4.0);
-			bool clippingTrack = newMaxAmplitude*pow(2.0, round(newGainValue/DB)/4.0)>32767.0;
-			setItem(row, "clip(Album)", clippingTrack);
+			if (item && !item->data().isNull()){
+				double maxAmplitude = item->data().toDouble();
+				double newMaxAmplitude = maxAmplitude*pow(2.0, round(gainValue/DB)/4.0);
+				bool clippingTrack = newMaxAmplitude*pow(2.0, round(newGainValue.toDouble()/DB)/4.0)>32767.0;
+				setItem(row, "clip(Album)", QVariant(clippingTrack));
+			}
 		}
 
 		// finally set line color to red if clipping is set
@@ -1911,6 +1973,20 @@ void MainWindow::runGain(QModelIndexList indices, bool isAlbum, double passSlice
 			}
 
 			/*
+			new file at track mode:
+
+			line==...bytes analyzed && (prevLine!=...bytes analyzed && prevLine!='File...')
+			line==filename && (prevLine!=...bytes analyzed && prevLine!='File...')
+
+			new file at album mode
+
+			line==...bytes analyzed && (prevLine!=...bytes analyzed && prevLine!='File...')
+			line==filename && (prevLine!=...bytes analyzed && prevLine!='File...')
+
+			line='Applying mp3 gain change...' && prevLine==...bytes written
+			*/
+
+			/*
 			track mode: expected undo output is a tab separated table, integer value is the mp3 gain (* 1.5 = real db gain)
 			>mp3gain -r -o "2Pac - California Love.mp3" "2Pac - Changes.mp3"
 			File    MP3 gain        dB gain Max Amplitude   Max global_gain Min global_gain
@@ -2000,7 +2076,7 @@ void MainWindow::runGain(QModelIndexList indices, bool isAlbum, double passSlice
 							line.type = LINETYPE_ANALYSIS;
 							// single track: "  5% of 2650308 bytes analyzed"
 							// more tracks: "[1/2] 13% of 2650308 bytes analyzed"
-							if (prevLine.type==LINETYPE_WRITTEN){
+							if (prevLine.type!=LINETYPE_ANALYSIS && prevLine.type!=LINETYPE_FILE_HEADER){
 								//isNextIndex = true;
 								total_index++;
 							}
@@ -2085,7 +2161,10 @@ void MainWindow::runGain(QModelIndexList indices, bool isAlbum, double passSlice
 								updateModelRowsByAnalysisAlbum(isAlbum, fileName, tokens[MP3_gain].toInt(), tokens[dB_gain].toDouble(), QVariant(tokens[Max_Amplitude].toDouble()), /*isLog=*/ true);
 								updateModelRowsByMP3GainAlbum(fileName, tokens[MP3_gain].toInt());
 							}
-							if (prevLine.type!=LINETYPE_FILE_ALBUM){
+							//if (prevLine.type!=LINETYPE_FILE_ALBUM){
+							//	isNextIndex = true;
+							//}
+							if (prevLine.type==LINETYPE_WRITTEN || prevLine.type==LINETYPE_APPLY_GAIN || prevLine.type==LINETYPE_FILE_ALBUM){
 								isNextIndex = true;
 							}
 						}
@@ -2102,7 +2181,7 @@ void MainWindow::runGain(QModelIndexList indices, bool isAlbum, double passSlice
 										//updateModelRowByAnalysisTrack(tokens[File], tokens[MP3_gain].toInt(), tokens[dB_gain].toDouble(), tokens[Max_Amplitude].toDouble());
 										//updateModelRowByMP3GainTrack(tokens[File], tokens[MP3_gain].toInt());
 										hasAnalysis = prevLine.type==LINETYPE_ANALYSIS;
-										isNextIndex = !hasAnalysis && prevLine.type!=LINETYPE_FILE_HEADER;
+										//isNextIndex = !hasAnalysis && prevLine.type!=LINETYPE_FILE_HEADER;
 									}else{
 										if (tokens[File]=="\"Album\""){
 											line.type = LINETYPE_FILE_ALBUM;
@@ -2120,6 +2199,11 @@ void MainWindow::runGain(QModelIndexList indices, bool isAlbum, double passSlice
 												updateStatusBar(msg);
 											}
 											updateModelRowByAnalysisTrack(tokens[File], tokens[MP3_gain].toInt(), tokens[dB_gain].toDouble(), tokens[Max_Amplitude].toDouble(), /*maxNoclipGain=*/ false,/*isLog=*/ true);
+											//isNextIndex = true;
+										}
+									}
+									if (line.type == LINETYPE_FILE_CONTENT){
+										if (prevLine.type!=LINETYPE_ANALYSIS && prevLine.type!=LINETYPE_FILE_HEADER){
 											isNextIndex = true;
 										}
 									}
