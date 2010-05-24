@@ -905,7 +905,7 @@ void MainWindow::setProgress(QVariant progressFile, QVariant progressTotal){
 			progressBar_Total->setValue(value);
 			if (trayIcon){
 				if (value!=0)
-					trayIcon->setToolTip(tr("Work in progress: %1%").arg(progressTotal.toString()));
+					trayIcon->setToolTip(tr("Work in progress: %1%").arg(progressBar_Total->value()));
 				else
 					trayIcon->setToolTip(tr("No operation running"));
 			}
