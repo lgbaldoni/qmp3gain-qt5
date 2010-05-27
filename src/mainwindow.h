@@ -135,6 +135,7 @@ private:
 	QPointer<QLabel> modelRowCountLabel;
 	QPointer<QSound> beepSound;
 	QTime operationTime;
+	QByteArray mainGeometry;
 
 	QPointer<QAction> restoreTrayAction;
 	QPointer<QAction> quitTrayAction;
