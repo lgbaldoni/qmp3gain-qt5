@@ -279,23 +279,32 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 void MainWindow::changeEvent (QEvent *event)
 {
+	QWidget *parentWidget = new QWidget(0, Qt::Window);
+	bool isEventProcessed = false;
+
 	switch (event->type()) {
 		case QEvent::WindowStateChange: {
+			/*
 			QWindowStateChangeEvent *changeEvent = static_cast<QWindowStateChangeEvent*>(event);
 			if (changeEvent->isOverride())
 				break;
 			Qt::WindowStates oldState = changeEvent->oldState();
 			Qt::WindowStates newState = this->windowState();
 			if (!(oldState & Qt::WindowMinimized) && (newState & Qt::WindowMinimized)){
+			*/
+			if (isMinimized()){
 				if (actionMinimize_to_tray->isChecked()){
 					if (!trayIcon)
 						createTrayIcon();
 
-					if (!trayIcon)
-						break;
-
-					trayIcon->show();
-					hide();
+					if (trayIcon){
+						mainGeometry = saveGeometry();
+						setParent(parentWidget, Qt::SubWindow); // removing from taskbar in Windows
+						//hide();
+						trayIcon->show();
+						event->ignore();
+						isEventProcessed = true;
+					}
 				}
 			}
 			break;
@@ -303,6 +312,9 @@ void MainWindow::changeEvent (QEvent *event)
 		default:
 			;
 	}
+
+	if (!isEventProcessed)
+		event->accept();
 }
 
 
@@ -455,8 +467,10 @@ void MainWindow::trayShowMessage()
 
 void MainWindow::trayHide()
 {
-	trayIcon->hide();
+	setParent(0, Qt::Window);
+	restoreGeometry(mainGeometry);
 	showNormal();
+	trayIcon->hide();
 }
 
 void MainWindow::on_cancelButton_clicked()
@@ -516,7 +530,7 @@ QDir MainWindow::directoryOf(const QString &subdir)
 		dir.cdUp();
 		dir.cdUp();
 	}
-#elif defined(Q_OS_LINUX) || defined(Q_OS_UNIX)
+#else //if defined(Q_OS_LINUX) || defined(Q_OS_UNIX)
 	if (dir.dirName().toLower() == "bin")
 		dir.cdUp();
 #endif
@@ -3690,15 +3704,21 @@ void MainWindow::on_actionAdvanced_triggered(){
 void MainWindow::on_actionContents_triggered(){
 	QProcess *process = new QProcess;
 	QStringList args;
-	QString app = QLibraryInfo::location(QLibraryInfo::BinariesPath) + QDir::separator();
-#if !defined(Q_OS_MAC)
-	app += QLatin1String("assistant");
-#else
+	QString app;
+#if defined(Q_OS_WIN)
+	app += QLatin1String("assistant.exe");
+#elif defined(Q_OS_MAC)
 	app += QLatin1String("Assistant.app/Contents/MacOS/Assistant");
+#else //defined(Q_OS_LINUX) || defined(Q_OS_UNIX)
+	app += QLatin1String("assistant");
 #endif
+	QFileInfo fi(app);
+	if (!fi.exists()){
+		app = QLibraryInfo::location(QLibraryInfo::BinariesPath) + QDir::separator() + app;
+	}
 	QString locale = settings->value("locale", QLocale::system().name()).toString();
 
-	QFileInfo fi(directoryOf("help").absolutePath(), "qmp3gain_"+locale+".qhc");
+	fi.setFile(directoryOf("help").absolutePath(), "qmp3gain_"+locale+".qhc");
 	if (!fi.exists()){
 		if (locale!=defaultLocale){
 			writeLog(tr("Help file %1 cannot be found").arg(fi.absoluteFilePath()), LOGTYPE_TRACE);
