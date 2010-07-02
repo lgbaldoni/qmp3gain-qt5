@@ -47,4 +47,10 @@
 	QMAKE_EXTRA_COMPILERS += QHCPQHC
 	PRE_TARGETDEPS += compiler_QHCPQHC_make_all
 
+	win32 {
+		help.files = $$HELP_DIR/*.qhc $$HELP_DIR/*.qch
+		help.path = $${INSTALLDIR}/help
+		INSTALLS += help
+	}
+
 } else:message(No help files in project)

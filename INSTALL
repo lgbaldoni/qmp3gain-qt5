@@ -4,6 +4,8 @@ git clone git://qmp3gain.git.sourceforge.net/gitroot/qmp3gain/qmp3gain
 qmake qmp3gain.pro
 make
 
+-------------------------------------------------------------------
+
 Verbose description:
 
 1. Downloading the source (git client is needed):
@@ -22,3 +24,21 @@ make
 4. Run the application
 After a successful build, run the generated executable file and enjoy it :) Good luck! 
 bin/mp3gain(.exe)
+
+-------------------------------------------------------------------
+
+Under Windows you may also use "make install" to create a complete installation directory which also includes the all necessary QT runtime libraries:
+
+git clone git://qmp3gain.git.sourceforge.net/gitroot/qmp3gain/qmp3gain
+qmake -config release -r qmp3gain.pro
+make
+cd src
+qmake -config release src.pro
+cd ..
+make install
+
+Notes:
+	-src.pro file must be qmake-d again, otherwise help and translation files are not copied to the installation directory
+	- don't forget to import the backend mp3gain.exe into bin directory before running "make install"
+	- check the result in the installation directory (installer/win32/generated), run qmp3gain.nsi script there to create windows installer if you have installed NSIS (Nullsoft Scriptable Install System) installer maker
+

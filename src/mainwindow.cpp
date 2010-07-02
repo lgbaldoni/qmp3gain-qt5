@@ -27,7 +27,6 @@
 #endif
 
 // init const static variables
-const bool MainWindow::isDevelopmentRelease = true;
 const QString MainWindow::appTitle = "QMP3Gain";
 const QString MainWindow::appVersion = QString() + APP_MAJOR_VER + "." + APP_MINOR_VER + "." + APP_SUBMINOR_VER;
 const QString MainWindow::appLastCommitId = QString() + APP_LASTCOMMIT_ID; // "bcde360"
@@ -692,10 +691,10 @@ void MainWindow::readSettings()
 void MainWindow::refreshUi(){
 	if (windowTitle().contains("%1")){
 		QString title = appTitle;
+		bool isDevelopmentRelease = !appLastCommitId.isEmpty() && !appLastCommitDate.isEmpty();
 		if (isDevelopmentRelease){
 			title += " "+appVersion;
-			if (!appLastCommitId.isEmpty() && !appLastCommitDate.isEmpty())
-				title += "."+appLastCommitId+" ("+appLastCommitDate+")";
+			title += "."+appLastCommitId+" ("+appLastCommitDate+")";
 		}
 		setWindowTitle(windowTitle().arg(title));
 	}

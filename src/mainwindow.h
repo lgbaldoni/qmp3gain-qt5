@@ -110,7 +110,6 @@ private:
 	const char ** modelHeaderLabels;
 	QStringList modelHeaderList; // contains column labels (always in english) of model header
 	QPointer<QStandardItemModel> model;
-	const static bool isDevelopmentRelease; // if true then appTitle contains appLastCommitId and appLastCommitDate
 	const static QString appTitle;
 	const static QString appVersion;
 	const static QString appLastCommitId;

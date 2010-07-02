@@ -15,4 +15,11 @@
 	TSQM.CONFIG = no_link
 	QMAKE_EXTRA_COMPILERS += TSQM
 	PRE_TARGETDEPS += compiler_TSQM_make_all
+
+	win32 {
+		translations.files = $$TS_DIR/*.qm
+		translations.path = $${INSTALLDIR}/translations
+		INSTALLS += translations
+	}
+
 } else:message(No translation files in project)

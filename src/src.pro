@@ -1,3 +1,10 @@
+APP_MAJOR_VER = 0
+APP_MINOR_VER = 9
+APP_SUBMINOR_VER = 0
+# comment the following 2 lines unless development version is to be made
+APP_LASTCOMMIT_ID = $$system(git rev-parse --short HEAD)
+APP_LASTCOMMIT_DATE = $$system('git log --pretty=format:"%ad" --date=iso -1')
+
 TEMPLATE = app
 CONFIG += warn_on \
     thread \
@@ -5,6 +12,7 @@ CONFIG += warn_on \
 	help
 TARGET = qmp3gain
 DESTDIR = ../bin
+win32:INSTALLDIR = ../installer/win32/generated
 QT += gui \
 	xml \
 	webkit
@@ -44,9 +52,57 @@ HELPS = ../help/qmp3gain
 include( ../translations/translations.pri )
 include( ../help/help.pri )
 QMAKE_DISTCLEAN += object_script.qmp3gain.Debug \
-	object_script.qmp3gain.Release
-DEFINES += APP_MAJOR_VER=\"\\\"0\\\"\"
-DEFINES += APP_MINOR_VER=\"\\\"9\\\"\"
-DEFINES += APP_SUBMINOR_VER=\"\\\"0\\\"\"
-DEFINES += APP_LASTCOMMIT_ID=\"\\\"$$system(git rev-parse --short HEAD)\\\"\"
-QMAKE_CXXFLAGS += -DAPP_LASTCOMMIT_DATE=\"\\\"$$system('git log --pretty=format:"%ad" --date=iso -1')\\\"\"
+	object_script.qmp3gain.Release \
+	object_script.qmp3gain
+DEFINES += APP_MAJOR_VER=\"\\\"$$APP_MAJOR_VER\\\"\"
+DEFINES += APP_MINOR_VER=\"\\\"$$APP_MINOR_VER\\\"\"
+DEFINES += APP_SUBMINOR_VER=\"\\\"$$APP_SUBMINOR_VER\\\"\"
+!isEmpty(APP_LASTCOMMIT_ID) {
+	DEFINES += APP_LASTCOMMIT_ID=\"\\\"$$APP_LASTCOMMIT_ID\\\"\"
+}
+!isEmpty(APP_LASTCOMMIT_DATE) {
+	QMAKE_CXXFLAGS += -DAPP_LASTCOMMIT_DATE=\"\\\"$$APP_LASTCOMMIT_DATE\\\"\"
+}
+
+win32 {
+	target.path = $${INSTALLDIR}
+	INSTALLS += target
+
+	bins.files = $$[QT_INSTALL_BINS]/assistant.exe
+	bins.files += $$[QT_INSTALL_BINS]/libgcc_s_dw2-1.dll
+	bins.files += $$[QT_INSTALL_BINS]/mingwm10.dll
+	bins.files += $$[QT_INSTALL_BINS]/phonon4.dll
+	bins.files += $$[QT_INSTALL_PLUGINS]/sqldrivers/qsqlodbc4.dll
+	bins.files += $$[QT_INSTALL_BINS]/QtCLucene4.dll
+	bins.files += $$[QT_INSTALL_BINS]/QtCore4.dll
+	bins.files += $$[QT_INSTALL_BINS]/QtGui4.dll
+	bins.files += $$[QT_INSTALL_BINS]/QtHelp4.dll
+	bins.files += $$[QT_INSTALL_BINS]/QtNetwork4.dll
+	bins.files += $$[QT_INSTALL_BINS]/QtSql4.dll
+	bins.files += $$[QT_INSTALL_BINS]/QtWebKit4.dll
+	bins.files += $$[QT_INSTALL_BINS]/QtXml4.dll
+	bins.files += $$[QT_INSTALL_BINS]/QtXmlPatterns4.dll
+	bins.path = $${INSTALLDIR}
+	INSTALLS += bins
+
+	plugins_imageformats.files = $$[QT_INSTALL_PLUGINS]/imageformats/qgif4.dll
+	plugins_imageformats.files += $$[QT_INSTALL_PLUGINS]/imageformats/qjpeg4.dll
+	plugins_imageformats.path = $${INSTALLDIR}/imageformats
+	INSTALLS += plugins_imageformats
+
+	plugins_sqldrivers.files = $$[QT_INSTALL_PLUGINS]/sqldrivers/qsqlite4.dll
+	plugins_sqldrivers.path = $${INSTALLDIR}/sqldrivers
+	INSTALLS += plugins_sqldrivers
+
+	# backend mp3gain and nsis win32 installer script
+	installer.files = $$DESTDIR/mp3gain.exe
+	installer.path = $${INSTALLDIR}
+	isEmpty(APP_LASTCOMMIT_ID) {
+		APP_VERSION_NSI = "$${APP_MAJOR_VER}.$${APP_MINOR_VER}.$${APP_SUBMINOR_VER}"
+	}
+	else {
+		APP_VERSION_NSI = "$${APP_MAJOR_VER}.$${APP_MINOR_VER}.$${APP_SUBMINOR_VER}.$${APP_LASTCOMMIT_ID}"
+	}
+	installer.extra = "echo !define VERSION \"$$APP_VERSION_NSI\" > $$INSTALLDIR/../qmp3gain.nsh"
+	INSTALLS += installer
+}
