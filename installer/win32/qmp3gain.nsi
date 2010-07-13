@@ -38,6 +38,7 @@ InstallDirRegKey HKLM "SOFTWARE\Zematix\${NAME}" "Install_Dir"
 Page license
 Page components
 Page directory
+Page custom StartMenuGroupSelect "" ": Start Menu Folder"
 Page instfiles
 
 UninstPage uninstConfirm
@@ -75,71 +76,98 @@ LangString UninstLogMissing ${LANG_HUNGARIAN} "${UninstLog} nem található!$\r$\n
  
 ; AddItem macro
 !macro AddItem Path
- FileWrite $UninstLog "${Path}$\r$\n"
+	FileWrite $UninstLog "${Path}$\r$\n"
 !macroend
 !define AddItem "!insertmacro AddItem"
  
 ; File macro
 !macro File FilePath FileName
- IfFileExists "$OUTDIR\${FileName}" +2
-  FileWrite $UninstLog "$OUTDIR\${FileName}$\r$\n"
- File "${FilePath}${FileName}"
+	IfFileExists "$OUTDIR\${FileName}" +2
+		FileWrite $UninstLog "$OUTDIR\${FileName}$\r$\n"
+	File "${FilePath}${FileName}"
 !macroend
 !define File "!insertmacro File"
  
 ; CreateShortcut macro
 !macro CreateShortcut FilePath FilePointer
- FileWrite $UninstLog "${FilePath}$\r$\n"
- CreateShortcut "${FilePath}" "${FilePointer}"
+	FileWrite $UninstLog "${FilePath}$\r$\n"
+	CreateShortcut "${FilePath}" "${FilePointer}"
 !macroend
 !define CreateShortcut "!insertmacro CreateShortcut"
  
 ; Copy files macro
 !macro CopyFiles SourcePath DestPath
- IfFileExists "${DestPath}" +2
-  FileWrite $UninstLog "${DestPath}$\r$\n"
- CopyFiles "${SourcePath}" "${DestPath}"
+	IfFileExists "${DestPath}" +2
+		FileWrite $UninstLog "${DestPath}$\r$\n"
+	CopyFiles "${SourcePath}" "${DestPath}"
 !macroend
 !define CopyFiles "!insertmacro CopyFiles"
  
 ; Rename macro
 !macro Rename SourcePath DestPath
- IfFileExists "${DestPath}" +2
-  FileWrite $UninstLog "${DestPath}$\r$\n"
- Rename "${SourcePath}" "${DestPath}"
+	IfFileExists "${DestPath}" +2
+		FileWrite $UninstLog "${DestPath}$\r$\n"
+	Rename "${SourcePath}" "${DestPath}"
 !macroend
 !define Rename "!insertmacro Rename"
  
 ; CreateDirectory macro
 !macro CreateDirectory Path
- CreateDirectory "${Path}"
- FileWrite $UninstLog "${Path}$\r$\n"
+	CreateDirectory "${Path}"
+	FileWrite $UninstLog "${Path}$\r$\n"
 !macroend
 !define CreateDirectory "!insertmacro CreateDirectory"
  
 ; SetOutPath macro
 !macro SetOutPath Path
- SetOutPath "${Path}"
- FileWrite $UninstLog "${Path}$\r$\n"
+	SetOutPath "${Path}"
+	FileWrite $UninstLog "${Path}$\r$\n"
 !macroend
 !define SetOutPath "!insertmacro SetOutPath"
  
 ; WriteUninstaller macro
 !macro WriteUninstaller Path
- WriteUninstaller "${Path}"
- FileWrite $UninstLog "$OUTDIR\${Path}$\r$\n"
+	WriteUninstaller "${Path}"
+	FileWrite $UninstLog "$OUTDIR\${Path}$\r$\n"
 !macroend
 !define WriteUninstaller "!insertmacro WriteUninstaller"
  
 Section -openlogfile
- CreateDirectory "$INSTDIR"
- IfFileExists "$INSTDIR\${UninstLog}" +3
-  FileOpen $UninstLog "$INSTDIR\${UninstLog}" w
- Goto +4
-  SetFileAttributes "$INSTDIR\${UninstLog}" NORMAL
-  FileOpen $UninstLog "$INSTDIR\${UninstLog}" a
-  FileSeek $UninstLog 0 END
+	CreateDirectory "$INSTDIR"
+	IfFileExists "$INSTDIR\${UninstLog}" +3
+		FileOpen $UninstLog "$INSTDIR\${UninstLog}" w
+	Goto +4
+		SetFileAttributes "$INSTDIR\${UninstLog}" NORMAL
+		FileOpen $UninstLog "$INSTDIR\${UninstLog}" a
+		FileSeek $UninstLog 0 END
 SectionEnd
+
+;--------------------------------
+
+; A LangString for the function StartMenuGroupSelect
+LangString MUI_STARTMENUPAGE_TEXT_TOP ${LANG_ENGLISH} "Select the Start Menu folder in which you would like to create the program's shortcuts:"
+LangString MUI_STARTMENUPAGE_TEXT_TOP ${LANG_HUNGARIAN} "Adja meg a start menü bejegyzés nevét amelybe a program rövidítések kerülnek:"
+LangString MUI_STARTMENUPAGE_TEXT_CHECKBOX ${LANG_ENGLISH} "Don't create a start menu folder"
+LangString MUI_STARTMENUPAGE_TEXT_CHECKBOX ${LANG_HUNGARIAN} "Ne hozzon létre start menü bejegyzést"
+
+Function StartMenuGroupSelect
+	Push $R1
+
+	StartMenu::Select /text "$(MUI_STARTMENUPAGE_TEXT_TOP)" /checknoshortcuts "$(MUI_STARTMENUPAGE_TEXT_CHECKBOX)" /autoadd /lastused $R0 "${NAME}"
+	Pop $R1
+
+	StrCmp $R1 "success" success
+	StrCmp $R1 "cancel" done
+		; error
+		MessageBox MB_OK $R1
+		StrCpy $R0 "${NAME}" # use default
+		Return
+	success:
+	Pop $R0
+
+	done:
+	Pop $R1
+FunctionEnd
 
 ;--------------------------------
 
@@ -236,6 +264,22 @@ Section !$(Sec3Name)
 SectionEnd
 
 ;--------------------------------
+
+Section
+	# this part is only necessary if you used /checknoshortcuts
+	StrCpy $R1 $R0 1
+	StrCmp $R1 ">" skip
+
+		${CreateDirectory} $SMPROGRAMS\$R0
+		${CreateShortCut} "$SMPROGRAMS\$R0\QMP3Gain.lnk" $INSTDIR\qmp3gain.exe
+		${CreateShortCut} "$SMPROGRAMS\$R0\Uninstall QMP3Gain.lnk" $INSTDIR\qmp3gain_uninstall.exe
+
+		;SetShellVarContext All
+		;CreateDirectory $SMPROGRAMS\$R0
+		;CreateShortCut "$SMPROGRAMS\$R0\All users MakeNSISw.lnk" $INSTDIR\makensisw.exe
+
+	skip:
+SectionEnd
 
 Section -closelogfile
  FileClose $UninstLog

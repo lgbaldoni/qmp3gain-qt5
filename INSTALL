@@ -38,7 +38,7 @@ cd ..
 make install
 
 Notes:
-	-src.pro file must be qmake-d again, otherwise help and translation files are not copied to the installation directory
+	- src.pro file must be qmake-d again, otherwise help and translation files are not copied to the installation directory
 	- don't forget to import the backend mp3gain.exe into bin directory before running "make install"
 	- check the result in the installation directory (installer/win32/generated), run qmp3gain.nsi script there to create windows installer if you have installed NSIS (Nullsoft Scriptable Install System) installer maker
 
