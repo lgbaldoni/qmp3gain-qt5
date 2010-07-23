@@ -226,6 +226,9 @@ MainWindow::~MainWindow(){
 	delete trayIcon;
 	delete restoreTrayAction;
 	delete quitTrayAction;
+
+	delete actionPlay_mp3_file;
+	delete mediaObject;
 }
 
 long MainWindow::getVersionNumber(const QString & versionString)
@@ -470,6 +473,75 @@ void MainWindow::trayHide()
 	restoreGeometry(mainGeometry);
 	showNormal();
 	trayIcon->hide();
+}
+
+void MainWindow::playStateChanged(Phonon::State newState, Phonon::State /* oldState */)
+{
+	QString playedFileName = mediaObject->currentSource().fileName();
+
+	switch (newState) {
+		case Phonon::ErrorState:
+			writeLog(QString("Playing of %1 went into failure because \"%2\"").arg(playedFileName).arg(mediaObject->errorString()), LOGTYPE_ERROR);
+			QMessageBox::critical(this, appTitle+" - "+tr("Fatal Error"),
+				tr("Playing of %1 went into failure").arg(playedFileName));
+			break;
+		case Phonon::PlayingState:
+				break;
+		case Phonon::StoppedState:
+				break;
+		case Phonon::PausedState:
+				break;
+		case Phonon::BufferingState:
+				break;
+		default:
+			;
+	}
+}
+
+// contextmenu: Play mp3 file
+void MainWindow::playMP3File(){
+	try {
+		QModelIndexList indices = getModelIndices();
+		if (indices.isEmpty()) throw(0);
+
+		QStringList args;
+		args << "-s" << "d"; // delete stored tag info (no other processing)
+		args << getArgumentsByOptions();
+
+		QModelIndex index = indices.last();
+		int row = model->itemFromIndex(index)->row();
+		//QStandardItem *item = model->itemFromIndex(index);
+		QStandardItem *item = getItem(row, "Path/File");
+		QString fileName = item->text();
+		writeLog(fileName, LOGTYPE_TRACE);
+		//fileName = QDir::toNativeSeparators(fileName);
+		//writeLog(fileName, LOGTYPE_TRACE);
+
+		//QString trace = QString("%1 %2").arg(this->getBackEnd()).arg(args.join(" "));
+		//writeLog(trace, LOGTYPE_BACKEND, 1, LOGOPTION_BOLD);
+
+		bool isToBeStopped = false;
+		if (mediaObject){
+			Phonon::State state = mediaObject->state();
+			if (state && state==Phonon::PlayingState){
+				QString playedFileName = mediaObject->currentSource().fileName();
+				if (fileName==playedFileName){
+					isToBeStopped = true;
+				}
+			}
+			delete mediaObject;
+		}
+		if (!isToBeStopped) {
+			mediaObject = Phonon::createPlayer(Phonon::MusicCategory, Phonon::MediaSource(fileName));
+			connect(mediaObject, SIGNAL(stateChanged(Phonon::State,Phonon::State)),
+						this, SLOT(playStateChanged(Phonon::State,Phonon::State)));
+			mediaObject->play();
+		}
+
+		throw(0);
+	}
+	catch (int e){
+	}
 }
 
 void MainWindow::on_cancelButton_clicked()
@@ -752,6 +824,9 @@ void MainWindow::disableGUI(){
 	//logDockWidget
 	clearLogButton->setEnabled(false);
 	groupBox_logCheckboxes->setEnabled(false);
+
+	// stop played mp3
+	delete mediaObject;
 
 	this->enabledGUI = false;
 	operationTime.start();
@@ -2423,6 +2498,10 @@ void MainWindow::runConstantGain(QModelIndexList indices, int mp3Gain, bool isLe
 // -----
 
 void MainWindow::showContextMenuForWidget(const QPoint &pos){
+	QStandardItem *item = getItem(tableView->currentIndex().row(), "Path/File");
+	QString fileName = item->text();
+	writeLog(fileName, LOGTYPE_TRACE);
+
     // create context menu for tableView
 	QMenu contextMenu(this);
 	bool checkBox_Maximizing = settings->value("checkBox_Maximizing", false).toBool();
@@ -2449,8 +2528,24 @@ void MainWindow::showContextMenuForWidget(const QPoint &pos){
 	actions << actionUndo_Gain_changes;
 	actions << 0;
 	actions << actionRemove_Tags_from_files;
-	//actions << ;
-	//actions << actionPlay_mp3_file;
+
+	if (!actionPlay_mp3_file){
+		actionPlay_mp3_file = new QAction(this);
+		//actionPlay_mp3_file->setObjectName(QString::fromUtf8("actionPlay_mp3_file"));
+		connect(actionPlay_mp3_file, SIGNAL(triggered()), this, SLOT(playMP3File()));
+	}
+	bool isToBeStopped = false;
+	if (mediaObject && mediaObject->state()==Phonon::PlayingState){
+		QString playedFileName = mediaObject->currentSource().fileName();
+		if (fileName==playedFileName){
+			isToBeStopped = true;
+		}
+
+	}
+	actionPlay_mp3_file->setText(!isToBeStopped ? tr("&Play mp3 file") : tr("Stop &playing mp3 file"));
+
+	actions << 0;
+	actions << actionPlay_mp3_file;
 
 	foreach (QAction* action, actions){
 		if (action){

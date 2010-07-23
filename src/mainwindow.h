@@ -14,6 +14,7 @@
 #include <QSound>
 #include <QSystemTrayIcon>
 #include <QTime>
+#include <phonon/mediaobject.h>
 
 #include "ui_mainwindow.h"
 
@@ -139,6 +140,8 @@ private:
 	QPointer<QAction> restoreTrayAction;
 	QPointer<QAction> quitTrayAction;
 	QPointer<QSystemTrayIcon> trayIcon;
+	QPointer<QAction> actionPlay_mp3_file; // exists only in context menu
+	QPointer<Phonon::MediaObject> mediaObject;
 
 	bool okToContinue();
 	QDir directoryOf(const QString &subdir);
@@ -182,6 +185,8 @@ private slots:
 	void trayIconActivated(QSystemTrayIcon::ActivationReason reason);
 	void trayShowMessage();
 	void trayHide();
+	void playStateChanged(Phonon::State newState, Phonon::State /* oldState */);
+	void playMP3File(); // contextmenu item
 
 	void on_cancelButton_clicked();
 	void on_clearLogButton_clicked();

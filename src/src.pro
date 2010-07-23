@@ -15,7 +15,8 @@ DESTDIR = ../bin
 win32:INSTALLDIR = ../installer/win32/generated
 QT += gui \
 	xml \
-	webkit
+	webkit \
+	phonon
 # Input
 HEADERS += doubleprogressbar.h \
     mymessagebox.h \
