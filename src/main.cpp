@@ -11,6 +11,7 @@ int main(int argc, char *argv[])
 	if (!argumentList.isEmpty())
 		return 0;
 	MainWindow mainWin;
+	app.setApplicationName(mainWin.getAppTitle());
 	mainWin.switchLanguage();
 	mainWin.show();
 	if (!mainWin.isBackEndAvailable()){
