@@ -34,22 +34,22 @@
         <translation>A szerző, Branyiczky Zsolt elérhetősége</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.ui" line="284"/>
+        <location filename="../src/aboutdialog.ui" line="288"/>
         <source>The back end makes use of a modified version of mpglib. The original version of mpglib can be found at</source>
         <translation>A kiszolgáló oldal lehetővé teszi az mpglib módosított változatának használatát. Az mpglib eredeti verziója</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.ui" line="390"/>
+        <location filename="../src/aboutdialog.ui" line="394"/>
         <source>Send a donation to the author</source>
         <translation>Adomány küldése a szerzőnek</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.ui" line="396"/>
+        <location filename="../src/aboutdialog.ui" line="400"/>
         <source>Donation</source>
         <translation>Adományoz</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.ui" line="416"/>
+        <location filename="../src/aboutdialog.ui" line="420"/>
         <source>Close</source>
         <translation>Bezárás</translation>
     </message>
@@ -65,12 +65,12 @@
         <translation>ReplayGain algoritmus végzi az MP3 fájlok elemzését. Részletes ReplayGain információ</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.ui" line="326"/>
+        <location filename="../src/aboutdialog.ui" line="330"/>
         <source>Thanks to Marc Heubeck for making the control buttons look nicer, to Bill MacEachern for making the Help file more profession, and to Glen Swer for the  MP3Gain back end (and original GUI).</source>
         <translation>Köszönet Marc Heubeck-nek a szebb kezelőgombokért, Bill MacEachern-nek a tökéletesebb súgó fájlért, és Glan Swer-nek a MP3Gain háttér oldali kiszolgáló programért és az eredeti felületért.</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.ui" line="361"/>
+        <location filename="../src/aboutdialog.ui" line="365"/>
         <source>English translation: Your Name</source>
         <translation>Magyar fordítás: Herczeg József Tamás</translation>
     </message>
@@ -103,7 +103,7 @@
         <translation>Üresjárat</translation>
     </message>
     <message>
-        <location filename="../src/advancedoptionsdialog.ui" line="131"/>
+        <location filename="../src/advancedoptionsdialog.ui" line="162"/>
         <source>Performance</source>
         <translation>Teljesítmény</translation>
     </message>
@@ -160,49 +160,64 @@ Its usage might be not recommended</source>
         <translation>Rejtett mezők megjelenítése</translation>
     </message>
     <message>
-        <location filename="../src/advancedoptionsdialog.ui" line="137"/>
+        <location filename="../src/advancedoptionsdialog.ui" line="133"/>
+        <source>Beep after</source>
+        <translation>Hangjelzés</translation>
+    </message>
+    <message>
+        <location filename="../src/advancedoptionsdialog.ui" line="140"/>
+        <source>Makes beep sound if the opeartion takes more time in seconds than this value</source>
+        <translation>Hangjelzést ad a művelet végén, ha az tovább tart, mint az itt megadott másodperc érték</translation>
+    </message>
+    <message>
+        <location filename="../src/advancedoptionsdialog.ui" line="150"/>
+        <source>seconds</source>
+        <translation>másodperc múlva</translation>
+    </message>
+    <message>
+        <location filename="../src/advancedoptionsdialog.ui" line="168"/>
         <source>Gain modifications can be done directly in the files</source>
         <translation>Erősítés módosítások végrehajthatók direktben a fájlokon</translation>
     </message>
     <message>
-        <location filename="../src/advancedoptionsdialog.ui" line="140"/>
+        <location filename="../src/advancedoptionsdialog.ui" line="171"/>
         <source>Do not use Temp files</source>
         <translation>Ideiglenes fájlok használata nélkül</translation>
     </message>
     <message>
-        <location filename="../src/advancedoptionsdialog.ui" line="147"/>
+        <location filename="../src/advancedoptionsdialog.ui" line="178"/>
         <source>File progress bar can be switch off</source>
         <translation>Fájl feldogozás folyamat kijelzésének kikapcsolása</translation>
     </message>
     <message>
-        <location filename="../src/advancedoptionsdialog.ui" line="150"/>
+        <location filename="../src/advancedoptionsdialog.ui" line="181"/>
         <source>Do not show file progress</source>
         <translation>Ne látszódjon a fájl feldolgozás folyamata</translation>
     </message>
     <message>
-        <location filename="../src/advancedoptionsdialog.ui" line="164"/>
+        <location filename="../src/advancedoptionsdialog.ui" line="195"/>
         <source>Extra output log</source>
         <translation>Extra kimeneti naplózás</translation>
     </message>
     <message>
-        <location filename="../src/advancedoptionsdialog.ui" line="253"/>
-        <location filename="../src/advancedoptionsdialog.ui" line="269"/>
+        <location filename="../src/advancedoptionsdialog.ui" line="284"/>
+        <location filename="../src/advancedoptionsdialog.ui" line="300"/>
         <source>Sets the depth of the trace, it&apos;s mostly for possible bug hunting</source>
         <translation>Beállítja a nyomkövetési szint mélységét, többnyire hibakeresésre szolgál</translation>
     </message>
     <message>
-        <location filename="../src/advancedoptionsdialog.ui" line="185"/>
+        <location filename="../src/advancedoptionsdialog.ui" line="216"/>
         <source>Back end log depth</source>
         <translation>Háttér oldal naplózásának szintje</translation>
     </message>
     <message>
-        <location filename="../src/advancedoptionsdialog.ui" line="192"/>
         <location filename="../src/advancedoptionsdialog.ui" line="223"/>
+        <location filename="../src/advancedoptionsdialog.ui" line="254"/>
         <source>Sets the depth of communication with the MP3Gain back end</source>
         <translation>Beállítja a MP3Gain kommunikáció naplózásának a szintjét</translation>
     </message>
     <message>
-        <location filename="../src/advancedoptionsdialog.ui" line="246"/>
+        <location filename="../src/advancedoptionsdialog.ui" line="277"/>
         <source>Trace log depth</source>
         <translation>Felület oldal naplózásának szintje</translation>
     </message>
@@ -382,165 +397,169 @@ A szerző egyáltalán nem felelős jelen termék használatából vagy használ
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../src/mainwindow.cpp" line="972"/>
-        <source>Y</source>
-        <comment>Yes flag in some fields of the file list</comment>
-        <translation>I</translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.cpp" line="1200"/>
+        <location filename="../src/mainwindow.cpp" line="1321"/>
         <source>Error analyzing further samples (max time reached)</source>
         <translation>Hiva merült fel a minták további elemzésében (idő túllépés)</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1208"/>
+        <location filename="../src/mainwindow.cpp" line="1329"/>
         <source>Cancelled processing of %1</source>
         <translation>%1 feldolgozása megszakítva</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1220"/>
+        <location filename="../src/mainwindow.cpp" line="1341"/>
         <source>Cancelled processing.</source>
         <translation>Feldolgozás megszakítva.</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1222"/>
+        <location filename="../src/mainwindow.cpp" line="1343"/>
         <source>%1 is probably corrupted now.</source>
         <translation>%1 valószínűleg korrupt mostanra.</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1230"/>
+        <location filename="../src/mainwindow.cpp" line="1351"/>
         <source>%1 is not a stereo or dual-channel mp3</source>
         <translation>%1 nem sztereó vagy dupla-csatornás mp3</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1238"/>
+        <location filename="../src/mainwindow.cpp" line="1359"/>
         <source>Error while analyzing: %1</source>
         <translation>Hiba merült fel %1 elemzése közben</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1238"/>
+        <location filename="../src/mainwindow.cpp" line="1359"/>
         <source>Can&apos;t find any valid MP3 frames in file %1</source>
         <translation>Nem található valódi MP3 minta a %1 fájlban</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1246"/>
+        <location filename="../src/mainwindow.cpp" line="1367"/>
         <source>Can&apos;t open %1 for temp writing</source>
         <translation>%1 nem megnyitható ideiglenes írásra</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1254"/>
+        <location filename="../src/mainwindow.cpp" line="1375"/>
         <source>Can&apos;t modify file %1</source>
         <translation>%1 fájl nem módosítható</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1262"/>
+        <location filename="../src/mainwindow.cpp" line="1383"/>
         <source>Error analyzing %1.</source>
         <translation>Hiba merült %1 elemzésében.</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1264"/>
+        <location filename="../src/mainwindow.cpp" line="1385"/>
         <source>This mp3 has some very corrupt data.</source>
         <translation>Ez az mp3 nagyon korrupt.</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1272"/>
+        <location filename="../src/mainwindow.cpp" line="1393"/>
         <source>%1 is an MPEG Layer I file, not a layer III file</source>
         <translation>%1 egy MPEG I-es rétegű fájl, nem pedig III-as</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1280"/>
+        <location filename="../src/mainwindow.cpp" line="1401"/>
         <source>%1 is an MPEG Layer II file, not a layer III file</source>
         <translation>%1 egy MPEG II-es rétegű fájl, nem pedig III-as</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1288"/>
+        <location filename="../src/mainwindow.cpp" line="1409"/>
         <source>%1 is free format (not currently supported)</source>
         <translation>%1 szabad formátumú (jelenleg nem támogatott)</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1312"/>
+        <location filename="../src/mainwindow.cpp" line="1433"/>
         <source>Problem re-naming %1 to %2.</source>
         <translation>Hiba merült fel %1 átnevezésében %2-re.</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1314"/>
+        <location filename="../src/mainwindow.cpp" line="1435"/>
         <source>The mp3 was correctly modified, but you will need to re-name it yourself.</source>
         <translation>Az mp3 megfelelően módosult, azonban a fájlt át kell nevezni manuálisan.</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1329"/>
+        <location filename="../src/mainwindow.cpp" line="1450"/>
         <source>Not enough temp space on disk to modify %1.</source>
         <translation>Nincs elegenő ideiglenes hely a lemezen %1 módosítására.</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1331"/>
+        <location filename="../src/mainwindow.cpp" line="1452"/>
         <source>Either clear space on disk, or go to &quot;Options-&gt;Advanced...&quot; and check the &quot;Do not use Temp files&quot; box.</source>
         <translation>Törölni kell a lemezről, vagy a haladó beállításokban meg kell jelölni a &quot;Ideiglenes fájlok nélkül&quot; kapcsolót.</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1359"/>
+        <location filename="../src/mainwindow.cpp" line="1480"/>
         <source>Open Log Panel?</source>
         <translation>Naplózó felület megnyitása?</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1360"/>
+        <location filename="../src/mainwindow.cpp" line="1481"/>
         <source>Would you like to display the errors in an opening log panel instead of seeing pop-up messages?</source>
         <translation>Szeretné megjeleníteni a hibákat egy megnyíló naplózó felületen, ahelyett hogy egyenként jönnének fel az üzenetek?</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1393"/>
+        <location filename="../src/mainwindow.cpp" line="1515"/>
         <source>Don&apos;t bother me again with error messages</source>
         <translation>Ne zavarjon ismét hibaüzenetekkel</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1570"/>
+        <location filename="../src/mainwindow.cpp" line="1692"/>
         <source>Error while analyzing in file</source>
         <translation>Hiba merült fel a fájl elemzése közben</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2021"/>
-        <location filename="../src/mainwindow.cpp" line="2049"/>
-        <location filename="../src/mainwindow.cpp" line="2085"/>
+        <location filename="../src/mainwindow.cpp" line="2217"/>
+        <location filename="../src/mainwindow.cpp" line="2245"/>
+        <location filename="../src/mainwindow.cpp" line="2284"/>
         <source>No changes to %1</source>
         <translation>Nincs változás %1 fájlban</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2023"/>
-        <location filename="../src/mainwindow.cpp" line="2039"/>
-        <location filename="../src/mainwindow.cpp" line="2087"/>
+        <location filename="../src/mainwindow.cpp" line="2219"/>
+        <location filename="../src/mainwindow.cpp" line="2235"/>
+        <location filename="../src/mainwindow.cpp" line="2286"/>
         <source>Applying gain of %1 dB to %2</source>
         <translation>Erősítés végrehajtása %1 dB értékről %2 értékre</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2362"/>
+        <location filename="../src/mainwindow.cpp" line="2545"/>
+        <source>&amp;Play mp3 file</source>
+        <translation>M&amp;p3 fájl lejátszása</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.cpp" line="2545"/>
+        <source>Stop &amp;playing mp3 file</source>
+        <translation>M&amp;p3 fájl lejátszásának megállítása</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.cpp" line="2585"/>
         <source>Could not open donation URL</source>
         <translation>Adományozáshoz vezető URL nem megnyitható</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2468"/>
+        <location filename="../src/mainwindow.cpp" line="2694"/>
         <source>Open analysis file</source>
         <translation>Elemzési fájl megnyitása</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2468"/>
-        <location filename="../src/mainwindow.cpp" line="2731"/>
+        <location filename="../src/mainwindow.cpp" line="2694"/>
+        <location filename="../src/mainwindow.cpp" line="2961"/>
         <source>Comma-separated files (*.m3g *.csv);;XML files (*.xml)</source>
         <translation>Vesszővel elválasztott fájlok (*.m3g *.csv);;XML fájlok (*.xml)</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2498"/>
+        <location filename="../src/mainwindow.cpp" line="2724"/>
         <source>DOM Parser</source>
         <translation>DOM elemző</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2499"/>
+        <location filename="../src/mainwindow.cpp" line="2725"/>
         <source>Parse error at line %1, column %2:
 %3</source>
         <translation>Elemzési hiba %1 sorban, %2 oszlopban:
 %3</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2610"/>
+        <location filename="../src/mainwindow.cpp" line="2837"/>
         <source>File may have been modified after analysis was saved:
 %1
 Load saved analysis results anyhow?</source>
@@ -548,7 +567,7 @@ Load saved analysis results anyhow?</source>
 Töltse be a korábbi analízis eredményeket mégis?</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2640"/>
+        <location filename="../src/mainwindow.cpp" line="2868"/>
         <source>File size changed after analysis was saved:
 %1
 Load saved analysis results anyhow?</source>
@@ -557,7 +576,7 @@ Load saved analysis results anyhow?</source>
 Töltse be az analízis eredményeket mégis?</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2673"/>
+        <location filename="../src/mainwindow.cpp" line="2902"/>
         <source>File already exists in list:
 %1
 Load saved analysis results anyhow?</source>
@@ -566,74 +585,74 @@ Load saved analysis results anyhow?</source>
 Töltse be az analízis eredményeket mégis?</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2731"/>
+        <location filename="../src/mainwindow.cpp" line="2961"/>
         <source>Save analysis file</source>
         <translation>Elemzési fájl mentése</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2833"/>
+        <location filename="../src/mainwindow.cpp" line="3063"/>
         <source>Add MP3 file(s)</source>
         <translation>MP3 fájl(ok) hozzáadása</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2833"/>
+        <location filename="../src/mainwindow.cpp" line="3063"/>
         <source>MP3 files (*.mp3)</source>
         <translation>MPS fájlok (*.mp3)</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2890"/>
+        <location filename="../src/mainwindow.cpp" line="3120"/>
         <source>Add Directory</source>
         <translation>Mappa hozzáadása</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2988"/>
+        <location filename="../src/mainwindow.cpp" line="3217"/>
         <source>Track analysis started...</source>
         <translation>Sáv elemzés megkezdődött...</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="3014"/>
+        <location filename="../src/mainwindow.cpp" line="3244"/>
         <source>Clear Analysis?</source>
         <translation>Elemzés törlése?</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="3519"/>
+        <location filename="../src/mainwindow.cpp" line="3744"/>
         <source>Beep %1 file cannot be found</source>
         <translation>Hangjelzés %1 fájl nem található</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="3522"/>
+        <location filename="../src/mainwindow.cpp" line="3747"/>
         <source>QSound is unavailable, QApplication::beep() will be used instead</source>
         <translation>QSound nem használható, QApplication::beep() kerül használatba</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="3587"/>
-        <location filename="../src/mainwindow.cpp" line="3604"/>
+        <location filename="../src/mainwindow.cpp" line="3818"/>
+        <location filename="../src/mainwindow.cpp" line="3835"/>
         <source>Help file %1 cannot be found</source>
         <translation>Súgó %1 fájl nem található</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="3595"/>
+        <location filename="../src/mainwindow.cpp" line="3826"/>
         <source>Help file %1 is used</source>
         <translation>Súgó %1 fájl használatban van</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="3015"/>
+        <location filename="../src/mainwindow.cpp" line="3245"/>
         <source>This will clear all analysis results.
 Are you sure?</source>
         <translation>Törölni fogja az összes jelenlegi elemzési eredményt.
 Biztos benne?</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="457"/>
+        <location filename="../src/mainwindow.cpp" line="562"/>
         <source>This will clear all log results.
 Are you sure?</source>
         <translation>Törölni fogja az összes eddigi naplózást.
 Biztos benne?</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="459"/>
-        <location filename="../src/mainwindow.cpp" line="1361"/>
-        <location filename="../src/mainwindow.cpp" line="3017"/>
+        <location filename="../src/mainwindow.cpp" line="564"/>
+        <location filename="../src/mainwindow.cpp" line="1482"/>
+        <location filename="../src/mainwindow.cpp" line="3247"/>
         <source>Don&apos;t ask me again</source>
         <translation>Ne kérdezzen meg újra</translation>
     </message>
@@ -745,7 +764,7 @@ Biztos benne?</translation>
         <location filename="../src/mainwindow.ui" line="406"/>
         <location filename="../src/mainwindow.ui" line="1173"/>
         <location filename="../src/mainwindow.ui" line="1240"/>
-        <location filename="../src/mainwindow.cpp" line="1391"/>
+        <location filename="../src/mainwindow.cpp" line="1513"/>
         <source>Error</source>
         <translation>Hiba</translation>
     </message>
@@ -926,7 +945,7 @@ Biztos benne?</translation>
     <message>
         <location filename="../src/mainwindow.ui" line="748"/>
         <location filename="../src/mainwindow.ui" line="751"/>
-        <location filename="../src/mainwindow.cpp" line="140"/>
+        <location filename="../src/mainwindow.cpp" line="158"/>
         <source>Track Gain</source>
         <translation>Sáv erősítés</translation>
     </message>
@@ -938,7 +957,7 @@ Biztos benne?</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="775"/>
-        <location filename="../src/mainwindow.cpp" line="146"/>
+        <location filename="../src/mainwindow.cpp" line="164"/>
         <source>Album Gain</source>
         <translation>Album erősítés</translation>
     </message>
@@ -1116,7 +1135,7 @@ Biztos benne?</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="656"/>
-        <location filename="../src/mainwindow.cpp" line="340"/>
+        <location filename="../src/mainwindow.cpp" line="374"/>
         <source>&amp;Quit</source>
         <translation>&amp;Kilépés</translation>
     </message>
@@ -1409,164 +1428,180 @@ Biztos benne?</translation>
         <translation>Naplózó panel automatikusan megnyitódik hiba esetén</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="568"/>
+        <location filename="../src/mainwindow.cpp" line="674"/>
         <source>Language</source>
         <translation>Magyar</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="134"/>
+        <location filename="../src/mainwindow.cpp" line="152"/>
         <source>Path/File</source>
         <translation>Útvonal/Fájl</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="135"/>
+        <location filename="../src/mainwindow.cpp" line="153"/>
         <source>Path</source>
         <translation>Útvonal</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="136"/>
+        <location filename="../src/mainwindow.cpp" line="154"/>
         <source>File</source>
         <translation>Fájl</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="137"/>
+        <location filename="../src/mainwindow.cpp" line="155"/>
         <source>Volume</source>
         <translation>Hangerő</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="138"/>
+        <location filename="../src/mainwindow.cpp" line="156"/>
         <source>Max Amplitude</source>
         <translation>Max Amplitúdó</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="139"/>
+        <location filename="../src/mainwindow.cpp" line="157"/>
         <source>clipping</source>
         <translation>vágás</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="141"/>
+        <location filename="../src/mainwindow.cpp" line="159"/>
         <source>dBGain</source>
         <translation>dBErősítés</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="143"/>
+        <location filename="../src/mainwindow.cpp" line="161"/>
         <source>Max Noclip Gain</source>
         <translation>Max. vágás nélküli erősítés</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="144"/>
+        <location filename="../src/mainwindow.cpp" line="162"/>
         <source>Album Volume</source>
         <translation>Album hangerő</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="145"/>
+        <location filename="../src/mainwindow.cpp" line="163"/>
         <source>Album Max Amplitude</source>
         <translation>Album Max Amplitudó</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="147"/>
+        <location filename="../src/mainwindow.cpp" line="165"/>
         <source>Album dBGain</source>
         <translation>Album dBErősítés</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="148"/>
+        <location filename="../src/mainwindow.cpp" line="166"/>
         <source>clip(Album)</source>
         <translation>vágás(Album)</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="303"/>
+        <location filename="../src/mainwindow.cpp" line="337"/>
         <source>Number of files in the list</source>
         <translation>Fájlok száma a listában</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="337"/>
+        <location filename="../src/mainwindow.cpp" line="371"/>
         <source>&amp;Restore</source>
         <translation>&amp;Visszahelyezés</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="341"/>
+        <location filename="../src/mainwindow.cpp" line="375"/>
         <source>Ctrl+Q</source>
         <comment>SystemTrayIcon|Quit</comment>
         <translation>Ctrl+K</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="400"/>
-        <location filename="../src/mainwindow.cpp" line="878"/>
-        <location filename="../src/mainwindow.cpp" line="884"/>
+        <location filename="../src/mainwindow.cpp" line="434"/>
+        <location filename="../src/mainwindow.cpp" line="998"/>
+        <location filename="../src/mainwindow.cpp" line="1004"/>
         <source>No operation running</source>
         <translation>Inaktív, nem fut művelet</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="406"/>
+        <location filename="../src/mainwindow.cpp" line="440"/>
         <source>Minimize to tray option is checked and tray icon should be created but system tray is unavailable</source>
         <translation>Ikonként tálcára opció meg van jelölve, így a tálca ikont létre kellene hozni, azonban a rendszer tálca nem elérhető</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="429"/>
+        <location filename="../src/mainwindow.cpp" line="463"/>
         <source>Lossless volume modification of MP3 files</source>
         <translation>Veszteségnélküli hangerő módosítása MP3 fájloknak</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="432"/>
+        <location filename="../src/mainwindow.cpp" line="466"/>
         <source>System tray does not support balloon messages</source>
         <translation>Rendszer tálca nem támogatja a léggömb üzeneteket</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="456"/>
+        <location filename="../src/mainwindow.cpp" line="485"/>
+        <source>Fatal Error</source>
+        <translation>Súlyos hiba</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.cpp" line="486"/>
+        <source>Playing of %1 went into failure</source>
+        <translation>%1 lejátszása hibával végződött</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.cpp" line="561"/>
         <source>Clear Logs?</source>
         <translation>Naplózások törlése?</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="522"/>
+        <location filename="../src/mainwindow.cpp" line="628"/>
         <source>Translation file %1 is loaded</source>
         <translation>Fordítási %1 fájl betöltve</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="528"/>
+        <location filename="../src/mainwindow.cpp" line="634"/>
         <source>%1 locale is used</source>
         <translation>%1 lokál használatban</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="535"/>
+        <location filename="../src/mainwindow.cpp" line="641"/>
         <source>No translation file is necessary</source>
         <translation>Fordítási fáljra nincs szükség</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="537"/>
+        <location filename="../src/mainwindow.cpp" line="643"/>
         <source>Translation file %1 cannot be found, %2 locale is refused</source>
         <translation>Fordítási %1 fájl nem található, %2 lokál visszautasítva</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="541"/>
+        <location filename="../src/mainwindow.cpp" line="647"/>
         <source>Default %1 locale is used</source>
         <translation>Alap %1 lokál használatban</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="650"/>
+        <location filename="../src/mainwindow.cpp" line="756"/>
         <source>Cannot write log file: %1</source>
         <translation>Nem írhato a naplózó %1 fájl</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="876"/>
+        <location filename="../src/mainwindow.cpp" line="996"/>
         <source>Work in progress: %1%</source>
         <translation>Munka folyamatban: %1%</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2416"/>
+        <location filename="../src/mainwindow.cpp" line="1092"/>
+        <source>Y</source>
+        <comment>Yes flag in some clipping fields of the file list</comment>
+        <translation>I</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.cpp" line="2640"/>
         <source>MP3Gain back end cannot be found.
 Please make it available!</source>
         <translation>Kiszolgáló oldali MP3Gain program nem található.
 Kérem tegye elérhetővé!</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2420"/>
+        <location filename="../src/mainwindow.cpp" line="2644"/>
         <source>Required MP3Gain back end version is %1 or later, but only %2 is found.
 Please make a newer version available!</source>
         <translation>Kiszolgáló oldali Mp3Gain programból legalább %1 verzió szükséges, de csak %2 található meg.
 Kérem tegyen elérhetőve egy újabb verziót!</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="142"/>
+        <location filename="../src/mainwindow.cpp" line="160"/>
         <source>clip(Track)</source>
         <translation>vágás(Sáv)</translation>
     </message>
@@ -1574,102 +1609,102 @@ Kérem tegyen elérhetőve egy újabb verziót!</translation>
 <context>
     <name>QDialogButtonBox</name>
     <message>
-        <location filename="../src/mainwindow.cpp" line="108"/>
+        <location filename="../src/mainwindow.cpp" line="126"/>
         <source>OK</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="109"/>
+        <location filename="../src/mainwindow.cpp" line="127"/>
         <source>Open</source>
         <translation>Megnyitás</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="110"/>
+        <location filename="../src/mainwindow.cpp" line="128"/>
         <source>Save</source>
         <translation>Mentés</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="111"/>
+        <location filename="../src/mainwindow.cpp" line="129"/>
         <source>Cancel</source>
         <translation>Mégse</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="112"/>
+        <location filename="../src/mainwindow.cpp" line="130"/>
         <source>Close</source>
         <translation>Bezárás</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="113"/>
+        <location filename="../src/mainwindow.cpp" line="131"/>
         <source>Discard</source>
         <translation>Eldob</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="114"/>
+        <location filename="../src/mainwindow.cpp" line="132"/>
         <source>Apply</source>
         <translation>Alkalmazza</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="115"/>
+        <location filename="../src/mainwindow.cpp" line="133"/>
         <source>Reset</source>
         <translation>Visszaállítás</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="116"/>
+        <location filename="../src/mainwindow.cpp" line="134"/>
         <source>Restore Defaults</source>
         <translation>Alapértelemezett beállítások visszaállítása</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="117"/>
+        <location filename="../src/mainwindow.cpp" line="135"/>
         <source>Help</source>
         <translation>Súgó</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="118"/>
+        <location filename="../src/mainwindow.cpp" line="136"/>
         <source>Save All</source>
         <translation>Az összes mentése</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="119"/>
+        <location filename="../src/mainwindow.cpp" line="137"/>
         <source>&amp;Yes</source>
         <translation>&amp;Igen</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="120"/>
+        <location filename="../src/mainwindow.cpp" line="138"/>
         <source>Yes to &amp;All</source>
         <translation>Igen az &amp;összesre</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="121"/>
+        <location filename="../src/mainwindow.cpp" line="139"/>
         <source>&amp;No</source>
         <translation>&amp;Nem</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="122"/>
+        <location filename="../src/mainwindow.cpp" line="140"/>
         <source>N&amp;o to All</source>
         <translation>&amp;Nem az összesre</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="124"/>
+        <location filename="../src/mainwindow.cpp" line="142"/>
         <source>Abort</source>
         <translation>Megszakítás</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="125"/>
+        <location filename="../src/mainwindow.cpp" line="143"/>
         <source>Retry</source>
         <translation>Újra próbálkozás</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="126"/>
+        <location filename="../src/mainwindow.cpp" line="144"/>
         <source>Ignore</source>
         <translation>Mellőzés</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="128"/>
+        <location filename="../src/mainwindow.cpp" line="146"/>
         <source>Don&apos;t Save</source>
         <translation>Ne mentse</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="129"/>
+        <location filename="../src/mainwindow.cpp" line="147"/>
         <source>Close without Saving</source>
         <translation>Bezárás mentés nélkül</translation>
     </message>
