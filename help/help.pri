@@ -25,7 +25,7 @@
 	QMAKE_EXTRA_COMPILERS += QHPQCH
 	PRE_TARGETDEPS += compiler_QHPQCH_make_all
 
-	# qcollectiongenerator for generation from QHP to QCH
+	# qcollectiongenerator for generation from QHCP to QHC
 	# qcollectiongenerator qmp3gain.qhcp -o qmp3gain.qhc
 
 	isEmpty(QMAKE_QCOLLECTIONGENERATOR) {
@@ -43,6 +43,7 @@
 	QHCPQHC.input = HELPS_QHCP
 	QHCPQHC.output = $$HELP_DIR/${QMAKE_FILE_BASE}.qhc
 	QHCPQHC.commands = $$QMAKE_QCOLLECTIONGENERATOR ${QMAKE_FILE_IN}
+	QHCPQHC.depends = compiler_QHPQCH_make_all
 	QHCPQHC.CONFIG = no_link
 	QMAKE_EXTRA_COMPILERS += QHCPQHC
 	PRE_TARGETDEPS += compiler_QHCPQHC_make_all
