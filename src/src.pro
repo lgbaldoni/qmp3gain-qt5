@@ -122,7 +122,19 @@ else {
 	target.path = $${INSTALLDIR_BIN}
 	INSTALLS += target
 
-	resources.path = $${INSTALLDIR_SHARE}/sounds
-	resources.files = $$RESOURCEDIR/sounds/*
-	INSTALLS += resources
+	resources_sounds.path = $${INSTALLDIR_SHARE}/sounds
+	resources_sounds.files = $$RESOURCEDIR/sounds/*
+	INSTALLS += resources_sounds
+
+	resources_kde4_desktop.path = /usr/share/applications/kde4
+	resources_kde4_desktop.files = $$RESOURCEDIR/kde4/applications/qmp3gain.desktop
+	INSTALLS += resources_kde4_desktop
+
+	resources_kde4_icons_16.path = /usr/share/icons/hicolor/16x16/apps
+	resources_kde4_icons_16.files = $$RESOURCEDIR/kde4/icons/16x16/qmp3gain.png
+	INSTALLS += resources_kde4_icons_16
+
+	resources_kde4_icons_32.path = /usr/share/icons/hicolor/32x32/apps
+	resources_kde4_icons_32.files = $$RESOURCEDIR/kde4/icons/32x32/qmp3gain.png
+	INSTALLS += resources_kde4_icons_32
 }
