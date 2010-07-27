@@ -602,7 +602,9 @@ QDir MainWindow::directoryOf(const QString &subdir)
 		dir.cdUp();
 	}
 #else //if defined(Q_OS_LINUX) || defined(Q_OS_UNIX)
-	if (dir.dirName().toLower() == "bin")
+	if (dir.absolutePath().toLower() == "/usr/bin")
+		dir.cd("/usr/share/qmp3gain");
+	else if (dir.dirName().toLower() == "bin")
 		dir.cdUp();
 #endif
 	dir.cd(subdir);
