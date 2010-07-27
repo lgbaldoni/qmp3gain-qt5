@@ -17,8 +17,13 @@
 	PRE_TARGETDEPS += compiler_TSQM_make_all
 
 	win32 {
-		translations.files = $$TS_DIR/*.qm
 		translations.path = $${INSTALLDIR}/translations
+		translations.files = $$TS_DIR/*.qm
+		INSTALLS += translations
+	}
+	else {
+		translations.path = $${INSTALLDIR_SHARE}/translations
+		translations.files = $$TS_DIR/*.qm
 		INSTALLS += translations
 	}
 

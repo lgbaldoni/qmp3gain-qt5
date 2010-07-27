@@ -12,7 +12,14 @@ CONFIG += warn_on \
 	help
 TARGET = qmp3gain
 DESTDIR = ../bin
-win32:INSTALLDIR = ../installer/win32/generated
+RESOURCEDIR = ../resources
+win32 {
+	INSTALLDIR = ../installer/win32/generated
+}
+else {
+	INSTALLDIR_BIN = /usr/bin
+	INSTALLDIR_SHARE = /usr/share/qmp3gain
+}
 QT += gui \
 	xml \
 	webkit \
@@ -49,8 +56,8 @@ SOURCES += doubleprogressbar.cpp \
 	donationdialog.cpp
 RESOURCES += ../resources/qmp3gain.qrc
 TRANSLATIONS = ../translations/qmp3gain_hu.ts
-HELPS = ../help/qmp3gain
 include( ../translations/translations.pri )
+HELPS = ../help/qmp3gain
 include( ../help/help.pri )
 QMAKE_DISTCLEAN += object_script.qmp3gain.Debug \
 	object_script.qmp3gain.Release \
@@ -69,7 +76,12 @@ win32 {
 	target.path = $${INSTALLDIR}
 	INSTALLS += target
 
-	bins.files = $$[QT_INSTALL_BINS]/assistant.exe
+	resources.path = $${INSTALLDIR}/sounds
+	resources.files = $$RESOURCEDIR/sounds/*
+	INSTALLS += resources
+
+	bins.path = $${INSTALLDIR}
+	bins.files = $$QT_INSTALL_BINS/assistant.exe
 	bins.files += $$[QT_INSTALL_BINS]/libgcc_s_dw2-1.dll
 	bins.files += $$[QT_INSTALL_BINS]/mingwm10.dll
 	bins.files += $$[QT_INSTALL_BINS]/phonon4.dll
@@ -83,21 +95,20 @@ win32 {
 	bins.files += $$[QT_INSTALL_BINS]/QtWebKit4.dll
 	bins.files += $$[QT_INSTALL_BINS]/QtXml4.dll
 	bins.files += $$[QT_INSTALL_BINS]/QtXmlPatterns4.dll
-	bins.path = $${INSTALLDIR}
 	INSTALLS += bins
 
+	plugins_imageformats.path = $${INSTALLDIR}/imageformats
 	plugins_imageformats.files = $$[QT_INSTALL_PLUGINS]/imageformats/qgif4.dll
 	plugins_imageformats.files += $$[QT_INSTALL_PLUGINS]/imageformats/qjpeg4.dll
-	plugins_imageformats.path = $${INSTALLDIR}/imageformats
 	INSTALLS += plugins_imageformats
 
-	plugins_sqldrivers.files = $$[QT_INSTALL_PLUGINS]/sqldrivers/qsqlite4.dll
 	plugins_sqldrivers.path = $${INSTALLDIR}/sqldrivers
+	plugins_sqldrivers.files = $$[QT_INSTALL_PLUGINS]/sqldrivers/qsqlite4.dll
 	INSTALLS += plugins_sqldrivers
 
 	# backend mp3gain and nsis win32 installer script
-	installer.files = $$DESTDIR/mp3gain.exe
 	installer.path = $${INSTALLDIR}
+	installer.files = $$DESTDIR/mp3gain.exe
 	isEmpty(APP_LASTCOMMIT_ID) {
 		APP_VERSION_NSI = "$${APP_MAJOR_VER}.$${APP_MINOR_VER}.$${APP_SUBMINOR_VER}"
 	}
@@ -106,4 +117,12 @@ win32 {
 	}
 	installer.extra = "echo !define VERSION \"$$APP_VERSION_NSI\" > $$INSTALLDIR/../qmp3gain.nsh"
 	INSTALLS += installer
+}
+else {
+	target.path = $${INSTALLDIR_BIN}
+	INSTALLS += target
+
+	resources.path = $${INSTALLDIR_SHARE}/sounds
+	resources.files = $$RESOURCEDIR/sounds/*
+	INSTALLS += resources
 }

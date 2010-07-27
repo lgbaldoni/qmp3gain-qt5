@@ -49,8 +49,13 @@
 	PRE_TARGETDEPS += compiler_QHCPQHC_make_all
 
 	win32 {
-		help.files = $$HELP_DIR/*.qhc $$HELP_DIR/*.qch
 		help.path = $${INSTALLDIR}/help
+		help.files = $$HELP_DIR/*.qhc $$HELP_DIR/*.qch
+		INSTALLS += help
+	}
+	else {
+		help.path = $${INSTALLDIR_SHARE}/help
+		help.files = $$HELP_DIR/*.qhc $$HELP_DIR/*.qch
 		INSTALLS += help
 	}
 
