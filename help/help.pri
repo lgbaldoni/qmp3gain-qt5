@@ -51,11 +51,13 @@
 	win32 {
 		help.path = $${INSTALLDIR}/help
 		help.files = $$HELP_DIR/*.qhc $$HELP_DIR/*.qch
+		help.CONFIG += no_check_exist
 		INSTALLS += help
 	}
 	else {
 		help.path = $${INSTALLDIR_SHARE}/help
 		help.files = $$HELP_DIR/*.qhc $$HELP_DIR/*.qch
+		help.CONFIG += no_check_exist
 		INSTALLS += help
 	}
 

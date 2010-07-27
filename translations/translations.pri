@@ -19,11 +19,13 @@
 	win32 {
 		translations.path = $${INSTALLDIR}/translations
 		translations.files = $$TS_DIR/*.qm
+		translations.CONFIG += no_check_exist
 		INSTALLS += translations
 	}
 	else {
 		translations.path = $${INSTALLDIR_SHARE}/translations
 		translations.files = $$TS_DIR/*.qm
+		translations.CONFIG += no_check_exist
 		INSTALLS += translations
 	}
 
