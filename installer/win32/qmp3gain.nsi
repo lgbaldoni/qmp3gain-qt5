@@ -22,7 +22,7 @@ SetCompressor lzma
 Name "${NAME} ${VERSION}"
 
 ; The file to write
-OutFile "${FILENAME}_install.exe"
+OutFile "${FILENAME}-${VERSION}.exe"
 
 ; The default installation directory
 InstallDir $PROGRAMFILES\${NAME}
@@ -272,7 +272,7 @@ Section
 
 		${CreateDirectory} $SMPROGRAMS\$R0
 		${CreateShortCut} "$SMPROGRAMS\$R0\QMP3Gain.lnk" $INSTDIR\qmp3gain.exe
-		${CreateShortCut} "$SMPROGRAMS\$R0\Uninstall QMP3Gain.lnk" $INSTDIR\qmp3gain_uninstall.exe
+		${CreateShortCut} "$SMPROGRAMS\$R0\Uninstall QMP3Gain.lnk" $INSTDIR\${FILENAME}_uninstall.exe
 
 		;SetShellVarContext All
 		;CreateDirectory $SMPROGRAMS\$R0
