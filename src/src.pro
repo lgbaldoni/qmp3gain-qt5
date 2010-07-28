@@ -77,7 +77,7 @@ win32 {
 	target.path = $${INSTALLDIR}
 	INSTALLS += target
 
-	resources.path = $${INSTALLDIR}/sounds
+	resources.path = $${INSTALLDIR}/resources/sounds
 	resources.files = $$RESOURCEDIR/sounds/*
 	INSTALLS += resources
 
@@ -123,7 +123,7 @@ else {
 	target.path = $${INSTALLDIR_BIN}
 	INSTALLS += target
 
-	resources_sounds.path = $${INSTALLDIR_SHARE}/sounds
+	resources_sounds.path = $${INSTALLDIR_SHARE}/resources/sounds
 	resources_sounds.files = $$RESOURCEDIR/sounds/*
 	INSTALLS += resources_sounds
 
