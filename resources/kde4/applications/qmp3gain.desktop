@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=QMP3Gain
+GenericName=MP3Gain front end
+Comment=Analyzes and losslessly adjusts volume of mp3 files
+Icon=qmp3gain
+Exec=qmp3gain
+MimeType=audio/x-mp3;
+Terminal=false
+Categories=AudioVideo;Audio;Qt;
