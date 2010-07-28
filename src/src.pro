@@ -14,6 +14,7 @@ TARGET = qmp3gain
 DESTDIR = ../bin
 RESOURCEDIR = ../resources
 win32 {
+	RC_FILE = $$RESOURCEDIR/win32/qmp3gain.rc
 	INSTALLDIR = ../installer/win32/generated
 }
 else {
@@ -81,7 +82,7 @@ win32 {
 	INSTALLS += resources
 
 	bins.path = $${INSTALLDIR}
-	bins.files = $$QT_INSTALL_BINS/assistant.exe
+	bins.files = $$[QT_INSTALL_BINS]/assistant.exe
 	bins.files += $$[QT_INSTALL_BINS]/libgcc_s_dw2-1.dll
 	bins.files += $$[QT_INSTALL_BINS]/mingwm10.dll
 	bins.files += $$[QT_INSTALL_BINS]/phonon4.dll
