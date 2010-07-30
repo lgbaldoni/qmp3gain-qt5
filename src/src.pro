@@ -127,7 +127,7 @@ else {
 	resources_sounds.files = $$RESOURCEDIR/sounds/*
 	INSTALLS += resources_sounds
 
-	resources_kde4_desktop.path = /usr/share/applications/kde4
+	resources_kde4_desktop.path = /usr/share/applications
 	resources_kde4_desktop.files = $$RESOURCEDIR/kde4/applications/qmp3gain.desktop
 	INSTALLS += resources_kde4_desktop
 
