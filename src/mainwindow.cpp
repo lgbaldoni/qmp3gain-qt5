@@ -2401,10 +2401,6 @@ void MainWindow::runConstantGain(QModelIndexList indices, int mp3Gain, bool isLe
 			QByteArray newData = process.readAll();
 			QString result = QString::fromLocal8Bit(newData);
 
-			// the following error message has no line feed from mp3gain backend
-			QString replaceStr("Can't adjust single channel for mono or joint stereo");
-			result.replace(replaceStr, replaceStr+"\r");
-
 			QTextStream in(&result);
 			do {
 				Line line;
@@ -3461,10 +3457,6 @@ void MainWindow::on_actionUndo_Gain_changes_triggered(){
 
 			QByteArray newData = process.readAllStandardOutput();
 			QString result = QString::fromLocal8Bit(newData);
-
-			// the following error message has no line feed from mp3gain backend
-			QString replaceStr("Can't adjust single channel for mono or joint stereo");
-			result.replace(replaceStr, replaceStr+"\r");
 
 			QTextStream in(&result);
 			do {
