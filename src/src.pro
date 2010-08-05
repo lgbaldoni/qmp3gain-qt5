@@ -2,8 +2,8 @@ APP_MAJOR_VER = 0
 APP_MINOR_VER = 9
 APP_SUBMINOR_VER = 0
 # comment the following 2 lines unless development version is to be made
-APP_LASTCOMMIT_ID = $$system(git rev-parse --short HEAD)
-APP_LASTCOMMIT_DATE = $$system('git log --pretty=format:"%ad" --date=iso -1')
+#APP_LASTCOMMIT_ID = $$system(git rev-parse --short HEAD)
+#APP_LASTCOMMIT_DATE = $$system('git log --pretty=format:"%ad" --date=iso -1')
 
 TEMPLATE = app
 CONFIG += warn_on \
