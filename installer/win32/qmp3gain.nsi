@@ -22,7 +22,7 @@ SetCompressor lzma
 Name "${NAME} ${VERSION}"
 
 ; The file to write
-OutFile "${FILENAME}-${VERSION}_install.exe"
+OutFile "${FILENAME}-${VERSION}-install.exe"
 
 ; The default installation directory
 InstallDir $PROGRAMFILES\${NAME}
