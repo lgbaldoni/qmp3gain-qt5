@@ -7,4 +7,4 @@ Icon=qmp3gain
 Exec=qmp3gain
 MimeType=audio/x-mp3;
 Terminal=false
-Categories=Qt;AudioVideo;Audio;
+Categories=Qt;AudioVideo;AudioVideoEditing;
