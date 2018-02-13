@@ -24,7 +24,8 @@
 	}
 	else {
 		translations.path = $${INSTALLDIR_SHARE}/translations
-		translations.files = $$TS_DIR/*.qm
+		translations.files = $$TRANSLATIONS
+		translations.files ~= s,\\.ts$,.qm,g
 		translations.CONFIG += no_check_exist
 		INSTALLS += translations
 	}

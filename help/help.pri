@@ -14,6 +14,7 @@
 	for(file, HELPS) {
 		exists($${file}.qhp) {
 		HELPS_QHP += $${file}.qhp
+		HELPS_INST += $${file}.qch
 		}
 	}
 
@@ -36,6 +37,7 @@
 	for(file, HELPS) {
 		exists($${file}.qhcp) {
 		HELPS_QHCP += $${file}.qhcp
+		HELPS_INST += $${file}.qhc
 		}
 	}
 
@@ -56,7 +58,7 @@
 	}
 	else {
 		help.path = $${INSTALLDIR_SHARE}/help
-		help.files = $$HELP_DIR/*.qhc $$HELP_DIR/*.qch
+		help.files = $$HELPS_INST
 		help.CONFIG += no_check_exist
 		INSTALLS += help
 	}
