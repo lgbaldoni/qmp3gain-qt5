@@ -535,7 +535,7 @@ void MainWindow::playMP3File(){
 			delete mediaObject;
 		}
 		if (!isToBeStopped) {
-			mediaObject = Phonon::createPlayer(Phonon::MusicCategory, Phonon::MediaSource(fileName));
+			mediaObject = Phonon::createPlayer(Phonon::MusicCategory, Phonon::MediaSource(QUrl::fromLocalFile("fileName")));
 			connect(mediaObject, SIGNAL(stateChanged(Phonon::State,Phonon::State)),
 						this, SLOT(playStateChanged(Phonon::State,Phonon::State)));
 			mediaObject->play();
