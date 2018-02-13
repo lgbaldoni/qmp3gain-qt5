@@ -1,5 +1,8 @@
 #include <QtGui>
 #include <QtXml>
+#include <QWidgetAction>
+#include <QFileDialog>
+#include <QAudioDeviceInfo>
 
 #include "mainwindow.h"
 #include "aboutdialog.h"
@@ -2989,14 +2992,14 @@ void MainWindow::on_actionSave_Analysis_results_triggered(){
 			item = getItem(row, "Path");
 			if (item){
 				if (isXML)
-					out << "\t\t<path>" << Qt::escape(item->text()) << "</path>" << endl;
+					out << "\t\t<path>" << QString(item->text().toHtmlEscaped()) << "</path>" << endl;
 				else
 					out << "\"" << item->text() << "\"" << ",";
 			}
 			item = getItem(row, "File");
 			if (item){
 				if (isXML)
-					out << "\t\t<file>" << Qt::escape(item->text()) << "</file>" << endl;
+					out << "\t\t<file>" << QString(item->text().toHtmlEscaped()) << "</file>" << endl;
 				else
 					out << "\"" << item->text() << "\"" << ",";
 			}
@@ -3005,7 +3008,7 @@ void MainWindow::on_actionSave_Analysis_results_triggered(){
 				QFileInfo fi(item->text());
 				QDateTime dateTime = fi.lastModified();
 				if (isXML)
-					out << "\t\t<file_last_modified>" << Qt::escape(dateTime.toString("yyyy-MM-dd hh:mm:ss")) << "</file_last_modified>" << endl;
+					out << "\t\t<file_last_modified>" << QString(dateTime.toString("yyyy-MM-dd hh:mm:ss").toHtmlEscaped()) << "</file_last_modified>" << endl;
 				else
 					out << "#" << dateTime.toString("yyyy-MM-dd hh:mm:ss") << "#" << ",";
 				if (isXML)
@@ -3018,7 +3021,7 @@ void MainWindow::on_actionSave_Analysis_results_triggered(){
 				double maxAmplitude = item->data().toDouble();
 				QString maxAmplitudeStr =  QString("%1").arg(maxAmplitude, 0, 'f', 3);
 				if (isXML)
-					out << "\t\t<max_amplitude>" << Qt::escape(maxAmplitudeStr) << "</max_amplitude>" << endl;
+					out << "\t\t<max_amplitude>" << QString(maxAmplitudeStr.toHtmlEscaped()) << "</max_amplitude>" << endl;
 				else
 					out << maxAmplitudeStr << ",";
 			}
@@ -3027,7 +3030,7 @@ void MainWindow::on_actionSave_Analysis_results_triggered(){
 				double dBGain = item->data().toDouble();
 				QString dBGainStr =  QString("%1").arg(dBGain, 0, 'f', 3);
 				if (isXML)
-					out << "\t\t<db_gain>" << Qt::escape(dBGainStr) << "</db_gain>" << endl;
+					out << "\t\t<db_gain>" << QString(dBGainStr.toHtmlEscaped()) << "</db_gain>" << endl;
 				else
 					out << dBGainStr << ",";
 			}
@@ -3036,7 +3039,7 @@ void MainWindow::on_actionSave_Analysis_results_triggered(){
 				double AlbumdBGain = item->data().toDouble();
 				QString AlbumdBGainStr =  QString("%1").arg(AlbumdBGain, 0, 'f', 3);
 				if (isXML)
-					out << "\t\t<album_db_gain>" << Qt::escape(AlbumdBGainStr) << "</album_db_gain>" << endl;
+					out << "\t\t<album_db_gain>" << QString(AlbumdBGainStr.toHtmlEscaped()) << "</album_db_gain>" << endl;
 				else
 					out << AlbumdBGainStr;
 			}
@@ -3729,7 +3732,7 @@ void MainWindow::on_actionShow_Path_at_File_triggered(){
 // menu: Options/Beep when finished
 void MainWindow::on_actionBeep_when_finished_toggled(bool checked){
 	if (checked){
-		if (QSound::isAvailable()){
+		if (QAudioDeviceInfo::availableDevices(QAudio::AudioOutput).isEmpty()){
 			QString resourcePath = directoryOf("resources/sounds").absolutePath();
 			QString beepFile(resourcePath+"/"+"beep.wav");
 			if (QFileInfo(beepFile).exists())

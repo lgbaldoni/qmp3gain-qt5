@@ -1,4 +1,5 @@
 #include <QtGui>
+#include <QFileDialog>
 
 #include "backenddialog.h"
 

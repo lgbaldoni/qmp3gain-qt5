@@ -1,5 +1,7 @@
 #include <QtGui>
 #include <QPointer>
+#include <QFileDialog>
+#include <QMessageBox>
 
 #include "logoptionsdialog.h"
 

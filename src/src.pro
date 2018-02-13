@@ -8,8 +8,7 @@ APP_SUBMINOR_VER = 0
 TEMPLATE = app
 CONFIG += warn_on \
     thread \
-	qt \
-	help
+	qt
 TARGET = qmp3gain
 DESTDIR = ../bin
 RESOURCEDIR = ../resources
@@ -20,11 +19,14 @@ win32 {
 else {
 	INSTALLDIR_BIN = /usr/bin
 	INSTALLDIR_SHARE = /usr/share/qmp3gain
+	CONFIG += link_pkgconfig
+	PKGCONFIG += phonon4qt5
 }
-QT += gui \
+QT += help \
+	gui \
+	multimedia \
 	xml \
-	webkit \
-	phonon
+	webkitwidgets
 # Input
 HEADERS += doubleprogressbar.h \
     mymessagebox.h \

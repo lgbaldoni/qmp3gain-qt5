@@ -1,7 +1,7 @@
 #ifndef CONSTANTGAINCHANGEDIALOG_H
 #define CONSTANTGAINCHANGEDIALOG_H
 
-#include <QtGui/QDialog>
+#include <QDialog>
 #include <QSettings>
 #include "ui_constantgainchangedialog.h"
 

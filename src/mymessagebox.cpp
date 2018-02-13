@@ -6,6 +6,8 @@
  */
 
 #include <QtGui>
+#include <QGridLayout>
+#include <QCheckBox>
 #include "mymessagebox.h"
 
 MyMessageBox::MyMessageBox() {
